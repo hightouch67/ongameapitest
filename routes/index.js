@@ -20,7 +20,7 @@ router.get('/@:name/friends', function(req, res, next) {
          }
          done++;
          if (done == count) {
-           res.render('front/friends', {layout: 'front', posts: _.sortBy(content, 'created').reverse()});
+           res.json( _.sortBy(content, 'created').reverse());
          }
        });
      }
