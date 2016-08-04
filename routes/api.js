@@ -16,11 +16,11 @@ router.get('/:method', function(req, res, next) {
   });
   var method = decamelize(req.params.method, '_');
   var data = {
-    method: method,
+    method: method,//
     params: params
   };
   steem.send('database_api', data, function(err, result) {
-    var json = result.result;
+    var json = (result.result)? query.scope? result.result[query.scope] : result.result : {};
     res.json(json);
   });
 });
