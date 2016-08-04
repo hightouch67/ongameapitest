@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Steem = require('steem');
+var _ = require('lodash');
 
 router.get('/@:name/friends', function(req, res, next) {
   var steem = new Steem();
@@ -16,7 +17,7 @@ router.get('/@:name/friends', function(req, res, next) {
          }
          done++;
          if (done == count) {
-           res.render('front/friends', {posts: content});
+           res.render('front/friends', {layout: 'front', posts: _.sortBy(content, 'created').reverse()});
          }
        });
      }
