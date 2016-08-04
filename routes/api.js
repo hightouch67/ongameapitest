@@ -20,7 +20,7 @@ router.get('/:method', function(req, res, next) {
     params: params
   };
   steem.send('database_api', data, function(err, result) {
-    var json = query.scope? result.result[query.scope] : result.result;
+    var json = result.result;
     res.json(json);
   });
 });
