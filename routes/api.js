@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var get = require('get-parameter-names');
 var decamelize = require('decamelize');
+var _ = require('lodash');
 var Steem = require('steem');
 
 router.get('/:method', function(req, res, next) {
@@ -20,7 +21,7 @@ router.get('/:method', function(req, res, next) {
     params: params
   };
   steem.send('database_api', data, function(err, result) {
-    var json = (result.result)? query.scope? result.result[query.scope] : result.result : {};
+    var json = _.has(result, 'result')? query.scope? result.result[query.scope] : result.result : {};
     res.json(json);
   });
 });
