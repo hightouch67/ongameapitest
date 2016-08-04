@@ -4,6 +4,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var http = require('http'),
+  https = require('https');
+http.globalAgent.maxSockets = Infinity;
+https.globalAgent.maxSockets = Infinity;
 
 var app = express();
 
@@ -13,6 +17,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
+// view engine setup
+var hbs = require('hbs');
+hbs.registerPartials(__dirname + '/views/partials');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
+
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler

@@ -2,16 +2,36 @@ var express = require('express');
 var router = express.Router();
 var get = require('get-parameter-names');
 var decamelize = require('decamelize');
-var Steem = require('steem'),
-  steem = new Steem();
+var Steem = require('steem');
+
+/*
+router.get('/@:name/friends', function(req, res, next) {
+  var name = req.name;
+  steem.getFollowing(name, 0, 10, function(err, result) {
+    if (result) {
+      console.log('1');
+      var count = result.length;
+      var done = 0;
+      var content = [];
+      for (var i = 0; i < count; i++) {
+        steem.getState('@' + result[i].following + '/posts', function(e, data) {
+          if (data.content) {
+            console.log(data);
+          }
+          if (done == count) {
+            //res.json(content);
+          }
+        });
+      }
+    }
+  });
+});
+*/
 
 router.get('/:method', function(req, res, next) {
+  steem = new Steem();
   var query = req.query;
-  var lenght = steem[req.params.method].length;
   var options = get(steem[req.params.method]);
-  var callback = function(err, result) {
-    res.json(result);
-  };
   var params = [];
   options.forEach(function(option) {
     if (query[option]) {
@@ -28,5 +48,6 @@ router.get('/:method', function(req, res, next) {
     res.json(result);
   });
 });
+
 
 module.exports = router;
