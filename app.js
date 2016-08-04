@@ -25,6 +25,7 @@ app.set('view engine', 'hbs');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index'));
+app.use('/', require('./routes/api'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
