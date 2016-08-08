@@ -5,9 +5,37 @@ var decamelize = require('decamelize');
 var _ = require('lodash');
 var Steem = require('steem');
 
-router.get('/:method', function(req, res, next) {
+
+router.get('/getFollowingPosts', function(req, res, next) {
+  var follower = req.query.follower;
   var steem = new Steem();
+  steem.getFollowing(follower, 0, 10, function(err, result) {
+    if (err) {
+      res.json(err);
+    } else {
+      var count = result.length;
+      var done = 0;
+      var content = [];
+      for (var i = 0; i < count; i++) {
+        steem.getState('@' + result[i].following, function(e, data) {
+          for (var post in data.content) {
+            content.push(data.content[post]);
+          }
+          done++;
+          if (done == count) {
+            res.json( _.sortBy(content, 'created').reverse());
+          }
+        });
+      }
+    }
+  });
+});
+
+router.get('/:method', function(req, res, next) {
   var query = req.query;
+  var ws = (query.ws)? query.ws : '';
+  delete query.ws;
+  var steem = new Steem(ws);
   var options = get(steem[req.params.method]);
   var params = [];
   options.forEach(function(option) {
