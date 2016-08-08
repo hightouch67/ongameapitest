@@ -9,7 +9,7 @@ var Steem = require('steem');
 router.get('/getFollowingPosts', function(req, res, next) {
   var follower = req.query.follower;
   var steem = new Steem();
-  steem.getFollowing(follower, 0, 100, function(err, result) {
+  steem.getFollowing(follower, 0, 50, function(err, result) {
     if (err) {
       res.json(err);
     } else {
