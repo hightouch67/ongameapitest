@@ -9,7 +9,7 @@ var Steem = require('steem');
 router.get('/getFollowingPosts', function(req, res, next) {
   var follower = req.query.follower;
   var steem = new Steem();
-  steem.getFollowing(follower, 0, 10, function(err, result) {
+  steem.getFollowing(follower, 0, 100, function(err, result) {
     if (err) {
       res.json(err);
     } else {
@@ -23,7 +23,8 @@ router.get('/getFollowingPosts', function(req, res, next) {
           }
           done++;
           if (done == count) {
-            res.json( _.sortBy(content, 'created').reverse());
+            var posts = _.sortBy(content, 'created').reverse().slice(0, 20);
+            res.json(posts);
           }
         });
       }
