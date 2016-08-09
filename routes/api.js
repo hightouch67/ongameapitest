@@ -6,33 +6,6 @@ var _ = require('lodash');
 var Steem = require('steem');
 
 
-router.get('/getFollowingPosts', function(req, res, next) {
-  var follower = req.query.follower;
-  var ws = (req.query.ws)? req.query.ws : '';
-  var steem = new Steem(ws);
-  steem.getFollowing(follower, 0, 20, function(err, result) {
-    if (err) {
-      res.json(err);
-    } else {
-      var count = result.length;
-      var done = 0;
-      var content = [];
-      for (var i = 0; i < count; i++) {
-        steem.getState('@' + result[i].following, function(e, data) {
-          for (var post in data.content) {
-            content.push(data.content[post]);
-          }
-          done++;
-          if (done == count) {
-            var posts = _.sortBy(content, 'created').reverse().slice(0, 20);
-            res.json(posts);
-          }
-        });
-      }
-    }
-  });
-});
-
 router.get('/:method', function(req, res, next) {
   var query = req.query;
   var ws = (query.ws)? query.ws : '';
