@@ -10,7 +10,7 @@ router.get('/:method', function(req, res, next) {
   var query = req.query;
   var ws = (query.ws)? query.ws : 'wss://steemit.com/wspa';
   delete query.ws;
-  var steem = new Steem();
+  var steem = new Steem(ws);
   var options = get(steem[req.params.method]);
   var params = [];
   options.forEach(function(option) {
