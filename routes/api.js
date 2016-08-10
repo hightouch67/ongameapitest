@@ -8,9 +8,9 @@ var Steem = require('steem');
 
 router.get('/:method', function(req, res, next) {
   var query = req.query;
-  var ws = (query.ws)? query.ws : '';
+  var ws = (query.ws)? query.ws : 'wss://steemit.com/wspa';
   delete query.ws;
-  var steem = new Steem(ws);
+  var steem = new Steem();
   var options = get(steem[req.params.method]);
   var params = [];
   options.forEach(function(option) {
