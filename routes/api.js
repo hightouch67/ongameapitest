@@ -23,7 +23,8 @@ router.get('/:method', function(req, res, next) {
     method: method,//
     params: params
   };
-  steem.send('database_api', data, function(err, result) {
+  var api = (req.params.method == 'getFollowers' || req.params.method == 'getFollowing')? 'follow_api' : 'database_api';
+  steem.send(api, data, function(err, result) {
     var json = _.has(result, 'result')? query.scope? result.result[query.scope] : result.result : {};
     res.json(json);
   });
