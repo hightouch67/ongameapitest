@@ -18,6 +18,6 @@
     "morgan": "~1.7.0",
     "node-sass-middleware": "^0.9.8",
     "nodemon": "^1.10.0",
-    "steem": "^0.2.14"
+    "steem": "^0.2.16"
   }
 }
