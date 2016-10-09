@@ -28,6 +28,8 @@ router.get('/:method', function(req, res, next) {
     api = 'follow_api';
   } elseif (req.params.method == 'broadcastTransaction' || req.params.method == 'broadcastTransactionWithCallback') {
     api = 'network_broadcast_api';
+  } elseif (req.params.method == 'login') {
+    api = 'login_api';
   }
   steem.send(api, data, function(err, result) {
     var json = _.has(result, 'result')? query.scope? result.result[query.scope] : result.result : {};
