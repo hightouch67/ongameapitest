@@ -10,7 +10,7 @@
     sci.setAttribute('scrolling', 'no');
     sci.setAttribute('id', 'z');
     sci.setAttribute('style', 'display:inline-block;');
-    sci.width = '90';
+    sci.width = '60';
     sci.height = '20';
     p[i].appendChild(sci);
   }
