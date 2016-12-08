@@ -4,7 +4,7 @@
     var author = p[i].dataset.author;
     var permlink = p[i].dataset.permlink;
     sci = d.createElement('iframe');
-    sci.setAttribute('src', '//dev.steemconnect.com/embed/vote?author=' + author + '&permlink=' + permlink);
+    sci.setAttribute('src', '//steemconnect.com/embed/vote?author=' + author + '&permlink=' + permlink);
     sci.setAttribute('allowtransparency', 'true');
     sci.setAttribute('frameBorder', '0');
     sci.setAttribute('scrolling', 'no');
