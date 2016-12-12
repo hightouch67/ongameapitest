@@ -20,7 +20,9 @@ router.get('/:method', (req, res) => {
     method: method,
     params: params
   }, (err, result) => {
-    res.json(result);
+    const json = query.scope
+      ? result[query.scope] : result;
+    res.json(json);
   });
 });
 
