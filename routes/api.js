@@ -5,6 +5,22 @@ const steem = require('steem');
 const methods = require('../node_modules/steem/lib/methods.json');
 const router = express.Router();
 
+router.post('/rpc', (req, res) => {
+  const { method, params, id } = req.body;
+  const mapping = _.filter(methods, { method: method });
+  steem.api.send(mapping[0].api, {
+    method: method,
+    params: params,
+  }, (err, result) => {
+    res.send({
+      jsonrpc: '2.0',
+      id,
+      method,
+      result,
+    });
+  });
+});
+
 router.get('/:method', (req, res) => {
   const query = req.query;
   const method = decamelize(req.params.method, '_');
