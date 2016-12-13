@@ -5,6 +5,10 @@ const steem = require('steem');
 const methods = require('../node_modules/steem/lib/methods.json');
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  res.send();
+});
+
 router.post('/rpc', (req, res) => {
   const { method, params, id } = req.body;
   const mapping = _.filter(methods, { method: method });
