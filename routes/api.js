@@ -26,7 +26,7 @@ router.post('/rpc', (req, res) => {
 });
 
 router.get('/:method', (req, res) => {
-  const query = req.query;
+  const query = parseQuery(req.query);
   const method = decamelize(req.params.method, '_');
   const mapping = _.filter(methods, { method: method });
   let params = [];
@@ -45,5 +45,16 @@ router.get('/:method', (req, res) => {
     res.json(json);
   });
 });
+
+const parseQuery = (query) => {
+  let newQuery = {};
+  Object.keys(query).map(key => {
+    let value = query[key];
+    try { value = JSON.parse(decodeURIComponent(value)); }
+    catch (e) { }
+    newQuery[key] = value;
+  });
+  return newQuery;
+};
 
 module.exports = router;
