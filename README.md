@@ -1,1 +1,1 @@
-# Steem API
+# Steem REST API
