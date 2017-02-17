@@ -5,6 +5,8 @@ const steem = require('steem');
 const methods = require('../node_modules/steem/lib/methods.json');
 const router = express.Router();
 
+steem.api.setWebSocket('wss://steemd.steemit.com');
+
 router.get('/', (req, res) => {
   res.send();
 });
