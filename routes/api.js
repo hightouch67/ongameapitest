@@ -6,7 +6,7 @@ const methods = require('../node_modules/steem/lib/api/methods.json');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.send();
+  res.redirect('https://esteemapp.github.io/steemapi/');
 });
 
 router.post('/rpc', (req, res) => {
