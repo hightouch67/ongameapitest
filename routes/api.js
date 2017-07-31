@@ -2,7 +2,7 @@ const express = require('express');
 const decamelize = require('decamelize');
 const _ = require('lodash');
 const steem = require('steem');
-const methods = require('../node_modules/steem/lib/api/methods.json');
+const methods = require('../node_modules/steem/lib/api/methods.js');
 const router = express.Router();
 
 router.get('/', (req, res) => {
