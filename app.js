@@ -5,10 +5,16 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var http = require('http'),
   https = require('https');
+var steem = require('steem');
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
 
 var app = express();
+
+steem.api.setOptions({
+  transport: 'ws',
+  websocket: process.env.WS || 'wss://steemd-int.steemit.com',
+});
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
