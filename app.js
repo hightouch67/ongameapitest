@@ -11,10 +11,9 @@ https.globalAgent.maxSockets = Infinity;
 
 var app = express();
 
-steem.api.setOptions({
-  transport: 'ws',
-  websocket: process.env.WS || 'wss://steemd-int.steemit.com',
-});
+if (process.env.STEEMJS_URL) {
+  steem.api.setOptions({ url: process.env.STEEMJS_URL });
+}
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
