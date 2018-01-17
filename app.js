@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var http = require('http'),
   https = require('https');
-var steem = require('steem');
+var steem = require('@steemit/steem-js');
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
 
