@@ -6,7 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
-    "@steemit/steem-js": "^0.6.10",
+    "@steemit/steem-js": "^0.7.1",
     "body-parser": "~1.15.1",
     "cors": "^2.7.1",
     "debug": "~2.2.0",
