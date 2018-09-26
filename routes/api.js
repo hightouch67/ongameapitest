@@ -27,7 +27,7 @@ router.get("/api/characters", function (req, res) {
 
 router.get("/api/character/:id", function (req, res) {
   var element = {} ,characters = []
-  var query = "SELECT * FROM characters WHERE id="+ req.params.id
+  var query = "SELECT * FROM characters WHERE character_id="+ req.params.id
   Connect(query,element,function(error){
     if(error)
     res.json(error)
