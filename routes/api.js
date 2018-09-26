@@ -26,8 +26,12 @@ router.get("/api/characters", function (req, res) {
 });
 
 router.get("/api/character/:id", function (req, res) {
-  console.log(req.params.id)
-  res.json({ test: 'contactsss' });
+  var element = {} ,characters = []
+  var query = "SELECT * FROM characters WHERE id="+ req.params.id
+  Connect(query,element,function(error){
+    if(error)
+    res.json(error)
+  })
 });
 
 
