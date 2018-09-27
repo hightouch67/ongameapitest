@@ -29,17 +29,17 @@ router.get("/api/characters", function (req, res) {
 router.get("/api/character/:name", function (req, res) {
   var playerid;
   var character = {}
-  //LOAD CHARACTER
+  //LOAD USER
   var query = "SELECT * FROM user WHERE first_name='" + req.params.name + "'"
   Connect(query, function (result) {
     if (result)
       playerid = result[0].user_id
-    character.character = result[0]
-    //LOAD EQUIPMENT
+      character = result[0]
+    //LOAD CHARACTER
     var query = "SELECT * FROM characters WHERE character_id='" + playerid + "'"
     Connect(query, function (result) {
       if (result)
-        character.equipment = result[0]
+        character.character = result[0]
       //LOAD ATTRIBUTES
       var query = "SELECT * FROM character_attribute WHERE character_id='" + playerid + "'"
       Connect(query, function (result) {
@@ -50,7 +50,13 @@ router.get("/api/character/:name", function (req, res) {
         Connect(query, function (result) {
           if (result)
             character.items = result
+        //LOAD EQUIPMENT
+        var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
+        Connect(query, function (result) {
+          if (result)
+            character.equipment = result
           res.json(character)
+        })
         })
       })
     })
