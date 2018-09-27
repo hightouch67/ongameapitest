@@ -16,10 +16,11 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
+
+
 router.get("/api/characters", function (req, res) {
-  var element = {}, characters = []
   var query = "SELECT * FROM user"
-  Connect(query, element, function (result) {
+  Connect(query, function (result) {
     if (result)
       res.json(result)
   })
