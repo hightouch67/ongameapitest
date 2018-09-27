@@ -30,7 +30,7 @@ router.get("/api/characters", function (req, res) {
   Connect(query, function (result) {
     if (result)
       res.json(result)
-      connection.end();
+    connection.end();
   })
 });
 
@@ -42,7 +42,7 @@ router.get("/api/character/:name", function (req, res) {
   Connect(query, function (result) {
     if (result)
       playerid = result[0].user_id
-      character = result[0]
+    character = result[0]
     //LOAD CHARACTER
     var query = "SELECT * FROM characters WHERE character_id='" + playerid + "'"
     Connect(query, function (result) {
@@ -58,20 +58,19 @@ router.get("/api/character/:name", function (req, res) {
         Connect(query, function (result) {
           if (result)
             character.character.items = result
-        //LOAD EQUIPMENT
-        var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
-        Connect(query, function (result) {
-          if (result)
-            character.character.equipment = result
-        //LOAD CLASS
-        var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
-        Connect(query, function (result) {
-          if (result)
-            character.character.class = result[0]
-          res.json(character)
-          connection.end();
-        })
-        })
+          //LOAD EQUIPMENT
+          var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
+          Connect(query, function (result) {
+            if (result)
+              character.character.equipment = result
+            //LOAD CLASS
+            var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
+            Connect(query, function (result) {
+              if (result)
+                character.character.class = result[0]
+              res.json(character)
+            })
+          })
         })
       })
     })
@@ -105,8 +104,13 @@ router.get("/api/properties", function (req, res) {
           Connect(query, function (result) {
             if (result)
               properties.slots = result
+          })
+          //LOAD CLASS
+          var query = "SELECT * FROM class"
+          Connect(query, function (result) {
+            if (result)
+              properties.class = result
             res.json(properties)
-            connection.end();
           })
         })
       })
