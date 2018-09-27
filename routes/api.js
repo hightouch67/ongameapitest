@@ -16,101 +16,107 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
-var connection = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DB
+var pool = mysql.createPool({
+  connectionLimit: 5,
+  host: "us-cdbr-iron-east-01.cleardb.net",
+  user: "bce50ec26bedce",
+  password: "13c7ceb6",
+  database: "heroku_38540d920d933f3"
 });
 
-connection.connect();
 
 router.get("/api/characters", function (req, res) {
-  var query = "SELECT * FROM user"
-  Connect(query, function (result) {
-    if (result)
-      res.json(result)
-    connection.end();
+  pool.getConnection(function (error, connection) {
+    var query = "SELECT * FROM user"
+    connection.query(query, function (err, result) {
+      if (err) throw err;
+      else
+        res.json(result)
+      connection.release();
+    })
   })
-});
+})
 
 router.get("/api/character/:name", function (req, res) {
   var playerid;
   var character = {}
-  //LOAD USER
-  var query = "SELECT * FROM user WHERE username='" + req.params.name + "'"
-  Connect(query, function (result) {
-    if (result)
-      playerid = result[0].user_id
-    character = result[0]
-    //LOAD CHARACTER
-    var query = "SELECT * FROM characters WHERE character_id='" + playerid + "'"
-    Connect(query, function (result) {
-      if (result)
-        character.character = result[0]
-      //LOAD ATTRIBUTES
-      var query = "SELECT * FROM character_attribute WHERE character_id='" + playerid + "'"
-      Connect(query, function (result) {
-        if (result)
-          character.character.attributes = result
-        //LOAD ITEMS
-        var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
-        Connect(query, function (result) {
-          if (result)
-            character.character.items = result
-          //LOAD EQUIPMENT
+  pool.getConnection(function (err, connection) {
+    //LOAD USER
+    var query = "SELECT * FROM user WHERE username='" + req.params.name + "'"
+    connection.query(query, function (err, result) {
+            if (err) throw err;
+        playerid = result[0].user_id
+      character = result[0]
+      //LOAD CHARACTER
+      var query = "SELECT * FROM characters WHERE character_id='" + playerid + "'"
+      connection.query(query, function (err, result) {
+              if (err) throw err;
+          character.character = result[0]
+        //LOAD ATTRIBUTES
+        var query = "SELECT * FROM character_attribute WHERE character_id='" + playerid + "'"
+        connection.query(query, function (err, result) {
+                if (err) throw err;
+            character.character.attributes = result
+          //LOAD ITEMS
           var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
-          Connect(query, function (result) {
-            if (result)
-              character.character.equipment = result
-            //LOAD CLASS
-            var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
-            Connect(query, function (result) {
-              if (result)
-                character.character.class = result[0]
-              res.json(character)
+          connection.query(query, function (err, result) {
+                  if (err) throw err;
+              character.character.items = result
+            //LOAD EQUIPMENT
+            var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
+            connection.query(query, function (err, result) {
+                    if (err) throw err;
+                character.character.equipment = result
+              //LOAD CLASS
+              var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
+              connection.query(query, function (err, result) {
+                      if (err) throw err;
+                  character.character.class = result[0]
+                res.json(character)
+                connection.release();
+              })
             })
           })
         })
       })
     })
   })
-});
-
+})
 router.get("/api/properties", function (req, res) {
   var properties = {}
   //LOAD ATTRIBUTES
   var query = "SELECT * FROM attribute"
-  Connect(query, function (result) {
-    if (result)
+  connection.query(query, function (err, result) {
+    if (err) throw err;
       properties.attributes = result
     //LOAD ITEMS
     var query = "SELECT * FROM item"
-    Connect(query, function (result) {
-      if (result)
+    connection.query(query, function (err, result) {
+      if (err) throw err;
         properties.items = result
       //LOAD ITEMS ATTRIBUTES
       var query = "SELECT * FROM item_attribute"
-      Connect(query, function (result) {
-        if (result)
+      connection.query(query, function (err, result) {
+        if (err) throw err;
           properties.items_attributes = result
         //LOAD ITEMS TYPES
         var query = "SELECT * FROM item_type"
-        Connect(query, function (result) {
-          if (result)
+        connection.query(query, function (err, result) {
+          if (err) throw err;
             properties.items_types = result
           //LOAD SLOTS
           var query = "SELECT * FROM equipment_slot"
-          Connect(query, function (result) {
-            if (result)
+          connection.query(query, function (err, result) {
+            if (err) throw err;
               properties.slots = result
           })
           //LOAD CLASS
           var query = "SELECT * FROM class"
-          Connect(query, function (result) {
-            if (result)
+          connection.query(query, function (err, result) {
+            if (err) throw err;
               properties.class = result
             res.json(properties)
+            connection.release();
           })
         })
       })
@@ -118,17 +124,6 @@ router.get("/api/properties", function (req, res) {
   })
 });
 
-
-
-
-Connect = function (query, cb) {
-  connection.query(query, function (error, results, fields) {
-    if (error) throw error;
-    else {
-      return cb(results)
-    }
-  });
-}
 
 function getHash(input) {
   var hash = 0, len = input.length;
