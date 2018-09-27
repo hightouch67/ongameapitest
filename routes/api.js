@@ -22,7 +22,7 @@ router.get("/api/characters", function (req, res) {
   var query = "SELECT * FROM user"
   Connect(query, function (result) {
     if (result)
-      res.json(result[0])
+      res.json(result)
   })
 });
 
