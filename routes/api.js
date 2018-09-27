@@ -16,13 +16,21 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
+var connection = mysql.createConnection({
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USERNAME,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DB
+});
 
+connection.connect();
 
 router.get("/api/characters", function (req, res) {
   var query = "SELECT * FROM user"
   Connect(query, function (result) {
     if (result)
       res.json(result)
+      connection.end();
   })
 });
 
@@ -56,6 +64,7 @@ router.get("/api/character/:name", function (req, res) {
           if (result)
             character.character.equipment = result
           res.json(character)
+          connection.end();
         })
         })
       })
@@ -91,6 +100,7 @@ router.get("/api/properties", function (req, res) {
             if (result)
               properties.slots = result
             res.json(properties)
+            connection.end();
           })
         })
       })
@@ -98,14 +108,7 @@ router.get("/api/properties", function (req, res) {
   })
 });
 
-var connection = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DB
-});
 
-connection.connect();
 
 
 Connect = function (query, cb) {
@@ -124,7 +127,7 @@ function getHash(input) {
     hash |= 0; // to 32bit integer
   }
   return hash;
-  connection.end();
+
 }
 
 module.exports = router;
