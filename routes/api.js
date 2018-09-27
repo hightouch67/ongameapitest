@@ -64,7 +64,14 @@ router.get("/api/character/:name", function (req, res) {
           if (result)
             character.character.equipment = result
           res.json(character)
+        //LOAD CLASS
+        var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
+        Connect(query, function (result) {
+          if (result)
+            character.character.class = result[0]
+          res.json(character)
           connection.end();
+        })
         })
         })
       })
