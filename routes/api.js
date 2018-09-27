@@ -22,7 +22,7 @@ router.get("/api/characters", function (req, res) {
   var query = "SELECT * FROM user"
   Connect(query, function (result) {
     if (result)
-      res.json(result)
+      res.json(result[0])
   })
 });
 
@@ -91,27 +91,6 @@ router.get("/api/properties", function (req, res) {
     })
   })
 });
-// Connect = function (query, object, cb) {
-//   var con = mysql.createConnection({
-//     host: "db4free.net",
-//     user: "ongame",
-//     password: "Abcdef55",
-//     database: "ongame"
-//   })
-//   var element = {}, characters = []
-//   con.connect(function (err) {
-//     if (err) throw err;
-//     con.query(query, function (err, result) {
-//       if (err) return cb(null);
-//       for (var i = 0; i < result.length; i++) {
-//         element = result[i]
-//         characters.push(element)
-//       }
-//       return cb(characters)
-//     })
-//   })
-
-// }
 
 var connection = mysql.createConnection({
   host: 'db4free.net',
@@ -130,12 +109,7 @@ Connect = function (query, cb) {
       return cb(results)
     }
   });
-
 }
-
-
-
-
 
 function getHash(input) {
   var hash = 0, len = input.length;
