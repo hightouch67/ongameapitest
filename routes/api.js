@@ -44,34 +44,34 @@ router.get("/api/character/:name", function (req, res) {
     //LOAD USER
     var query = "SELECT * FROM user WHERE username='" + req.params.name + "'"
     connection.query(query, function (err, result) {
-            if (err) throw err;
-        playerid = result[0].user_id
+      if (err) throw err;
+      playerid = result[0].user_id
       character = result[0]
       //LOAD CHARACTER
       var query = "SELECT * FROM characters WHERE character_id='" + playerid + "'"
       connection.query(query, function (err, result) {
-              if (err) throw err;
-          character.character = result[0]
+        if (err) throw err;
+        character.character = result[0]
         //LOAD ATTRIBUTES
         var query = "SELECT * FROM character_attribute WHERE character_id='" + playerid + "'"
         connection.query(query, function (err, result) {
-                if (err) throw err;
-            character.character.attributes = result
+          if (err) throw err;
+          character.character.attributes = result
           //LOAD ITEMS
           var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
           connection.query(query, function (err, result) {
-                  if (err) throw err;
-              character.character.items = result
+            if (err) throw err;
+            character.character.items = result
             //LOAD EQUIPMENT
             var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
             connection.query(query, function (err, result) {
-                    if (err) throw err;
-                character.character.equipment = result
+              if (err) throw err;
+              character.character.equipment = result
               //LOAD CLASS
               var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
               connection.query(query, function (err, result) {
-                      if (err) throw err;
-                  character.character.class = result[0]
+                if (err) throw err;
+                character.character.class = result[0]
                 res.json(character)
                 connection.release();
               })
@@ -84,39 +84,41 @@ router.get("/api/character/:name", function (req, res) {
 })
 router.get("/api/properties", function (req, res) {
   var properties = {}
-  //LOAD ATTRIBUTES
-  var query = "SELECT * FROM attribute"
-  connection.query(query, function (err, result) {
-    if (err) throw err;
-      properties.attributes = result
-    //LOAD ITEMS
-    var query = "SELECT * FROM item"
+  pool.getConnection(function (err, connection) {
+    //LOAD ATTRIBUTES
+    var query = "SELECT * FROM attribute"
     connection.query(query, function (err, result) {
       if (err) throw err;
-        properties.items = result
-      //LOAD ITEMS ATTRIBUTES
-      var query = "SELECT * FROM item_attribute"
+      properties.attributes = result
+      //LOAD ITEMS
+      var query = "SELECT * FROM item"
       connection.query(query, function (err, result) {
         if (err) throw err;
-          properties.items_attributes = result
-        //LOAD ITEMS TYPES
-        var query = "SELECT * FROM item_type"
+        properties.items = result
+        //LOAD ITEMS ATTRIBUTES
+        var query = "SELECT * FROM item_attribute"
         connection.query(query, function (err, result) {
           if (err) throw err;
+          properties.items_attributes = result
+          //LOAD ITEMS TYPES
+          var query = "SELECT * FROM item_type"
+          connection.query(query, function (err, result) {
+            if (err) throw err;
             properties.items_types = result
-          //LOAD SLOTS
-          var query = "SELECT * FROM equipment_slot"
-          connection.query(query, function (err, result) {
-            if (err) throw err;
+            //LOAD SLOTS
+            var query = "SELECT * FROM equipment_slot"
+            connection.query(query, function (err, result) {
+              if (err) throw err;
               properties.slots = result
-          })
-          //LOAD CLASS
-          var query = "SELECT * FROM class"
-          connection.query(query, function (err, result) {
-            if (err) throw err;
+            })
+            //LOAD CLASS
+            var query = "SELECT * FROM class"
+            connection.query(query, function (err, result) {
+              if (err) throw err;
               properties.class = result
-            res.json(properties)
-            connection.release();
+              res.json(properties)
+              connection.release();
+            })
           })
         })
       })
