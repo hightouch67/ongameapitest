@@ -99,10 +99,10 @@ router.get("/api/properties", function (req, res) {
 });
 
 var connection = mysql.createConnection({
-  host: 'db4free.net',
-  user: 'ongame',
-  password: 'Abcdef55',
-  database: 'ongame'
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USERNAME,
+  password: process.env.MYSQL_PASSWORD,
+  database: MYSQL_DB
 });
 
 connection.connect();
