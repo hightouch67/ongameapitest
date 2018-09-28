@@ -24,7 +24,6 @@ var pool = mysql.createPool({
   database: process.env.MYSQL_DB
 });
 
-
 router.get("/api/characters", function (req, res) {
   pool.getConnection(function (error, connection) {
     var query = "SELECT * FROM user"
@@ -63,7 +62,7 @@ router.get("/api/character/:name", function (req, res) {
             if (err) throw err;
             character.character.items = result
             //LOAD EQUIPMENT
-            var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
+            var query = "SELECT * FROM character_equipment WHERE character_id='" + playerid + "'"
             connection.query(query, function (err, result) {
               if (err) throw err;
               character.character.equipment = result
@@ -82,6 +81,9 @@ router.get("/api/character/:name", function (req, res) {
     })
   })
 })
+
+
+
 router.get("/api/properties", function (req, res) {
   var properties = {}
   pool.getConnection(function (err, connection) {
