@@ -118,8 +118,14 @@ router.get("/api/properties", function (req, res) {
             connection.query(query, function (err, result) {
               if (err) throw err;
               properties.class = result
-              res.json(properties)
-              connection.release();
+              //LOAD SHOP
+              var query = "SELECT * FROM shop"
+              connection.query(query, function (err, result) {
+                if (err) throw err;
+                properties.shop = result
+                res.json(properties)
+                connection.release();
+              })
             })
           })
         })
