@@ -134,6 +134,30 @@ router.get("/api/properties", function (req, res) {
   })
 });
 
+router.get("/api/battle", function (req, res) {
+  pool.getConnection(function (error, connection) {
+    var query = "SELECT * FROM battle"
+    connection.query(query, function (err, result) {
+      if (err) throw err;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
+router.get("/api/battle_history", function (req, res) {
+  pool.getConnection(function (error, connection) {
+    var query = "SELECT * FROM battle_history"
+    connection.query(query, function (err, result) {
+      if (err) throw err;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 
 function getHash(input) {
   var hash = 0, len = input.length;
