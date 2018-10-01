@@ -2,7 +2,6 @@ const express = require('express');
 const decamelize = require('decamelize');
 const _ = require('lodash');
 var mysql = require('mysql');
-const SocketServer = require('ws').Server;
 const router = express.Router();
 
 router.get('/', (req, res) => {
