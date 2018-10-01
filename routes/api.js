@@ -44,7 +44,7 @@ router.get("/api/character/:name", function (req, res) {
     //LOAD USER
     var query = "SELECT * FROM user WHERE username='" + req.params.name + "'"
     connection.query(query, function (err, result) {
-      if (err || result.length >0) return ;
+      if (err || result.length < 1) return ;
       playerid = result[0].user_id
       character = result[0]
       //LOAD CHARACTER
