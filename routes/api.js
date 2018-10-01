@@ -9,7 +9,6 @@ router.get('/', (req, res) => {
   res.json({ hello: 'world' });
 });
 
-const wss = new SocketServer({ server });
 // CONTACTS API ROUTES BELOW
 function handleError(res, reason, message, code) {
   console.log("ERROR: " + reason);
