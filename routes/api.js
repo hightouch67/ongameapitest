@@ -37,6 +37,18 @@ router.get("/api/characters", function (req, res) {
   })
 })
 
+router.get("/api/gifts", function (req, res) {
+  pool.getConnection(function (error, connection) {
+    var query = "SELECT * FROM gift"
+    connection.query(query, function (err, result) {
+      if (err) return ;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 router.get("/api/character/:name", function (req, res) {
   var playerid;
   var character = {}
