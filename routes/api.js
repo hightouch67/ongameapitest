@@ -41,7 +41,7 @@ router.get("/api/gifts/:name", function (req, res) {
   pool.getConnection(function (error, connection) {
     var query = "SELECT * FROM gift WHERE username='" + req.params.name + "'"
     connection.query(query, function (err, result) {
-      if (err) return ;
+      if (err) res.json(err) ;
       else
         res.json(result)
       connection.release();
