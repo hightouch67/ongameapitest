@@ -37,9 +37,9 @@ router.get("/api/characters", function (req, res) {
   })
 })
 
-router.get("/api/gifts", function (req, res) {
+router.get("/api/gifts/:name", function (req, res) {
   pool.getConnection(function (error, connection) {
-    var query = "SELECT * FROM gift"
+    var query = "SELECT * FROM gift WHERE username='" + req.params.name + "'"
     connection.query(query, function (err, result) {
       if (err) return ;
       else
