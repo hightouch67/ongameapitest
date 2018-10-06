@@ -110,7 +110,7 @@ router.get("/api/user/:name", function (req, res) {
   //   // ... error handler
   //   sql.close();
   // })
-})
+
 
 
 router.get("/api/characters", function (req, res) {
