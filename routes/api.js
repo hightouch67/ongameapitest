@@ -52,12 +52,14 @@ router.get("/api/user/:name", function (req, res) {
  
         console.dir(result)
         res.json(result)
+        sql.close()
     })
  
     // Stored Procedure
 })
  
 sql.on('error', err => {
+  sql.close()
     // ... error handler
 })
 
