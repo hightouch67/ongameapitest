@@ -22,7 +22,55 @@ var pool = mysql.createPool({
   database: process.env.MYSQL_DB
 });
 
+const config = {
+  host: process.env.SQL_HOST,
+  user: process.env.SQL_USERNAME,
+  password: process.env.SQL_PASSWORD,
+  database: process.env.SQL_DB,
+  pool: {
+      max: 10,
+      min: 0,
+      idleTimeoutMillis: 30000
+  }
+}
 
+
+
+router.get("/api/user/:name", function (req, res) {
+  var array = []
+  sql.connect(config, err => {
+    // ... error checks
+  
+    const request = new sql.Request()
+    request.stream = true // You can set streaming differently for each request
+    request.query(`SELECT * FROM Comments WHERE author = '` + req.params.name +`'`) // or request.execute(procedure)
+  
+    request.on('recordset', columns => {
+        console.log(columns)
+        // Emitted once for each recordset in a query
+    })
+  
+    request.on('row', row => {
+        console.log(row)
+        array.push(row)
+        // Emitted for each row in a recordset
+    })
+  
+    request.on('error', err => {
+        // May be emitted multiple times
+    })
+  
+    request.on('done', result => {
+        // Always emitted as the last one
+        console.log(result)
+        res.json(array)
+    })
+  })
+  
+  sql.on('error', err => {
+    // ... error handler
+  })
+})
 
 
 router.get("/api/characters", function (req, res) {
