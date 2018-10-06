@@ -49,9 +49,12 @@ router.get("/api/user/:name", function (req, res) {
  
     new sql.Request().query(`select * from Comments where author = '${test}'`, (err, result) => {
         // ... error checks
- 
-        console.dir(result)
-        res.json(result)
+        if(err) console.log(err)
+        else{
+          console.dir(result)
+          res.json(result)
+         
+        }
         sql.close()
     })
  
