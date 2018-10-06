@@ -27,7 +27,7 @@ const config = {
   password: process.env.SQL_PASSWORD,
   server: process.env.SQL_HOST,
   database: process.env.SQL_DB,
-  1: {
+  pool: {
     max: 10,
     min: 0,
     idleTimeoutMillis: 30000
@@ -41,15 +41,7 @@ const pool = new sql.ConnectionPool({
   user: process.env.SQL_USERNAME,
   password: process.env.SQL_PASSWORD,
   server: process.env.SQL_HOST,
-  database: process.env.SQL_DB,
-  1: {
-    max: 10,
-    min: 0,
-    idleTimeoutMillis: 30000
-  },
-  options: {
-    encrypt: true // Use this if you're on Windows Azure
-  }
+  database: process.env.SQL_DB
 })
 
 
@@ -63,7 +55,7 @@ async function execute2(query) {
       }).then(result => {
 
           resolve(result.recordset);
-
+          console.log(result.recordset)
           sql.close();
       }).catch(err => {
 
