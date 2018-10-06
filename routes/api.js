@@ -37,26 +37,27 @@ const config = {
   }
 }
 
+async function execute2(query) {
 
+  return new Promise((resolve, reject) => {
+
+      new sql.ConnectionPool(dbConfig).connect().then(pool => {
+          return pool.request().query(query)
+      }).then(result => {
+
+          resolve(result.recordset);
+
+          sql.close();
+      }).catch(err => {
+
+          reject(err)
+          sql.close();
+      });
+  });
+}
 
 router.get("/api/user/:name", function (req, res) {
-  const pool1 = new sql.ConnectionPool(config, err => {
-    // ... error checks
-
-    // Query
-
-    pool1.request() // or: new sql.Request(pool1)
-      .query(`select * from Comments where author = '${req.params.name}'`, (err, result) => {
-        // ... error checks
-
-        console.dir(result)
-      })
-
-  })
-
-  pool1.on('error', err => {
-    // ... error handler
-  })
+  console.log(execute2(`select * from Comments where author = '${req.params.name}'`))
   // new sql.ConnectionPool(config).connect().then(pool => {
   //   return pool.request().query(`select * from Comments where author = '${req.params.name}'`)
   //   }).then(result => {
