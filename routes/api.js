@@ -38,12 +38,14 @@ const config = {
 
 router.get("/api/user/:name", function (req, res) {
   var array = []
+  var name = ""
+  name = req.params.name
   sql.connect(config, err => {
     // ... error checks
   
     const request = new sql.Request()
     request.stream = true // You can set streaming differently for each request
-    request.query(`select * from Comments where author = '${req.params.name}'`)  
+    request.query(`select * from Comments where author = '${name}'`)  
     request.on('recordset', columns => {
         console.log(columns)
         // Emitted once for each recordset in a query
