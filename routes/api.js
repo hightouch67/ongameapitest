@@ -48,7 +48,7 @@ const pool = new sql.ConnectionPool({
 
 
 router.get("/api/user/:name", function (req, res) {
-  var query = `select * from Comments where author = '${req.params.name}' AND (parent_author = '${req.params.name}' OR parent_author = '') AND created > '20180101'`
+  var query = `select * from Comments where author = '${req.params.name}' AND (parent_author = '${req.params.name}' OR parent_author = '') AND created > '20180414'`
   execute2(query)
   async function execute2(query) {
 
@@ -58,7 +58,6 @@ router.get("/api/user/:name", function (req, res) {
         return pool.request().query(query)
       }).then(result => {
         res.json( result.recordset)
-        console.log(result.recordset)
         resolve(result.recordset);
         sql.close();
       }).catch(err => {
