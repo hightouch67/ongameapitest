@@ -40,27 +40,38 @@ const config = {
 
 
 router.get("/api/user/:name", function (req, res) {
-
-  var name = req.params.name
-  (async function () {
-    try {
-        let pool = await sql.connect(config)
-        let result1 = await pool.request()
-            .input('input_parameter', sql.Int, value)
-            .query(`select * from Comments where author = '${name}'`)
+  new sql.ConnectionPool(config).connect().then(pool => {
+    return pool.request().query(`select * from Comments where author = '${req.params.name}'`)
+    }).then(result => {
+      let rows = result.recordset
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      res.status(200).json(rows);
+      sql.close();
+    }).catch(err => {
+      res.status(500).send({ message: "${err}"})
+      sql.close();
+    });
+  });
+//   var name = req.params.name
+//   (async function () {
+//     try {
+//         let pool = await sql.connect(config)
+//         let result1 = await pool.request()
+//             .input('input_parameter', sql.Int, value)
+//             .query(`select * from Comments where author = '${name}'`)
             
-        console.dir(result1)
-        sql.close()
-    } catch (err) {
-        // ... error checks
-        sql.close()
-    }
-})()
+//         console.dir(result1)
+//         sql.close()
+//     } catch (err) {
+//         // ... error checks
+//         sql.close()
+//     }
+// })()
  
-sql.on('error', err => {
-    // ... error handler
-    sql.close()
-})
+// sql.on('error', err => {
+//     // ... error handler
+//     sql.close()
+// })
 
   // var array = []
   // var test = "hightouch"
