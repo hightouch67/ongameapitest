@@ -25,7 +25,7 @@ var pool1 = mysql.create1({
 const config = {
   user: process.env.SQL_USERNAME,
   password: process.env.SQL_PASSWORD,
-  host: process.env.SQL_HOST,
+  server: process.env.SQL_HOST,
   database: process.env.SQL_DB,
   1: {
     max: 10,
@@ -36,6 +36,23 @@ const config = {
     encrypt: true // Use this if you're on Windows Azure
   }
 }
+
+const pool = new sql.ConnectionPool({
+  user: process.env.SQL_USERNAME,
+  password: process.env.SQL_PASSWORD,
+  server: process.env.SQL_HOST,
+  database: process.env.SQL_DB,
+  1: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 30000
+  },
+  options: {
+    encrypt: true // Use this if you're on Windows Azure
+  }
+})
+
+
 
 async function execute2(query) {
 
