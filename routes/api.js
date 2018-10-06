@@ -48,42 +48,52 @@ const pool = new sql.ConnectionPool({
 
 
 router.get("/api/user/:name/:permlink", function (req, res) {
-  var query = `select *
-  from
-      Comments
-  where   
-       author='${req.params.name}'
-      AND        
-          (    
-          (ISJSON(json_metadata) > 0) and
-          (
-               ( JSON_VALUE(json_metadata,'$.tags[5]') in ('${req.params.permlink}') ) or  
-               ( JSON_VALUE(json_metadata,'$.tags[4]') in ('${req.params.permlink}') ) or   
-               ( JSON_VALUE(json_metadata,'$.tags[3]') in ('${req.params.permlink}') ) or   
-               ( JSON_VALUE(json_metadata,'$.tags[2]') in ('${req.params.permlink}') ) or   
-               ( JSON_VALUE(json_metadata,'$.tags[1]') in ('${req.params.permlink}') ) or   
-               ( JSON_VALUE(json_metadata,'$.tags[0]') in ('${req.params.permlink}') )
-          )
-        )
-  order by 
-      created desc`
-  execute2(query)
-  async function execute2(query) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT * FROM comments where permlink='${req.params.permlink}', author='${req.params.name}`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
 
-    return new Promise((resolve, reject) => {
+  // var query = `select *
+  // from
+  //     Comments
+  // where   
+  //      author='${req.params.name}'
+  //     AND        
+  //         (    
+  //         (ISJSON(json_metadata) > 0) and
+  //         (
+  //              ( JSON_VALUE(json_metadata,'$.tags[5]') in ('${req.params.permlink}') ) or  
+  //              ( JSON_VALUE(json_metadata,'$.tags[4]') in ('${req.params.permlink}') ) or   
+  //              ( JSON_VALUE(json_metadata,'$.tags[3]') in ('${req.params.permlink}') ) or   
+  //              ( JSON_VALUE(json_metadata,'$.tags[2]') in ('${req.params.permlink}') ) or   
+  //              ( JSON_VALUE(json_metadata,'$.tags[1]') in ('${req.params.permlink}') ) or   
+  //              ( JSON_VALUE(json_metadata,'$.tags[0]') in ('${req.params.permlink}') )
+  //         )
+  //       )
+  // order by 
+  //     created desc`
+  // execute2(query)
+  // async function execute2(query) {
+
+  //   return new Promise((resolve, reject) => {
   
-      new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-      }).then(result => {
-        res.json( result.recordset)
-        resolve(result.recordset);
-        sql.close();
-      }).catch(err => {
-        reject(err)
-        sql.close();
-      });
-    });
-  }
+  //     new sql.ConnectionPool(config).connect().then(pool => {
+  //       return pool.request().query(query)
+  //     }).then(result => {
+  //       res.json( result.recordset)
+  //       resolve(result.recordset);
+  //       sql.close();
+  //     }).catch(err => {
+  //       reject(err)
+  //       sql.close();
+  //     });
+  //   });
+  // }
   
 })
 // new sql.ConnectionPool(config).connect().then(pool => {
