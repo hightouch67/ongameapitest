@@ -14,7 +14,7 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
-var pool = mysql.createPool({
+var pool1 = mysql.create1({
   connectionLimit: 5,
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USERNAME,
@@ -27,7 +27,7 @@ const config = {
   password: process.env.SQL_PASSWORD,
   host: process.env.SQL_HOST,
   database: process.env.SQL_DB,
-  pool: {
+  1: {
     max: 10,
     min: 0,
     idleTimeoutMillis: 30000
@@ -41,7 +41,7 @@ async function execute2(query) {
 
   return new Promise((resolve, reject) => {
 
-      new sql.ConnectionPool(dbConfig).connect().then(pool => {
+      new sql.ConnectionPool(config).connect().then(pool => {
           return pool.request().query(query)
       }).then(result => {
 
@@ -132,7 +132,7 @@ router.get("/api/user/:name", function (req, res) {
 
 
 router.get("/api/characters", function (req, res) {
-  pool.getConnection(function (error, connection) {
+  pool1.getConnection(function (error, connection) {
     var query = "SELECT * FROM user"
     connection.query(query, function (err, result) {
       if (err) return;
@@ -144,7 +144,7 @@ router.get("/api/characters", function (req, res) {
 })
 
 router.get("/api/gifts/:name", function (req, res) {
-  pool.getConnection(function (error, connection) {
+  pool1.getConnection(function (error, connection) {
     var query = "SELECT * FROM gift WHERE username='" + req.params.name + "'"
     connection.query(query, function (err, result) {
       if (err) return (err);
@@ -158,7 +158,7 @@ router.get("/api/gifts/:name", function (req, res) {
 router.get("/api/character/:name", function (req, res) {
   var playerid;
   var character = {}
-  pool.getConnection(function (err, connection) {
+  pool1.getConnection(function (err, connection) {
     //LOAD USER
     var query = "SELECT * FROM user WHERE username='" + req.params.name + "'"
     connection.query(query, function (err, result) {
@@ -205,7 +205,7 @@ router.get("/api/character/:name", function (req, res) {
 
 router.get("/api/properties", function (req, res) {
   var properties = {}
-  pool.getConnection(function (err, connection) {
+  pool1.getConnection(function (err, connection) {
     //LOAD ATTRIBUTES
     var query = "SELECT * FROM attribute"
     connection.query(query, function (err, result) {
@@ -254,7 +254,7 @@ router.get("/api/properties", function (req, res) {
 });
 
 router.get("/api/battle", function (req, res) {
-  pool.getConnection(function (error, connection) {
+  pool1.getConnection(function (error, connection) {
     var query = "SELECT * FROM battle"
     connection.query(query, function (err, result) {
       if (err) return;
@@ -266,7 +266,7 @@ router.get("/api/battle", function (req, res) {
 })
 
 router.get("/api/battle_history", function (req, res) {
-  pool.getConnection(function (error, connection) {
+  pool1.getConnection(function (error, connection) {
     var query = "SELECT * FROM battle_history"
     connection.query(query, function (err, result) {
       if (err) return;
