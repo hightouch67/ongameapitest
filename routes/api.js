@@ -14,7 +14,7 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
-var pool1 = mysql.pool({
+var pool1 = mysql.createPool({
   connectionLimit: 5,
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USERNAME,
