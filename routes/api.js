@@ -31,6 +31,9 @@ const config = {
       max: 10,
       min: 0,
       idleTimeoutMillis: 30000
+  },
+  options: {
+      encrypt: false // Use this if you're on Windows Azure
   }
 }
 
@@ -44,8 +47,8 @@ router.get("/api/user/:name", function (req, res) {
   sql.connect(config, err => {
     // ... error checks
   
-    const request = new sql.Request()
-    request.stream = false // You can set streaming differently for each request
+    var request = new sql.Request()
+    request.stream = true // You can set streaming differently for each request
     request.query(`select * from Comments where author = '${name}'`)  
     request.on('recordset', columns => {
         console.log(columns)
