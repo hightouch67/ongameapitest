@@ -47,8 +47,26 @@ const pool = new sql.ConnectionPool({
 
 
 
-router.get("/api/user/:name", function (req, res) {
-  var query = `select * from Comments where author = '${req.params.name}' AND (parent_author = '${req.params.name}' OR parent_author = '') AND created > '20180414'`
+router.get("/api/user/:name/:permlink", function (req, res) {
+  var query = `select *
+  from
+      Comments
+  where   
+       author='${req.params.name}'
+      AND        
+          (    
+          (ISJSON(json_metadata) > 0) and
+          (
+               ( JSON_VALUE(json_metadata,'$.tags[5]') in ('${req.params.permlink}') ) or  
+               ( JSON_VALUE(json_metadata,'$.tags[4]') in ('${req.params.permlink}') ) or   
+               ( JSON_VALUE(json_metadata,'$.tags[3]') in ('${req.params.permlink}') ) or   
+               ( JSON_VALUE(json_metadata,'$.tags[2]') in ('${req.params.permlink}') ) or   
+               ( JSON_VALUE(json_metadata,'$.tags[1]') in ('${req.params.permlink}') ) or   
+               ( JSON_VALUE(json_metadata,'$.tags[0]') in ('${req.params.permlink}') )
+          )
+        )
+  order by 
+      created desc`
   execute2(query)
   async function execute2(query) {
 
