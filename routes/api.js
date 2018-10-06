@@ -49,7 +49,7 @@ const pool = new sql.ConnectionPool({
 
 router.get("/api/user/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT * FROM comments where permlink='${req.params.permlink}', author='${req.params.name}`
+    var query = `SELECT * FROM comments where author='${req.params.name}' AND permlink='${req.params.permlink}'`
     connection.query(query, function (err, result) {
       if (err) return;
       else
