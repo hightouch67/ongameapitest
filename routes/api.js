@@ -41,13 +41,13 @@ const config = {
 
 router.get("/api/user/:name", function (req, res) {
 
-
+  var name = req.params.name
   (async function () {
     try {
         let pool = await sql.connect(config)
         let result1 = await pool.request()
             .input('input_parameter', sql.Int, value)
-            .query(`select * from Comments where author = '${test}'`)
+            .query(`select * from Comments where author = '${name}'`)
             
         console.dir(result1)
         sql.close()
