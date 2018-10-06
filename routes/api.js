@@ -41,43 +41,63 @@ const config = {
 
 router.get("/api/user/:name", function (req, res) {
 
-  var array = []
   var test = "hightouch"
-  name = req.params.name
   sql.connect(config, err => {
     // ... error checks
-  
-    var request = new sql.Request()
-    request.stream = true // You can set streaming differently for each request
-    request.query(`select * from Comments where author = '${test}'`)  
-    request.on('recordset', columns => {
-        console.log(columns)
-        // Emitted once for each recordset in a query
+ 
+    // Query
+ 
+    new sql.Request().query(`select * from Comments where author = '${test}'`, (err, result) => {
+        // ... error checks
+ 
+        console.dir(result)
+        res.json(result)
     })
-  
-    request.on('row', row => {
-        console.log(row)
-        array.push(row)
-        // Emitted for each row in a recordset
-    })
-  
-    request.on('error', err => {
-        // May be emitted multiple times
-        sql.close();
-    })
-  
-    request.on('done', result => {
-        // Always emitted as the last one
-        console.log(result)
-        res.json(array)
-        sql.close();
-    })
-  })
-  
-  sql.on('error', err => {
+ 
+    // Stored Procedure
+})
+ 
+sql.on('error', err => {
     // ... error handler
-    sql.close();
-  })
+})
+
+  // var array = []
+  // var test = "hightouch"
+  // name = req.params.name
+  // sql.connect(config, err => {
+  //   // ... error checks
+  
+  //   var request = new sql.Request()
+  //   request.stream = true // You can set streaming differently for each request
+  //   request.query(`select * from Comments where author = '${test}'`)  
+  //   request.on('recordset', columns => {
+  //       console.log(columns)
+  //       // Emitted once for each recordset in a query
+  //   })
+  
+  //   request.on('row', row => {
+  //       console.log(row)
+  //       array.push(row)
+  //       // Emitted for each row in a recordset
+  //   })
+  
+  //   request.on('error', err => {
+  //       // May be emitted multiple times
+  //       sql.close();
+  //   })
+  
+  //   request.on('done', result => {
+  //       // Always emitted as the last one
+  //       console.log(result)
+  //       res.json(array)
+  //       sql.close();
+  //   })
+  // })
+  
+  // sql.on('error', err => {
+  //   // ... error handler
+  //   sql.close();
+  // })
 })
 
 
