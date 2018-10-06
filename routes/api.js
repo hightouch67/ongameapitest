@@ -58,17 +58,20 @@ router.get("/api/user/:name", function (req, res) {
   
     request.on('error', err => {
         // May be emitted multiple times
+        sql.close();
     })
   
     request.on('done', result => {
         // Always emitted as the last one
         console.log(result)
         res.json(array)
+        sql.close();
     })
   })
   
   sql.on('error', err => {
     // ... error handler
+    sql.close();
   })
 })
 
