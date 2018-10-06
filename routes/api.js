@@ -28,30 +28,47 @@ const config = {
   host: process.env.SQL_HOST,
   database: process.env.SQL_DB,
   pool: {
-      max: 10,
-      min: 0,
-      idleTimeoutMillis: 30000
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 30000
   },
   options: {
-      encrypt: false // Use this if you're on Windows Azure
+    encrypt: true // Use this if you're on Windows Azure
   }
 }
 
 
 
 router.get("/api/user/:name", function (req, res) {
-  new sql.ConnectionPool(config).connect().then(pool => {
-    return pool.request().query(`select * from Comments where author = '${req.params.name}'`)
-    }).then(result => {
-      let rows = result.recordset
-      res.setHeader('Access-Control-Allow-Origin', '*')
-      res.status(200).json(rows);
-      sql.close();
-    }).catch(err => {
-      res.status(500).send({ message: "${err}"})
-      sql.close();
-    });
-  });
+  const pool1 = new sql.ConnectionPool(config, err => {
+    // ... error checks
+
+    // Query
+
+    pool1.request() // or: new sql.Request(pool1)
+      .query(`select * from Comments where author = '${req.params.name}'`, (err, result) => {
+        // ... error checks
+
+        console.dir(result)
+      })
+
+  })
+
+  pool1.on('error', err => {
+    // ... error handler
+  })
+  // new sql.ConnectionPool(config).connect().then(pool => {
+  //   return pool.request().query(`select * from Comments where author = '${req.params.name}'`)
+  //   }).then(result => {
+  //     let rows = result.recordset
+  //     res.setHeader('Access-Control-Allow-Origin', '*')
+  //     res.status(200).json(rows);
+  //     sql.close();
+  //   }).catch(err => {
+  //     res.status(500).send({ message: "${err}"})
+  //     sql.close();
+  //   });
+})
 //   var name = req.params.name
 //   (async function () {
 //     try {
@@ -59,7 +76,7 @@ router.get("/api/user/:name", function (req, res) {
 //         let result1 = await pool.request()
 //             .input('input_parameter', sql.Int, value)
 //             .query(`select * from Comments where author = '${name}'`)
-            
+
 //         console.dir(result1)
 //         sql.close()
 //     } catch (err) {
@@ -67,49 +84,49 @@ router.get("/api/user/:name", function (req, res) {
 //         sql.close()
 //     }
 // })()
- 
+
 // sql.on('error', err => {
 //     // ... error handler
 //     sql.close()
 // })
 
-  // var array = []
-  // var test = "hightouch"
-  // name = req.params.name
-  // sql.connect(config, err => {
-  //   // ... error checks
-  
-  //   var request = new sql.Request()
-  //   request.stream = true // You can set streaming differently for each request
-  //   request.query(`select * from Comments where author = '${test}'`)  
-  //   request.on('recordset', columns => {
-  //       console.log(columns)
-  //       // Emitted once for each recordset in a query
-  //   })
-  
-  //   request.on('row', row => {
-  //       console.log(row)
-  //       array.push(row)
-  //       // Emitted for each row in a recordset
-  //   })
-  
-  //   request.on('error', err => {
-  //       // May be emitted multiple times
-  //       sql.close();
-  //   })
-  
-  //   request.on('done', result => {
-  //       // Always emitted as the last one
-  //       console.log(result)
-  //       res.json(array)
-  //       sql.close();
-  //   })
-  // })
-  
-  // sql.on('error', err => {
-  //   // ... error handler
-  //   sql.close();
-  // })
+// var array = []
+// var test = "hightouch"
+// name = req.params.name
+// sql.connect(config, err => {
+//   // ... error checks
+
+//   var request = new sql.Request()
+//   request.stream = true // You can set streaming differently for each request
+//   request.query(`select * from Comments where author = '${test}'`)  
+//   request.on('recordset', columns => {
+//       console.log(columns)
+//       // Emitted once for each recordset in a query
+//   })
+
+//   request.on('row', row => {
+//       console.log(row)
+//       array.push(row)
+//       // Emitted for each row in a recordset
+//   })
+
+//   request.on('error', err => {
+//       // May be emitted multiple times
+//       sql.close();
+//   })
+
+//   request.on('done', result => {
+//       // Always emitted as the last one
+//       console.log(result)
+//       res.json(array)
+//       sql.close();
+//   })
+// })
+
+// sql.on('error', err => {
+//   // ... error handler
+//   sql.close();
+// })
 
 
 
@@ -117,7 +134,7 @@ router.get("/api/characters", function (req, res) {
   pool.getConnection(function (error, connection) {
     var query = "SELECT * FROM user"
     connection.query(query, function (err, result) {
-      if (err) return ;
+      if (err) return;
       else
         res.json(result)
       connection.release();
@@ -129,7 +146,7 @@ router.get("/api/gifts/:name", function (req, res) {
   pool.getConnection(function (error, connection) {
     var query = "SELECT * FROM gift WHERE username='" + req.params.name + "'"
     connection.query(query, function (err, result) {
-      if (err) return (err) ;
+      if (err) return (err);
       else
         res.json(result)
       connection.release();
@@ -150,27 +167,27 @@ router.get("/api/character/:name", function (req, res) {
       //LOAD CHARACTER
       var query = "SELECT * FROM characters WHERE character_id='" + playerid + "'"
       connection.query(query, function (err, result) {
-        if (err) return ;
+        if (err) return;
         character.character = result[0]
         //LOAD ATTRIBUTES
         var query = "SELECT * FROM character_attribute WHERE character_id='" + playerid + "'"
         connection.query(query, function (err, result) {
-          if (err) return ;
+          if (err) return;
           character.character.attributes = result
           //LOAD ITEMS
           var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
           connection.query(query, function (err, result) {
-            if (err) return ;
+            if (err) return;
             character.character.items = result
             //LOAD EQUIPMENT
             var query = "SELECT * FROM character_equipment WHERE character_id='" + playerid + "'"
             connection.query(query, function (err, result) {
-              if (err) return ;
+              if (err) return;
               character.character.equipment = result
               //LOAD CLASS
               var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
               connection.query(query, function (err, result) {
-                if (err) return ;
+                if (err) return;
                 character.character.class = result[0]
                 res.json(character)
                 connection.release();
@@ -191,38 +208,38 @@ router.get("/api/properties", function (req, res) {
     //LOAD ATTRIBUTES
     var query = "SELECT * FROM attribute"
     connection.query(query, function (err, result) {
-      if (err) return ;
+      if (err) return;
       properties.attributes = result
       //LOAD ITEMS
       var query = "SELECT * FROM item"
       connection.query(query, function (err, result) {
-        if (err) return ;
+        if (err) return;
         properties.items = result
         //LOAD ITEMS ATTRIBUTES
         var query = "SELECT * FROM item_attribute"
         connection.query(query, function (err, result) {
-          if (err) return ;
+          if (err) return;
           properties.items_attributes = result
           //LOAD ITEMS TYPES
           var query = "SELECT * FROM item_type"
           connection.query(query, function (err, result) {
-            if (err) return ;
+            if (err) return;
             properties.items_types = result
             //LOAD SLOTS
             var query = "SELECT * FROM equipment_slot"
             connection.query(query, function (err, result) {
-              if (err) return ;
+              if (err) return;
               properties.slots = result
             })
             //LOAD CLASS
             var query = "SELECT * FROM class"
             connection.query(query, function (err, result) {
-              if (err) return ;
+              if (err) return;
               properties.class = result
               //LOAD SHOP
               var query = "SELECT * FROM shop"
               connection.query(query, function (err, result) {
-                if (err) return ;
+                if (err) return;
                 properties.shop = result
                 res.json(properties)
                 connection.release();
@@ -239,7 +256,7 @@ router.get("/api/battle", function (req, res) {
   pool.getConnection(function (error, connection) {
     var query = "SELECT * FROM battle"
     connection.query(query, function (err, result) {
-      if (err) return ;
+      if (err) return;
       else
         res.json(result)
       connection.release();
@@ -251,7 +268,7 @@ router.get("/api/battle_history", function (req, res) {
   pool.getConnection(function (error, connection) {
     var query = "SELECT * FROM battle_history"
     connection.query(query, function (err, result) {
-      if (err) return ;
+      if (err) return;
       else
         res.json(result)
       connection.release();
