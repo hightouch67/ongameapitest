@@ -46,39 +46,44 @@ const pool = new sql.ConnectionPool({
 
 
 
-async function execute2(query) {
+async function execute2(query, cb) {
 
   return new Promise((resolve, reject) => {
 
-      new sql.ConnectionPool(config).connect().then(pool => {
-          return pool.request().query(query)
-      }).then(result => {
+    new sql.ConnectionPool(config).connect().then(pool => {
+      return pool.request().query(query)
+    }).then(result => {
 
-          resolve(result.recordset);
-
-          sql.close();
-      }).catch(err => {
-
-          reject(err)
-          sql.close();
-      });
+      resolve(result.recordset);
+      cb(result.recordset)
+      sql.close();
+    }).catch(err => {
+      cb(null)
+      reject(err)
+      sql.close();
+    });
   });
 }
 
 router.get("/api/user/:name", function (req, res) {
-  res.json(execute2(`select * from Comments where author = '${req.params.name}'`))
-  // new sql.ConnectionPool(config).connect().then(pool => {
-  //   return pool.request().query(`select * from Comments where author = '${req.params.name}'`)
-  //   }).then(result => {
-  //     let rows = result.recordset
-  //     res.setHeader('Access-Control-Allow-Origin', '*')
-  //     res.status(200).json(rows);
-  //     sql.close();
-  //   }).catch(err => {
-  //     res.status(500).send({ message: "${err}"})
-  //     sql.close();
-  //   });
+  execute2(`select * from Comments where author = '${req.params.name}'`), function (result) {
+    if (result) {
+      res.json(result)
+    }
+  }
 })
+// new sql.ConnectionPool(config).connect().then(pool => {
+//   return pool.request().query(`select * from Comments where author = '${req.params.name}'`)
+//   }).then(result => {
+//     let rows = result.recordset
+//     res.setHeader('Access-Control-Allow-Origin', '*')
+//     res.status(200).json(rows);
+//     sql.close();
+//   }).catch(err => {
+//     res.status(500).send({ message: "${err}"})
+//     sql.close();
+//   });
+
 //   var name = req.params.name
 //   (async function () {
 //     try {
