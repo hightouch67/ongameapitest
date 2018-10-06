@@ -48,7 +48,7 @@ const pool = new sql.ConnectionPool({
 
 
 router.get("/api/user/:name", function (req, res) {
-  var query = `select * from Comments where author = '${req.params.name}'`
+  var query = `select * from Comments where author = '${req.params.name}' AND (parent_author = '${req.params.name}' OR parent_author = '')`
   execute2(query)
   async function execute2(query) {
 
