@@ -43,7 +43,7 @@ router.get("/api/user/:name", function (req, res) {
   
     const request = new sql.Request()
     request.stream = true // You can set streaming differently for each request
-    request.query("SELECT * FROM Comments WHERE author = '" + req.params.name +"'" ) // or request.execute(procedure)
+    request.query(`select * from Comments where author = ${req.params.name}`) // or request.execute(procedure)
   
     request.on('recordset', columns => {
         console.log(columns)
