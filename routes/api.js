@@ -23,9 +23,9 @@ var pool = mysql.createPool({
 });
 
 const config = {
-  host: process.env.SQL_HOST,
   user: process.env.SQL_USERNAME,
   password: process.env.SQL_PASSWORD,
+  host: process.env.SQL_HOST,
   database: process.env.SQL_DB,
   pool: {
       max: 10,
