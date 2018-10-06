@@ -46,19 +46,18 @@ const pool = new sql.ConnectionPool({
 
 
 
-async function execute2(query, cb) {
+async function execute2(query) {
 
   return new Promise((resolve, reject) => {
 
     new sql.ConnectionPool(config).connect().then(pool => {
       return pool.request().query(query)
     }).then(result => {
-
+      res.json(result.recordset)
+      console.log(result.recordset)
       resolve(result.recordset);
-      cb(result.recordset)
       sql.close();
     }).catch(err => {
-      cb(null)
       reject(err)
       sql.close();
     });
@@ -66,11 +65,8 @@ async function execute2(query, cb) {
 }
 
 router.get("/api/user/:name", function (req, res) {
-  execute2(`select * from Comments where author = '${req.params.name}'`), function (result) {
-    if (result) {
-      res.json(result)
-    }
-  }
+  execute2(`select * from Comments where author = '${req.params.name}'`)
+
 })
 // new sql.ConnectionPool(config).connect().then(pool => {
 //   return pool.request().query(`select * from Comments where author = '${req.params.name}'`)
