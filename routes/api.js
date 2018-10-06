@@ -41,33 +41,25 @@ const config = {
 
 router.get("/api/user/:name", function (req, res) {
 
-  var test = "hightouch"
-  sql.connect(config, err => {
-    // ... error checks
- 
-    // Query
- 
-    new sql.Request().query(`select * from Comments where author = '${test}'`, (err, result) => {
+
+  (async function () {
+    try {
+        let pool = await sql.connect(config)
+        let result1 = await pool.request()
+            .input('input_parameter', sql.Int, value)
+            .query(`select * from Comments where author = '${test}'`)
+            
+        console.dir(result1)
+        sql.close()
+    } catch (err) {
         // ... error checks
-        if(err){
-          console.log(err)
-          sql.close()
-
-        } 
-        else{
-          console.dir(result)
-          res.json(result)
-          sql.close()
-
-        }
-    })
- 
-    // Stored Procedure
-})
+        sql.close()
+    }
+})()
  
 sql.on('error', err => {
-  sql.close()
     // ... error handler
+    sql.close()
 })
 
   // var array = []
