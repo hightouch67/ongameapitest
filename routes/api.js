@@ -73,8 +73,8 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
     }
     var query = `INSERT INTO projects (author,permlink,json_metadata) 
                             VALUES
-                                  ('${req.params.name}',
-                                  '${req.params.permlink}')`
+                                  ('${result.author}',
+                                  '${result.permlink}','${result.json_metadata}')`
     pool1.getConnection(function (error, connection) {
       connection.query(query, function (err, result) {
         if (err) return;
