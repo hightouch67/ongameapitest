@@ -64,31 +64,41 @@ router.get("/api/projects", function (req, res) {
   })
 })
 
+
+loadSingle = function (author, permlink, cb) {
+  steem.api.getContent(author, permlink, function (error, result) {
+    if (result) {
+      try {
+        result.json_metadata = JSON.parse(result.json_metadata)
+      } catch (e) {
+      }
+      cb(result)
+    }
+    else {
+      cb(null)
+    }
+  })
+}
+
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   var project = {}
-  steem.api.getContent(req.params.name, req.params.permlink, function (err, result) {
-    if (err) res.json(err)
-    if (result)
-        project = result
-      try {
-        project.json_metadata = JSON.stringify(project.json_metadata);
-       
-      } catch (e) {
-        console.log(e)
-      }
-  });
-  var query = `INSERT INTO projects (author,permlink,json_metadata) 
-  VALUES
-        ('${project.author}',
-        '${project.permlink}','${project.json_metadata}')`
-  pool1.getConnection(function (error, connection) {
-    connection.query(query, function (err, result) {
-      if (err) return;
-      else
-        console.log(result)
-      res.json(result)
-      connection.release();
-    })
+  loadSingle(req.params.name, req.params.permlink, function (project){
+    if(project)
+    {
+      var query = `INSERT INTO projects (author,permlink,json_metadata) 
+      VALUES
+            ('${project.author}',
+            '${project.permlink}','${project.json_metadata}')`
+      pool1.getConnection(function (error, connection) {
+        connection.query(query, function (err, result) {
+          if (err) return;
+          else
+            console.log(result)
+          res.json(result)
+          connection.release();
+        })
+      })
+    }
   })
 })
 
