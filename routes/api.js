@@ -66,6 +66,7 @@ router.get("/api/projects", function (req, res) {
 router.get("/api/add/:name/:permlink", function (req, res) {
   steem.api.getContent(req.params.name, req.params.permlink, function(err, result) {
     console.log(err, result);
+    res.json(result)
   });
   // pool1.getConnection(function (error, connection) {
 
