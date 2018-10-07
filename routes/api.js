@@ -88,6 +88,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
     if(post)
     {
       if(post.json_metadata.basics.content === "project")
+      console.log(result.rewards)
       post.image = setImage(post.basics.description)
       var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
                       title, body, json_metadata, last_update, created, active, last_payout, 
@@ -101,7 +102,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
                       socials, tags, project ) 
                   VALUES
                       ('${post.author}','${post.permlink}','${post.category}','${post.parent_author}','${post.parent_permlink}',
-                      '${post.title}','${post.body}',JSON_OBJECT(${post.json_metadata}),'${post.last_update}','${post.created}','${post.active}','${post.last_payout}',
+                      '${post.title}','${post.body}','${post.json_metadata}','${post.last_update}','${post.created}','${post.active}','${post.last_payout}',
                       '${post.depth}','${post.children}','${post.net_rshares}','${post.abs_rshares}','${post.vote_rshares}','${post.children_abs_rshares}',
                       '${post.cashout_time}','${post.max_cashout_time}','${post.total_vote_weight}','${post.reward_weight}','${post.total_payout_value}',
                       '${post.curator_payout_value}','${post.author_rewards}','${post.net_votes}','${post.root_comment}','${post.mode}','${post.max_accepted_payout}',
