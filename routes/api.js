@@ -4,7 +4,7 @@ const _ = require('lodash');
 var mysql = require('mysql');
 const router = express.Router();
 const sql = require('mssql')
-const steem = require('@steemit/steem-js');
+var steem = require('steem');
 
 
 

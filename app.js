@@ -10,9 +10,6 @@ https.globalAgent.maxSockets = Infinity;
 
 const app = express();
 
-if (process.env.STEEMJS_URL) {
-  steem.api.setOptions({ url: process.env.STEEMJS_URL });
-}
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", '*');
   res.header("Access-Control-Allow-Credentials", true);
