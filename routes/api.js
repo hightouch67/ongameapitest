@@ -73,7 +73,7 @@ router.get("/api/user/:name/:permlink", function (req, res) {
 
   router.get("/api/projects", function (req, res) {
     pool1.getConnection(function (error, connection) {
-      var query = `SELECT author, permlink, title, json_metadata FROM comments`
+      var query = `SELECT author, permlink, title, json_metadata, type FROM comments`
       connection.query(query, function (err, result) {
         if (err) return;
         else
