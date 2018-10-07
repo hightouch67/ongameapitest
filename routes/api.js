@@ -57,6 +57,7 @@ router.get("/api/user/:name/:permlink", function (req, res) {
       connection.release();
     })
   })
+})
 
   router.get("/api/projects", function (req, res) {
     pool1.getConnection(function (error, connection) {
@@ -68,6 +69,7 @@ router.get("/api/user/:name/:permlink", function (req, res) {
         connection.release();
       })
     })
+  })
 
   // var query = `select *
   // from
@@ -106,7 +108,6 @@ router.get("/api/user/:name/:permlink", function (req, res) {
   //   });
   // }
   
-})
 // new sql.ConnectionPool(config).connect().then(pool => {
 //   return pool.request().query(`select * from Comments where author = '${req.params.name}'`)
 //   }).then(result => {
