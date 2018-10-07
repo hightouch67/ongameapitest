@@ -85,7 +85,6 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (project){
     if(project)
     {
-      project.json_metadata = JSON.stringify(project.json_metadata)
       var query = `INSERT INTO projects (author,permlink,json_metadata) 
       VALUES
             ('${project.author}',
