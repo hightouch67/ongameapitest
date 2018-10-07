@@ -72,6 +72,7 @@ loadSingle = function (author, permlink, cb) {
         result.json_metadata = JSON.parse(result.json_metadata)
       } catch (e) {
       }
+      result.json_metadata = result.json_metadata.toString()
       result.basics = result.json_metadata.basics
       result.rewards = result.json_metadata.rewards
       result.goals = result.json_metadata.goals
