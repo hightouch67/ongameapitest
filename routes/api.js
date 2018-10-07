@@ -69,7 +69,7 @@ loadSingle = function (author, permlink, cb) {
   steem.api.getContent(author, permlink, function (error, result) {
     if (result) {
       try {
-        result.json_metadata = JSON.parse(result.json_metadata)
+        result.json_metadata = JSON.stringify(result.json_metadata)
       } catch (e) {
       }
       cb(result)
