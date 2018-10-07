@@ -59,9 +59,21 @@ router.get("/api/user/:name/:permlink", function (req, res) {
   })
 })
 
+  router.get("/api/fullprojects", function (req, res) {
+    pool1.getConnection(function (error, connection) {
+      var query = `SELECT * FROM comments`
+      connection.query(query, function (err, result) {
+        if (err) return;
+        else
+          res.json(result)
+        connection.release();
+      })
+    })
+  })
+
   router.get("/api/projects", function (req, res) {
     pool1.getConnection(function (error, connection) {
-      var query = `SELECT * FROM comments where type='project'`
+      var query = `SELECT author, permlink, title FROM comments`
       connection.query(query, function (err, result) {
         if (err) return;
         else
