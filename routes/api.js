@@ -91,11 +91,11 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
             '${project.permlink}','${project.json_metadata}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
-          if (err) return;
+          if (err)  res.json(err);
           else
-            console.log(result)
-          res.json(result)
+          console.log(result)
           connection.release();
+          res.json(result)
         })
       })
     }
