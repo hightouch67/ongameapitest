@@ -65,29 +65,31 @@ router.get("/api/projects", function (req, res) {
 })
 
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
-  steem.api.getContent(req.params.name, req.params.permlink, function (err, project) {
+  var project = {}
+  steem.api.getContent(req.params.name, req.params.permlink, function (err, result) {
     if (err) res.json(err)
-    if (project)
+    if (result)
+        project = result
       try {
         project.json_metadata = JSON.stringify(project.json_metadata);
        
       } catch (e) {
         console.log(e)
       }
-      var query = `INSERT INTO projects (author,permlink,json_metadata) 
-      VALUES
-            ('${project.author}',
-            '${project.permlink}','${project.json_metadata}')`
-      pool1.getConnection(function (error, connection) {
-        connection.query(query, function (err, result) {
-          if (err) return;
-          else
-            console.log(result)
-          res.json(result)
-          connection.release();
-        })
-      })
   });
+  var query = `INSERT INTO projects (author,permlink,json_metadata) 
+  VALUES
+        ('${project.author}',
+        '${project.permlink}','${project.json_metadata}')`
+  pool1.getConnection(function (error, connection) {
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        console.log(result)
+      res.json(result)
+      connection.release();
+    })
+  })
 })
 
 
