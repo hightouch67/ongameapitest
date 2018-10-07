@@ -67,7 +67,7 @@ router.get("/api/projects", function (req, res) {
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   steem.api.getContent(req.params.name, req.params.permlink, function (err, result) {
     try {
-      result.json_metadata = JSON.parse(result.json_metadata);
+      result.json_metadata = JSON.stringify(result.json_metadata);
     } catch (e) {
       console.log(e)
     }
