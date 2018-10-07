@@ -65,8 +65,15 @@ router.get("/api/projects", function (req, res) {
 })
 
 router.get("/api/add/:name/:permlink", function (req, res) {
-  steem.api.getContent(req.params.name, req.params.permlink, function(err, result) {
+  steem.api.getContent(req.params.name, req.params.permlink, function (err, result) {
     console.log(err, result);
+
+    try {
+      result.json_metadata = JSON.parse(result.json_metadata);
+    } catch (e) {
+      console.log(e)
+    }
+    
     res.json(result)
   });
   // pool1.getConnection(function (error, connection) {
