@@ -4,8 +4,9 @@ const _ = require('lodash');
 var mysql = require('mysql');
 const router = express.Router();
 const sql = require('mssql')
-var steem = require('steem');
+const steem = require('steem');
 
+steem.api.setOptions({ url: 'https://api.steemit.com' });
 
 
 router.get('/', (req, res) => {
