@@ -73,7 +73,7 @@ loadSingle = function (author, permlink, cb) {
       } catch (e) {
       }
       result.basics = result.json_metadata.basics
-
+      console.log(basics.description)
       cb(result)
     }
     else {
