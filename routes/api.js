@@ -68,11 +68,6 @@ router.get("/api/projects", function (req, res) {
 loadSingle = function (author, permlink, cb) {
   steem.api.getContent(author, permlink, function (error, result) {
     if (result) {
-      try {
-        var json_metadata = result.json_metadata.toString();
-        result.json_metadata = json_metadata
-      } catch (e) {
-      }
       cb(result)
     }
     else {
@@ -89,7 +84,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
       var query = `INSERT INTO projects (author,permlink,json_metadata) 
       VALUES
             ('${project.author}',
-            '${project.permlink}','${project.json_metadata}')`
+            '${project.permlink}','${project.json_metadata.toString()}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err)  res.json(err);
