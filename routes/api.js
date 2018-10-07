@@ -72,7 +72,8 @@ loadSingle = function (author, permlink, cb) {
         result.json_metadata = JSON.parse(result.json_metadata)
       } catch (e) {
       }
-      result.json_metadata = JSON.stringify(result.json_metadata)
+      result.basics = result.json_metadata.basics
+
       cb(result)
     }
     else {
@@ -86,6 +87,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (project){
     if(project)
     {
+      console.log(project.basics)
       var query = `INSERT INTO projects (author,permlink,json_metadata) 
       VALUES
             ('${project.author}',
