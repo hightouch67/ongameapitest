@@ -83,21 +83,42 @@ loadSingle = function (author, permlink, cb) {
 }
 
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
-  var project = {}
-  loadSingle(req.params.name, req.params.permlink, function (project){
-    if(project)
+  loadSingle(req.params.name, req.params.permlink, function (post){
+    if(post)
     {
-      console.log(project.basics)
-      var query = `INSERT INTO projects (author,permlink,json_metadata) 
-      VALUES
-            ('${project.author}',
-            '${project.permlink}','${project.json_metadata}')`
+      if(post.json_metadata.basics.content === "project")
+      post.image = setImage(post.json_metadata.basics.description)
+      var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
+                      title, body, json_metadata, last_update, created, active, last_payout, 
+                      depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, 
+                      cashout_time, max_cashout_time, total_vote_weight, reward_weight, total_payout_value,
+                      curator_payout_value, author_rewards, net_votes, root_comment, mode, max_accepted_payout,
+                      percent_steem_dollars, allow_replies, allow_votes, allow_curation_rewards, beneficiaries,
+                      url, root_title, pending_payout_value, total_pending_payout_value, active_votes,
+                      replies, author_reputation, promoted, body_length, reblogged_by, body_language, 
+                      image, rewards, goals, thanks_message, description, 
+                      socials, tags, project ) 
+                  VALUES
+                      ('${post.author}','${post.permlink}','${post.category}','${post.parent_author}','${post.parent_permlink}',
+                      '${post.title}','${post.body}','${post.json_metadata}','${post.last_update}','${post.created}','${post.active}','${post.last_payout}',
+                      '${post.depth}','${post.children}','${post.net_rshares}','${post.abs_rshares}','${post.vote_rshares}','${post.children_abs_rshares}',
+                      '${post.cashout_time}','${post.max_cashout_time}','${post.total_vote_weight}','${post.reward_weight}','${post.total_payout_value}',
+                      '${post.curator_payout_value}','${post.author_rewards}','${post.net_votes}','${post.root_comment}','${post.mode}','${post.max_accepted_payout}',
+                      '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
+                      '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
+                      '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
+                      '${post.image}','${post.json_metadata.rewards}','${post.json_metadata.goals}','${post.json_metadata.thanks}','${post.json_metadata.basics.description}',
+                      '${post.json_metadata.basics.social}','${post.json_metadata.tags}','${post.json_metadata.project}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
-          if (err)  res.json(err);
+          if (err)
+          {
+            connection.release();
+            res.json(err);
+          }  
           else
           console.log(result)
-          connection.release();
+
           res.json(result)
         })
       })
@@ -262,5 +283,47 @@ function getHash(input) {
   return hash;
 
 }
+
+
+setImage = function (string) {
+  if (!string) return
+  if ($.isArray(string)) {
+    if (string[0]) {
+      if (string[0].url.match('^http://')) {
+        string[0].url = string[0].url.replace("http://", "https://")
+        return string[0].url
+      }
+    }
+  }
+  else {
+    var pattern = "(http(s?):)([/|.|\\w|\\s])*." + "(?:jpe?g|gif|png|JPG)";
+    var res = string.match(pattern);
+    if (res) {
+      if (res[0]) {
+        //return res[0]
+        if (res[0].includes('hightouch')) {
+          var filename = res[0].split("/").pop();
+          if (filename) {
+            return "https://res.cloudinary.com/hightouch/image/upload/c_fill,h_200,w_235/v1523828169/" + filename
+          }
+        }
+        else {
+          return res[0]
+        }
+      }
+    }
+    else {
+      pattern = "(http(s?):\/\/.*\.(?:jpe?g|gif|png|JPG))";
+      res = string.match(pattern);
+      if (res) {
+        return res[0]
+      }
+      else {
+        return "./images/notfound.jpg"
+      }
+    }
+  }
+}
+
 
 module.exports = router;
