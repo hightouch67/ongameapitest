@@ -64,7 +64,7 @@ router.get("/api/projects", function (req, res) {
   })
 })
 
-router.get("/api/add/:name/:permlink", function (req, res) {
+router.get("/api/addaproject/:name/:permlink", function (req, res) {
   steem.api.getContent(req.params.name, req.params.permlink, function (err, result) {
     console.log(err, result);
 
@@ -73,22 +73,27 @@ router.get("/api/add/:name/:permlink", function (req, res) {
     } catch (e) {
       console.log(e)
     }
-    
+    var query = `INSERT INTO projects (author,permlink,json_metadata) 
+                            VALUES
+                                  ('${req.params.name}',
+                                  '${req.params.permlink}')`
+    pool1.getConnection(function (error, connection) {
+
+
+      // var query = `INSERT INTO * FROM projects where 
+      //                               author='${req.params.name}' AND 
+      //                               permlink='${req.params.permlink}'`
+      connection.query(query, function (err, result) {
+        if (err) return;
+        else
+          res.json(result)
+        connection.release();
+      })
+    })
     res.json(result)
   });
-  // pool1.getConnection(function (error, connection) {
 
 
-  //   var query = `INSERT INTO * FROM projects where 
-  //                                 author='${req.params.name}' AND 
-  //                                 permlink='${req.params.permlink}'`
-  //   connection.query(query, function (err, result) {
-  //     if (err) return;
-  //     else
-  //       res.json(result)
-  //     connection.release();
-  //   })
-  // })
 })
 
 
