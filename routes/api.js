@@ -302,7 +302,7 @@ setImage = function (string) {
 function parseProject(project) {
   var newProject = {}
   try {
-    newProject.json_metadata = JSON.parse(project.json_metadata)
+    newProject.json_metadata = JSON.stringify(project.json_metadata)
     } catch(e) {
       console.log(e)
   }
