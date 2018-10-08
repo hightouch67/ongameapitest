@@ -149,9 +149,11 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
           }
           else
             res.json(result)
-            connection.release();
         })
       })
+    }
+    else{
+      connection.release();
     }
   })
 })
