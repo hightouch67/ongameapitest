@@ -68,10 +68,10 @@ router.get("/api/projects", function (req, res) {
 loadSingle = function (author, permlink, cb) {
   steem.api.getContent(author, permlink, function (error, result) {
     if (result) {
-      // try {
-      //   result.json_metadata = JSON.stringify(result.json_metadata)
-      // } catch (e) {
-      // }
+      try {
+        result.json_metadata = JSON.parse(result.json_metadata)
+      } catch (e) {
+      }
       // result.rewards = JSON.stringify(result.json_metadata.rewards)
       // result.goals = JSON.stringify(result.json_metadata.goals)
       // result.image = setImage(result.json_metadata.basics.description)
@@ -115,8 +115,6 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
             connection.release();
           }
           else
-            console.log(result)
-
           res.json(result)
         })
       })
