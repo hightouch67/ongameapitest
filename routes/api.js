@@ -359,7 +359,7 @@ function parseProject(project) {
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
   try {
-    newProject.json_metadata = JSON.stringify(project.json_metadata)
+    newProject.json_metadata = JSON.stringify(project.json_metadata).replace("'","''")
     } catch(e) {
       console.log(e)
   }
