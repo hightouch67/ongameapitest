@@ -353,7 +353,7 @@ function parseProject(project) {
   newProject.body_length = project.body_length
   newProject.reblogged_by = project.reblogged_by
   newProject.body_language = project.body_language
-  newProject.description = newProject.json_metadata.basics.description
+  newProject.description = newProject.json_metadata.basics.description.replace("'","''")
   newProject.image = setImage(newProject.description)
   newProject.rewards = newProject.json_metadata.rewards
   newProject.goals = newProject.json_metadata.goals
