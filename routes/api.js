@@ -86,8 +86,9 @@ loadSingle = function (author, permlink, cb) {
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
-      console.log(post)
+
       var image = setImage(post.json_metadata.basics.description)
+      console.log(image)
       var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
           title, body, json_metadata, last_update, created, active, last_payout, 
           depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, 
