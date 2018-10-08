@@ -110,8 +110,9 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
-            connection.release();
+
             res.json(err);
+            connection.release();
           }
           else
             console.log(result)
@@ -119,9 +120,6 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
           res.json(result)
         })
       })
-    }
-    else{
-      res.json('no result')
     }
   })
 })
