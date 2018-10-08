@@ -86,8 +86,7 @@ loadSingle = function (author, permlink, cb) {
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
-      if (post.json_metadata.basics.content === "project") {
-        var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
+      var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
           title, body, json_metadata, last_update, created, active, last_payout, 
           depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, 
           cashout_time, max_cashout_time, total_vote_weight, reward_weight, total_payout_value,
@@ -108,19 +107,21 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
           '${post.image}','${post.rewards}','${post.goals}','${post.json_metadata.thanks.message}','${post.json_metadata.basics.description}',
           '[${post.json_metadata.basics.social}]','[${post.json_metadata.tags}]','${post.json_metadata.project}')`
-        pool1.getConnection(function (error, connection) {
-          connection.query(query, function (err, result) {
-            if (err) {
-              connection.release();
-              res.json(err);
-            }
-            else
-              console.log(result)
+      pool1.getConnection(function (error, connection) {
+        connection.query(query, function (err, result) {
+          if (err) {
+            connection.release();
+            res.json(err);
+          }
+          else
+            console.log(result)
 
-            res.json(result)
-          })
+          res.json(result)
         })
-      }
+      })
+    }
+    else{
+      res.json('no result')
     }
   })
 })
