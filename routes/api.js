@@ -72,7 +72,6 @@ loadSingle = function (author, permlink, cb) {
         result.json_metadata = JSON.parse(result.json_metadata)
       } catch (e) {
       }
-      result.basics = result.json_metadata.basics
       try {
         result.rewards = JSON.stringify(result.json_metadata.rewards)
         result.goals = JSON.stringify(result.json_metadata.goals)
@@ -112,8 +111,8 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
                       '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
                       '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
                       '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
-                      '${post.image}','${post.rewards}','${post.goals}','${post.json_metadata.thanks.message}','${post.basics.description}',
-                      '[${post.basics.social}]','[${post.json_metadata.tags}]','${post.json_metadata.project}')`
+                      '${post.image}','${post.rewards}','${post.goals}','${post.json_metadata.thanks.message}','${post.json_metadata.basics.description}',
+                      '[${post.json_metadata.basics.social}]','[${post.json_metadata.tags}]','${post.json_metadata.project}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err)
