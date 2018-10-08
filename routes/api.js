@@ -83,17 +83,17 @@ loadSingle = function (author, permlink, cb) {
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
-      var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, title, body, last_update, created, active, last_payout, depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, cashout_time, max_cashout_time, total_vote_weight, reward_weight, total_payout_value,curator_payout_value, author_rewards, net_votes, root_comment, mode, max_accepted_payout,percent_steem_dollars, allow_replies, allow_votes, allow_curation_rewards, beneficiaries,url, root_title, pending_payout_value, total_pending_payout_value, active_votes,replies, author_reputation, promoted, body_length, reblogged_by, body_language, image, rewards, goals, thanks_message, description, socials, tags, project ) 
+      var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, title, body, json_metadata, last_update, created, active, last_payout, depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, cashout_time, max_cashout_time, total_vote_weight, reward_weight, total_payout_value,curator_payout_value, author_rewards, net_votes, root_comment, mode, max_accepted_payout,percent_steem_dollars, allow_replies, allow_votes, allow_curation_rewards, beneficiaries,url, root_title, pending_payout_value, total_pending_payout_value, active_votes,replies, author_reputation, promoted, body_length, reblogged_by, body_language, image, rewards, goals, thanks_message, description, socials, tags, project ) 
       VALUES
           ('${post.author}','${post.permlink}','${post.category}','${post.parent_author}','${post.parent_permlink}',
-          '${post.title}','${post.body}','${post.last_update}','${post.created}','${post.active}','${post.last_payout}',
+          '${post.title}','${post.body}','${post.json_metadata}','${post.last_update}','${post.created}','${post.active}','${post.last_payout}',
           '${post.depth}','${post.children}','${post.net_rshares}','${post.abs_rshares}','${post.vote_rshares}','${post.children_abs_rshares}',
           '${post.cashout_time}','${post.max_cashout_time}','${post.total_vote_weight}','${post.reward_weight}','${post.total_payout_value}',
           '${post.curator_payout_value}','${post.author_rewards}','${post.net_votes}','${post.root_comment}','${post.mode}','${post.max_accepted_payout}',
           '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
-          '${post.image}','${post.rewards.toString().replace("'","''")}','${post.json_metadata.goals.toString().replace("'","''")}','${post.thanks.toString().replace("'","''")}','${post.description}',
+          '${post.image}','${post.rewards}','${post.json_metadata.goals}','${post.thanks}','${post.description}',
           '${post.socials}','${post.json_metadata.tags}','${post.project}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
@@ -302,7 +302,7 @@ setImage = function (string) {
 function parseProject(project) {
   var newProject = {}
   try {
-    newProject.json_metadata = JSON.stringify(project.json_metadata)
+    newProject.json_metadata = JSON.parse(project.json_metadata)
     } catch(e) {
       console.log(e)
   }
@@ -318,8 +318,6 @@ function parseProject(project) {
   newProject.created = project.created
   newProject.active = project.active
   newProject.last_payout = project.last_payout
-
-
   newProject.depth = project.depth
   newProject.children = project.children
   newProject.net_rshares = project.net_rshares
@@ -332,7 +330,6 @@ function parseProject(project) {
   newProject.reward_weight = project.reward_weight
   newProject.total_payout_value = project.total_payout_value
   newProject.curator_payout_value = project.curator_payout_value
-
   newProject.author_rewards = project.author_rewards
   newProject.net_votes = project.net_votes
   newProject.root_comment = project.root_comment
@@ -361,6 +358,11 @@ function parseProject(project) {
   newProject.socials = newProject.json_metadata.basics.socials
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
+  try {
+    newProject.json_metadata = JSON.stringify(project.json_metadata)
+    } catch(e) {
+      console.log(e)
+  }
   return newProject;
 }
 
