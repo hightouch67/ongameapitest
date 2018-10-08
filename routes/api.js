@@ -68,10 +68,7 @@ router.get("/api/projects", function (req, res) {
 loadSingle = function (author, permlink, cb) {
   steem.api.getContent(author, permlink, function (error, result) {
     if (result) {
-      try {
-        result.json_metadata = JSON.parse(result.json_metadata)
-      } catch (e) {
-      }
+      result = parseProject(result)
       // result.rewards = JSON.stringify(result.json_metadata.rewards)
       // result.goals = JSON.stringify(result.json_metadata.goals)
       // result.image = setImage(result.json_metadata.basics.description)
@@ -326,13 +323,14 @@ setImage = function (string) {
 }
 
 
-function parseProject(project, isComment) {
+function parseProject(project) {
   try {
     var newProject = JSON.parse(project.json_metadata)
     } catch(e) {
       console.log(e)
   }
   if (!newProject) newProject = {}
+  console.log(newProject)
   newProject.author = project.author
   newProject.body = project.body
   newProject.total_payout_value = project.total_payout_value
