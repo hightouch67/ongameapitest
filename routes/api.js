@@ -357,7 +357,7 @@ function parseProject(project) {
   try {
     newProject.thanks = JSON.stringify(newProject.json_metadata.thanks.message).toString().replace("\'","''")
     newProject.description = JSON.stringify(newProject.json_metadata.basics.description).toString().replace("\'","''")
-    newProject.rewards =  JSON.stringify(newProject.json_metadata.rewards).toString().replace("\'","''")
+    newProject.rewards =  JSON.stringify(newProject.json_metadata.rewards)[0].toString().replace("\'","''")
     newProject.goals = JSON.stringify(newProject.json_metadata.goals).toString().replace("\'","''")
     newProject.json_metadata = {}
     } catch(e) {
