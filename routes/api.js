@@ -27,8 +27,6 @@ var pool1 = mysql.createPool({
   database: process.env.MYSQL_DB
 });
 
-
-
 router.get("/api/user/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT * FROM projects where author='${req.params.name}' AND permlink='${req.params.permlink}'`
@@ -70,7 +68,7 @@ loadSingle = function (author, permlink, cb) {
   steem.api.getContent(author, permlink, function (error, result) {
     if (result) {
       try {
-        var test ={}
+        var test = {}
         test.json_metadata = JSON.parse(result.json_metadata)
       } catch (e) {
         console.log(e)
@@ -151,6 +149,7 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
           }
           else
             res.json(result)
+            connection.release();
         })
       })
     }
@@ -158,31 +157,21 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
 })
 
 router.get("/api/projects/authors", function (req, res) {
-      var query = `SELECT author, permlink FROM projects`
-      pool1.getConnection(function (error, connection) {
-        connection.query(query, function (err, result) {
-          if (err) {
-
-            res.json(err);
-            connection.release();
-          }
-          else
-            res.json(result)
-        })
-  })
-})
-
-router.get("/api/characters", function (req, res) {
+  var query = `SELECT author, permlink FROM projects`
   pool1.getConnection(function (error, connection) {
-    var query = "SELECT * FROM user"
     connection.query(query, function (err, result) {
-      if (err) return;
+      if (err) {
+
+        res.json(err);
+        connection.release();
+      }
       else
         res.json(result)
-      connection.release();
     })
   })
 })
+
+
 
 router.get("/api/gifts/:name", function (req, res) {
   pool1.getConnection(function (error, connection) {
@@ -196,127 +185,7 @@ router.get("/api/gifts/:name", function (req, res) {
   })
 })
 
-router.get("/api/character/:name", function (req, res) {
-  var playerid;
-  var character = {}
-  pool1.getConnection(function (err, connection) {
-    //LOAD USER
-    var query = "SELECT * FROM user WHERE username='" + req.params.name + "'"
-    connection.query(query, function (err, result) {
-      if (err || result.length < 1) return res.json(err);
-      playerid = result[0].user_id
-      character = result[0]
-      //LOAD CHARACTER
-      var query = "SELECT * FROM characters WHERE character_id='" + playerid + "'"
-      connection.query(query, function (err, result) {
-        if (err) return;
-        character.character = result[0]
-        //LOAD ATTRIBUTES
-        var query = "SELECT * FROM character_attribute WHERE character_id='" + playerid + "'"
-        connection.query(query, function (err, result) {
-          if (err) return;
-          character.character.attributes = result
-          //LOAD ITEMS
-          var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
-          connection.query(query, function (err, result) {
-            if (err) return;
-            character.character.items = result
-            //LOAD EQUIPMENT
-            var query = "SELECT * FROM character_equipment WHERE character_id='" + playerid + "'"
-            connection.query(query, function (err, result) {
-              if (err) return;
-              character.character.equipment = result
-              //LOAD CLASS
-              var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
-              connection.query(query, function (err, result) {
-                if (err) return;
-                character.character.class = result[0]
-                res.json(character)
-                connection.release();
-              })
-            })
-          })
-        })
-      })
-    })
-  })
-})
 
-
-
-router.get("/api/properties", function (req, res) {
-  var properties = {}
-  pool1.getConnection(function (err, connection) {
-    //LOAD ATTRIBUTES
-    var query = "SELECT * FROM attribute"
-    connection.query(query, function (err, result) {
-      if (err) return;
-      properties.attributes = result
-      //LOAD ITEMS
-      var query = "SELECT * FROM item"
-      connection.query(query, function (err, result) {
-        if (err) return;
-        properties.items = result
-        //LOAD ITEMS ATTRIBUTES
-        var query = "SELECT * FROM item_attribute"
-        connection.query(query, function (err, result) {
-          if (err) return;
-          properties.items_attributes = result
-          //LOAD ITEMS TYPES
-          var query = "SELECT * FROM item_type"
-          connection.query(query, function (err, result) {
-            if (err) return;
-            properties.items_types = result
-            //LOAD SLOTS
-            var query = "SELECT * FROM equipment_slot"
-            connection.query(query, function (err, result) {
-              if (err) return;
-              properties.slots = result
-            })
-            //LOAD CLASS
-            var query = "SELECT * FROM class"
-            connection.query(query, function (err, result) {
-              if (err) return;
-              properties.class = result
-              //LOAD SHOP
-              var query = "SELECT * FROM shop"
-              connection.query(query, function (err, result) {
-                if (err) return;
-                properties.shop = result
-                res.json(properties)
-                connection.release();
-              })
-            })
-          })
-        })
-      })
-    })
-  })
-});
-
-router.get("/api/battle", function (req, res) {
-  pool1.getConnection(function (error, connection) {
-    var query = "SELECT * FROM battle"
-    connection.query(query, function (err, result) {
-      if (err) return;
-      else
-        res.json(result)
-      connection.release();
-    })
-  })
-})
-
-router.get("/api/battle_history", function (req, res) {
-  pool1.getConnection(function (error, connection) {
-    var query = "SELECT * FROM battle_history"
-    connection.query(query, function (err, result) {
-      if (err) return;
-      else
-        res.json(result)
-      connection.release();
-    })
-  })
-})
 
 
 function getHash(input) {
@@ -494,5 +363,140 @@ function parseUpdate(update) {
   }
   return newUpdate;
 }
+
+
+router.get("/api/characters", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = "SELECT * FROM user"
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
+router.get("/api/character/:name", function (req, res) {
+  var playerid;
+  var character = {}
+  pool1.getConnection(function (err, connection) {
+    //LOAD USER
+    var query = "SELECT * FROM user WHERE username='" + req.params.name + "'"
+    connection.query(query, function (err, result) {
+      if (err || result.length < 1) return res.json(err);
+      playerid = result[0].user_id
+      character = result[0]
+      //LOAD CHARACTER
+      var query = "SELECT * FROM characters WHERE character_id='" + playerid + "'"
+      connection.query(query, function (err, result) {
+        if (err) return;
+        character.character = result[0]
+        //LOAD ATTRIBUTES
+        var query = "SELECT * FROM character_attribute WHERE character_id='" + playerid + "'"
+        connection.query(query, function (err, result) {
+          if (err) return;
+          character.character.attributes = result
+          //LOAD ITEMS
+          var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
+          connection.query(query, function (err, result) {
+            if (err) return;
+            character.character.items = result
+            //LOAD EQUIPMENT
+            var query = "SELECT * FROM character_equipment WHERE character_id='" + playerid + "'"
+            connection.query(query, function (err, result) {
+              if (err) return;
+              character.character.equipment = result
+              //LOAD CLASS
+              var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
+              connection.query(query, function (err, result) {
+                if (err) return;
+                character.character.class = result[0]
+                res.json(character)
+                connection.release();
+              })
+            })
+          })
+        })
+      })
+    })
+  })
+})
+
+
+
+router.get("/api/properties", function (req, res) {
+  var properties = {}
+  pool1.getConnection(function (err, connection) {
+    //LOAD ATTRIBUTES
+    var query = "SELECT * FROM attribute"
+    connection.query(query, function (err, result) {
+      if (err) return;
+      properties.attributes = result
+      //LOAD ITEMS
+      var query = "SELECT * FROM item"
+      connection.query(query, function (err, result) {
+        if (err) return;
+        properties.items = result
+        //LOAD ITEMS ATTRIBUTES
+        var query = "SELECT * FROM item_attribute"
+        connection.query(query, function (err, result) {
+          if (err) return;
+          properties.items_attributes = result
+          //LOAD ITEMS TYPES
+          var query = "SELECT * FROM item_type"
+          connection.query(query, function (err, result) {
+            if (err) return;
+            properties.items_types = result
+            //LOAD SLOTS
+            var query = "SELECT * FROM equipment_slot"
+            connection.query(query, function (err, result) {
+              if (err) return;
+              properties.slots = result
+            })
+            //LOAD CLASS
+            var query = "SELECT * FROM class"
+            connection.query(query, function (err, result) {
+              if (err) return;
+              properties.class = result
+              //LOAD SHOP
+              var query = "SELECT * FROM shop"
+              connection.query(query, function (err, result) {
+                if (err) return;
+                properties.shop = result
+                res.json(properties)
+                connection.release();
+              })
+            })
+          })
+        })
+      })
+    })
+  })
+});
+
+router.get("/api/battle", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = "SELECT * FROM battle"
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
+router.get("/api/battle_history", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = "SELECT * FROM battle_history"
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
 
 module.exports = router;
