@@ -69,7 +69,7 @@ loadSingle = function (author, permlink, cb) {
   steem.api.getContent(author, permlink, function (error, result) {
     if (result) {
       try {
-        result.json_metadata = JSON.parse(result.json_metadata)
+        parseProject(result)
       } catch (e) {
       }
       // result.rewards = JSON.stringify(result.json_metadata.rewards)
@@ -86,9 +86,6 @@ loadSingle = function (author, permlink, cb) {
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
-
-      var image = setImage(post.json_metadata.basics.description)
-      console.log(image)
       var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
           title, body, json_metadata, last_update, created, active, last_payout, 
           depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, 
@@ -128,7 +125,6 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
     }
   })
 })
-
 
 router.get("/api/characters", function (req, res) {
   pool1.getConnection(function (error, connection) {
@@ -328,5 +324,24 @@ setImage = function (string) {
   }
 }
 
+
+function parseProject(project) {
+  try {
+    var newProject = JSON.parse(project.json_metadata)
+    } catch(e) {
+      console.log(e)
+  }
+  if (!newProject) newProject = {}
+  newProject.author = project.author
+  newProject.body = project.body
+  newProject.total_payout_value = project.total_payout_value
+  newProject.curator_payout_value = project.curator_payout_value
+  newProject.pending_payout_value = project.pending_payout_value
+  newProject.permlink = project.permlink
+  newProject.created = project.created
+  newProject.net_rshares = project.net_rshares
+  newProject.reblogged_by = project.reblogged_by
+  return newProject;
+}
 
 module.exports = router;
