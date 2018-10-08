@@ -88,7 +88,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
     if(post)
     {
       if(post.json_metadata.basics.content === "project")
-      post.image = setImage(post.json_metadata.basics.description)
+      post.image = setImage(post.basics.description)
       var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
                       title, body, json_metadata, last_update, created, active, last_payout, 
                       depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, 
@@ -108,7 +108,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
                       '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
                       '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
                       '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
-                      '${post.image}','${post.json_metadata.rewards}','[${post.json_metadata.goals}]','${post.json_metadata.thanks.message}','${post.basics.description}',
+                      '${post.image}','${post.json_metadata.rewards}','${post.json_metadata.goals}','${post.json_metadata.thanks.message}','${post.basics.description}',
                       '[${post.basics.social}]','[${post.json_metadata.tags}]','${post.json_metadata.project}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
