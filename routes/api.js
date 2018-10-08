@@ -89,8 +89,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
     if(post)
     {
       if(post.json_metadata.basics.content === "project")
-      console.log(post)
-      post.image = setImage(post.basics.description)
+      post.image = setImage(post.json_metadata.basics.description)
       var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
                       title, body, json_metadata, last_update, created, active, last_payout, 
                       depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, 
