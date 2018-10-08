@@ -86,7 +86,11 @@ loadSingle = function (author, permlink, cb) {
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
-      post.json_metadata.basics.description = post.json_metadata.basics.description.toString()
+      try {
+        post.json_metadata.basics.description = JSON.stringify(post.json_metadata.basics.description)
+      } catch (e) {
+      }
+
       var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
           title, body, json_metadata, last_update, created, active, last_payout, 
           depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, 
