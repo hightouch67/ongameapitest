@@ -19,21 +19,14 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
-// var pool1 = mysql.createPool({
-//   connectionLimit: 5,
-//   host: process.env.MYSQL_HOST,
-//   user: process.env.MYSQL_USERNAME,
-//   password: process.env.MYSQL_PASSWORD,
-//   database: process.env.MYSQL_DB
-// });
-
 var pool1 = mysql.createPool({
   connectionLimit: 5,
-  host: 'us-cdbr-iron-east-01.cleardb.net',
-  user: 'bce50ec26bedce',
-  password: '13c7ceb6',
-  database: 'heroku_38540d920d933f3'
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USERNAME,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DB
 });
+
 
 
 router.get("/api/user/:name/:permlink", function (req, res) {
