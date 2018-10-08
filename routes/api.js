@@ -93,7 +93,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
           '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
-          '${post.image}','${post.rewards.toString().replace("'","''")}','${post.json_metadata.goals}','${post.thanks}','${post.description}',
+          '${post.image}','${post.rewards.toString().replace("'","''")}','${post.json_metadata.goals.toString().replace("'","''")}','${post.thanks.toString().replace("'","''")}','${post.description}',
           '${post.socials}','${post.json_metadata.tags}','${post.project}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
@@ -357,7 +357,7 @@ function parseProject(project) {
   newProject.image = setImage(newProject.description)
   newProject.rewards = newProject.json_metadata.rewards
   newProject.goals = newProject.json_metadata.goals
-  newProject.thanks = newProject.json_metadata.thanks.message.toString().replace("'","''")
+  newProject.thanks = newProject.json_metadata.thanks.message
   newProject.socials = newProject.json_metadata.basics.socials
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
