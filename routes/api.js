@@ -74,7 +74,7 @@ loadSingle = function (author, permlink, cb) {
       }
       result.rewards = JSON.stringify(result.json_metadata.rewards)
       result.goals = JSON.stringify(result.json_metadata.goals)
-      result.image = setImage(result.json_metadata.basics.description)
+      // result.image = setImage(result.json_metadata.basics.description)
       cb(result)
     }
     else {
