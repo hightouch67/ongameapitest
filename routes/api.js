@@ -94,7 +94,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
           '${post.image}','${post.rewards}','${post.goals}','${post.thanks}','${post.description}',
-          '${post.socials}','${post.json_metadata.tags}','${post.project}')`
+          '${post.socials}','${post.tags}','${post.project}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
@@ -357,8 +357,8 @@ function parseProject(project) {
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
   try {
-    newProject.rewards =  JSON.stringify(newProject.json_metadata.rewards).replace("'","''")
-    newProject.goals = JSON.stringify(newProject.json_metadata.goals).replace("'","''")
+    newProject.rewards =  JSON.stringify(newProject.json_metadata.rewards).toString().replace("'","''")
+    newProject.goals = JSON.stringify(newProject.json_metadata.goals).toString().replace("'","''")
     newProject.json_metadata = {}
     } catch(e) {
       console.log(e)
