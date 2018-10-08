@@ -313,7 +313,7 @@ function parseProject(project) {
   newProject.parent_author = project.parent_author
   newProject.parent_permlink = project.parent_permlink
   newProject.title = project.title
-  newProject.body = project.body
+  newProject.body = project.body.toString().replace("'","''")
   newProject.last_update = project.last_update
   newProject.created = project.created
   newProject.active = project.active
