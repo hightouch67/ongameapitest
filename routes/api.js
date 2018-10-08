@@ -352,14 +352,14 @@ function parseProject(project) {
   newProject.body_language = project.body_language
   newProject.description = newProject.json_metadata.basics.description.toString().replace("'","''")
   newProject.image = setImage(newProject.description)
-  newProject.rewards = newProject.json_metadata.rewards.toString().replace("'","''")
-  newProject.goals = newProject.json_metadata.goals.toString().replace("'","''")
   newProject.thanks = newProject.json_metadata.thanks.message.toString().replace("'","''")
   newProject.socials = newProject.json_metadata.basics.socials
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
   try {
     newProject.json_metadata = JSON.stringify(project.json_metadata).replace("'","''")
+    newProject.rewards = newProject.json_metadata.rewards.replace("'","''")
+    newProject.goals = newProject.json_metadata.goals.replace("'","''")
     } catch(e) {
       console.log(e)
   }
