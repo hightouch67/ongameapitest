@@ -351,11 +351,11 @@ function parseProject(project) {
   newProject.reblogged_by = project.reblogged_by
   newProject.body_language = project.body_language
   newProject.image = setImage(newProject.description)
-  newProject.thanks = newProject.json_metadata.thanks.message.toString().replace("'","''")
   newProject.socials = newProject.json_metadata.basics.social
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
   try {
+    newProject.thanks = JSON.stringify(newProject.json_metadata.thanks.message).toString().replace("'","''")
     newProject.description = JSON.stringify(newProject.json_metadata.basics.description).toString().replace("'","''")
     newProject.rewards =  JSON.stringify(newProject.json_metadata.rewards).toString().replace("'","''")
     newProject.goals = JSON.stringify(newProject.json_metadata.goals).toString().replace("'","''")
