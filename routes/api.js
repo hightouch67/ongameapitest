@@ -357,7 +357,7 @@ function parseProject(project) {
   newProject.image = setImage(newProject.description)
   newProject.rewards = newProject.json_metadata.rewards
   newProject.goals = newProject.json_metadata.goals
-  newProject.thanks = newProject.json_metadata.thanks.message
+  newProject.thanks = newProject.json_metadata.thanks.message.toString().replace("'","''")
   newProject.socials = newProject.json_metadata.basics.socials
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
