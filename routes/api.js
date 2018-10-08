@@ -75,6 +75,7 @@ loadSingle = function (author, permlink, cb) {
       result.basics = result.json_metadata.basics
       result.rewards = result.json_metadata.rewards
       result.goals = result.json_metadata.goals
+      console.log(result.basics)
       cb(result)
     }
     else {
@@ -88,7 +89,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
     if(post)
     {
       if(post.json_metadata.basics.content === "project")
-      console.log(post.basics)
+
       post.image = setImage(post.basics.description)
       var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
                       title, body, json_metadata, last_update, created, active, last_payout, 
