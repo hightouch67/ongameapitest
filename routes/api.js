@@ -83,10 +83,10 @@ loadSingle = function (author, permlink, cb) {
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
-      var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, title, body, json_metadata, last_update, created, active, last_payout, depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, cashout_time, max_cashout_time, total_vote_weight, reward_weight, total_payout_value,curator_payout_value, author_rewards, net_votes, root_comment, mode, max_accepted_payout,percent_steem_dollars, allow_replies, allow_votes, allow_curation_rewards, beneficiaries,url, root_title, pending_payout_value, total_pending_payout_value, active_votes,replies, author_reputation, promoted, body_length, reblogged_by, body_language, image, rewards, goals, thanks_message, description, socials, tags, project ) 
+      var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, title, body, last_update, created, active, last_payout, depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, cashout_time, max_cashout_time, total_vote_weight, reward_weight, total_payout_value,curator_payout_value, author_rewards, net_votes, root_comment, mode, max_accepted_payout,percent_steem_dollars, allow_replies, allow_votes, allow_curation_rewards, beneficiaries,url, root_title, pending_payout_value, total_pending_payout_value, active_votes,replies, author_reputation, promoted, body_length, reblogged_by, body_language, image, rewards, goals, thanks_message, description, socials, tags, project ) 
       VALUES
           ('${post.author}','${post.permlink}','${post.category}','${post.parent_author}','${post.parent_permlink}',
-          '${post.title}','${post.body}','${post.json_metadata}','${post.last_update}','${post.created}','${post.active}','${post.last_payout}',
+          '${post.title}','${post.body}','${post.last_update}','${post.created}','${post.active}','${post.last_payout}',
           '${post.depth}','${post.children}','${post.net_rshares}','${post.abs_rshares}','${post.vote_rshares}','${post.children_abs_rshares}',
           '${post.cashout_time}','${post.max_cashout_time}','${post.total_vote_weight}','${post.reward_weight}','${post.total_payout_value}',
           '${post.curator_payout_value}','${post.author_rewards}','${post.net_votes}','${post.root_comment}','${post.mode}','${post.max_accepted_payout}',
