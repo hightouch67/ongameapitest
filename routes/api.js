@@ -72,12 +72,8 @@ loadSingle = function (author, permlink, cb) {
         result.json_metadata = JSON.parse(result.json_metadata)
       } catch (e) {
       }
-      try {
-        result.rewards = JSON.stringify(result.json_metadata.rewards)
-        result.goals = JSON.stringify(result.json_metadata.goals)
-
-      } catch (e) {
-      }
+      result.rewards = JSON.stringify(result.json_metadata.rewards)
+      result.goals = JSON.stringify(result.json_metadata.goals)
       result.image = setImage(result.json_metadata.basics.description)
       cb(result)
     }
