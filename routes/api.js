@@ -158,8 +158,6 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
 })
 
 router.get("/api/projects/authors", function (req, res) {
-  loadSingle(req.params.name, req.params.permlink, function (post) {
-    if (post) {
       var query = `SELECT author, permlink FROM projects`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
@@ -171,8 +169,6 @@ router.get("/api/projects/authors", function (req, res) {
           else
             res.json(result)
         })
-      })
-    }
   })
 })
 
