@@ -83,11 +83,6 @@ loadSingle = function (author, permlink, cb) {
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
-      // try {
-      //   post.json_metadata.basics.description = JSON.stringify(post.json_metadata.basics.description)
-      // } catch (e) {
-      // }
-
       var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
           title, body, json_metadata, last_update, created, active, last_payout, 
           depth, children, net_rshares, abs_rshares, vote_rshares, children_abs_rshares, 
@@ -107,8 +102,8 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
           '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
-          '${post}','${post.json_metadata}','${post.json_metadata}','${post.json_metadata}','[${post.json_metadata.basics.description}]',
-          '${post.json_metadata.basics}','${post.json_metadata.tags}','${post.json_metadata.project}')`
+          '${post.image}','${post.rewards}','${post.goals}','${post.thanks}','${post.description}',
+          '${post.socials}','${post.tags}','${post.project}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
@@ -284,15 +279,6 @@ function getHash(input) {
 
 setImage = function (string) {
   if (!string) return
-  if ($.isArray(string)) {
-    if (string[0]) {
-      if (string[0].url.match('^http://')) {
-        string[0].url = string[0].url.replace("http://", "https://")
-        return string[0].url
-      }
-    }
-  }
-  else {
     var pattern = "(http(s?):)([/|.|\\w|\\s])*." + "(?:jpe?g|gif|png|JPG)";
     var res = string.match(pattern);
     if (res) {
@@ -319,27 +305,71 @@ setImage = function (string) {
         return "./images/notfound.jpg"
       }
     }
-  }
 }
 
 
 function parseProject(project) {
+  var newProject = {}
   try {
-    var newProject = JSON.parse(project.json_metadata)
+    newProject.json_metadata = JSON.parse(project.json_metadata)
     } catch(e) {
       console.log(e)
   }
   if (!newProject) newProject = {}
-  console.log(newProject)
   newProject.author = project.author
+  newProject.permlink = project.permlink
+  newProject.category = project.category
+  newProject.parent_author = project.parent_author
+  newProject.parent_permlink = project.parent_permlink
+  newProject.title = project.title
   newProject.body = project.body
+  newProject.last_update = project.last_update
+  newProject.created = project.created
+  newProject.active = project.active
+  newProject.last_payout = project.last_payout
+
+
+  newProject.depth = project.depth
+  newProject.children = project.children
+  newProject.net_rshares = project.net_rshares
+  newProject.abs_rshares = project.abs_rshares
+  newProject.vote_rshares = project.vote_rshares
+  newProject.children_abs_rshares = project.children_abs_rshares
+  newProject.cashout_time = project.cashout_time
+  newProject.max_cashout_time = project.max_cashout_time
+  newProject.total_vote_weight = project.total_vote_weight
+  newProject.reward_weight = project.reward_weight
   newProject.total_payout_value = project.total_payout_value
   newProject.curator_payout_value = project.curator_payout_value
+
+  newProject.author_rewards = project.author_rewards
+  newProject.net_votes = project.net_votes
+  newProject.root_comment = project.root_comment
+  newProject.max_accepted_payout = project.max_accepted_payout
+  newProject.percent_steem_dollars = project.percent_steem_dollars
+  newProject.allow_replies = project.allow_replies
+  newProject.allow_votes = project.allow_votes
+  newProject.allow_curation_rewards = project.allow_curation_rewards
+  newProject.beneficiaries = project.beneficiaries
+  newProject.url = project.url
+  newProject.root_title = project.root_title
   newProject.pending_payout_value = project.pending_payout_value
-  newProject.permlink = project.permlink
-  newProject.created = project.created
-  newProject.net_rshares = project.net_rshares
+  newProject.total_pending_payout_value = project.total_pending_payout_value
+  newProject.active_votes = project.active_votes
+  newProject.replies = project.replies
+  newProject.author_reputation = project.author_reputation
+  newProject.promoted = project.promoted
+  newProject.body_length = project.body_length
   newProject.reblogged_by = project.reblogged_by
+  newProject.body_language = project.body_language
+  newProject.description = newProject.json_metadata.basics.description
+  newProject.image = setImage(newProject.description)
+  newProject.rewards = newProject.json_metadata.rewards
+  newProject.goals = newProject.json_metadata.goals
+  newProject.thanks = newProject.json_metadata.thanks.message
+  newProject.socials = newProject.json_metadata.basics.socials
+  newProject.tags = newProject.json_metadata.tags
+  newProject.project = newProject.json_metadata.project
   return newProject;
 }
 
