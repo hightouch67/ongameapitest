@@ -93,7 +93,7 @@ router.get("/api/addaproject/:name/:permlink", function (req, res) {
           '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
-          '${post.image}','${JSON.stringify(post.rewards)}','${post.json_metadata.goals}','${post.thanks}','${post.description}',
+          '${post.image}','${JSON.stringify(post.rewards).replace("'","''")}','${post.json_metadata.goals}','${post.thanks}','${post.description}',
           '${post.socials}','${post.json_metadata.tags}','${post.project}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
