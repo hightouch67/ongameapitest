@@ -80,10 +80,6 @@ loadSingle = function (author, permlink, cb) {
       else {
         cb(parseUpdate(result))
       }
-      // result.rewards = JSON.stringify(result.json_metadata.rewards)
-      // result.goals = JSON.stringify(result.json_metadata.goals)
-      // result.image = setImage(result.json_metadata.basics.description)
-
     }
     else {
       cb(null)
@@ -146,6 +142,25 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
           '${post.image}','${post.tags}','${post.project}')`
+      pool1.getConnection(function (error, connection) {
+        connection.query(query, function (err, result) {
+          if (err) {
+
+            res.json(err);
+            connection.release();
+          }
+          else
+            res.json(result)
+        })
+      })
+    }
+  })
+})
+
+router.get("/api/projects/authors", function (req, res) {
+  loadSingle(req.params.name, req.params.permlink, function (post) {
+    if (post) {
+      var query = `SELECT author, permlink FROM projects`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
