@@ -68,6 +68,11 @@ router.get("/api/projects", function (req, res) {
 router.get("/api/addaproject/:name/:permlink", function (req, res) {
   steem.api.getContent(req.params.name, req.params.permlink, function (error, post) {
     if (post) {
+      try {
+        project.json_metadata = JSON.parse(project.json_metadata)
+      } catch (e) {
+        console.log(e)
+      }
       post = parseProject(post)
       var query = `INSERT INTO projects (author,permlink,category,parent_author, parent_permlink, 
         title, body, json_metadata, last_update, created, active, last_payout, 
