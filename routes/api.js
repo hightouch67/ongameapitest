@@ -51,6 +51,18 @@ router.get("/api/fullprojects", function (req, res) {
   })
 })
 
+router.get("/api/fullupdates", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT * FROM updates`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 router.get("/api/projects", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT author, description, permlink, created, title, image, tags, active_votes, socials, rewards, goals, beneficiaries, type FROM projects`
