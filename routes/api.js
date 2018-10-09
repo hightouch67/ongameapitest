@@ -19,12 +19,20 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
+// var pool1 = mysql.createPool({
+//   connectionLimit: 5,
+//   host: process.env.MYSQL_HOST,
+//   user: process.env.MYSQL_USERNAME,
+//   password: process.env.MYSQL_PASSWORD,
+//   database: process.env.MYSQL_DB
+// });
+
 var pool1 = mysql.createPool({
   connectionLimit: 5,
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DB
+  host: "us-cdbr-iron-east-01.cleardb.net",
+  user: "bce50ec26bedce",
+  password: "13c7ceb6",
+  database: "heroku_38540d920d933f3"
 });
 
 router.get("/api/user/:name/:permlink", function (req, res) {
@@ -64,21 +72,21 @@ router.get("/api/fullupdates", function (req, res) {
 })
 
 router.get("/api/recentupdates", function (req, res) {
+  var date = new Date();
+  date.setDate(date.getDate() - 7);
+  var dd = date.getDate();
+  var mm = date.getMonth() + 1; //January is 0!
+  var yyyy = date.getFullYear();
+  date = yyyy + '/' + mm + '/' + dd;
+  if (dd < 10) {
+      dd = '0' + dd
+  }
+  if (mm < 10) {
+      mm = '0' + mm
+  }
+  date = yyyy + '/' + mm + '/' + dd;
   pool1.getConnection(function (error, connection) {
-    var date = new Date();
-    date.setDate(date.getDate() - 7);
-    var dd = date.getDate();
-    var mm = date.getMonth() + 1; //January is 0!
-    var yyyy = date.getFullYear();
-    date = yyyy + '/' + mm + '/' + dd;
-    if (dd < 10) {
-        dd = '0' + dd
-    }
-    if (mm < 10) {
-        mm = '0' + mm
-    }
-    date = yyyy + '/' + mm + '/' + dd;
-    var query = "SELECT author, permlink, body, created, title, image, tags, active_votes FROM updates WHERE date > "+date
+    var query = "SELECT author, permlink, body, created, title, image, tags, active_votes FROM updates WHERE created > '"+date +"'"
     connection.query(query, function (err, result) {
       if (err) return;
       else
