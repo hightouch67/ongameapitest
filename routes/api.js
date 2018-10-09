@@ -65,7 +65,7 @@ router.get("/api/fullupdates", function (req, res) {
 
 router.get("/api/projects", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT author, description, permlink, created, title, image, tags, active_votes, socials, rewards, goals, beneficiaries, type FROM projects`
+    var query = `SELECT author, description, permlink, created, title, image, tags, active_votes, socials, rewards, goals, beneficiaries, thanks_message, type FROM projects`
     connection.query(query, function (err, result) {
       if (err) return;
       else
@@ -142,7 +142,7 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
         cashout_time, max_cashout_time, total_vote_weight, reward_weight, total_payout_value,curator_payout_value, author_rewards, net_votes, 
         root_comment, mode, max_accepted_payout,percent_steem_dollars, allow_replies, allow_votes, allow_curation_rewards, beneficiaries,url, 
         root_title, pending_payout_value, total_pending_payout_value, active_votes,replies, author_reputation, promoted, body_length, reblogged_by, 
-        body_language, image, tags, project ) 
+        body_language, image, tags ) 
       VALUES
           ('${post.author}','${post.permlink}','${post.category}','${post.parent_author}','${post.parent_permlink}',
           '${post.title}','${post.body}','${post.json_metadata}','${post.last_update}','${post.created}','${post.active}','${post.last_payout}',
@@ -152,7 +152,7 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
           '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
-          '${post.image}','${post.tags}','${post.project}')`
+          '${post.image}','${post.tags}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
