@@ -121,11 +121,12 @@ router.get("/api/addproject/:name/:permlink/:type", function (req, res) {
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
-            console.log('project inserted')
+            console.log(err)
             res.json(err);
             connection.release();
           }
           else
+          console.log('project inserted')
             res.json(result)
         })
       })
@@ -155,11 +156,12 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
-            console.log('update inserted')
+            console.log(err)
             res.json(err);
             connection.release();
           }
           else
+          console.log('update inserted')
             res.json(result)
         })
       })
