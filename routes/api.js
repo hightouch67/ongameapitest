@@ -63,6 +63,18 @@ router.get("/api/fullupdates", function (req, res) {
   })
 })
 
+router.get("/api/userupdates/:name/:permlink", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT * FROM updates where author='${req.params.name}' AND permlink='${req.params.permlink}'`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 router.get("/api/projects", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT author, description, permlink, created, title, image, tags, active_votes, socials, rewards, goals, beneficiaries, thanks_message, type FROM projects`
