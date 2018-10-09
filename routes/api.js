@@ -63,6 +63,20 @@ router.get("/api/fullupdates", function (req, res) {
   })
 })
 
+router.get("/api/recentupdates", function (req, res) {
+  var date = new Date();
+  date.setDate(date.getDate() - 7);
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT author, permlink, body, created, title, image, tags, active_votes FROM updates WHERE date < '${date}'`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 router.get("/api/userupdates/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT * FROM updates where author='${req.params.name}' AND permlink='${req.params.permlink}'`
