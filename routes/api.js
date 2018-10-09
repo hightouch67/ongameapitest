@@ -19,21 +19,14 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
-// var pool1 = mysql.createPool({
-//   connectionLimit: 5,
-//   host: process.env.MYSQL_HOST,
-//   user: process.env.MYSQL_USERNAME,
-//   password: process.env.MYSQL_PASSWORD,
-//   database: process.env.MYSQL_DB
-// });
-
 var pool1 = mysql.createPool({
   connectionLimit: 5,
-  host: "us-cdbr-iron-east-01.cleardb.net",
-  user: "bce50ec26bedce",
-  password: "13c7ceb6",
-  database: "heroku_38540d920d933f3"
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USERNAME,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DB
 });
+
 
 router.get("/api/user/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
@@ -187,7 +180,7 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
         cashout_time, max_cashout_time, total_vote_weight, reward_weight, total_payout_value,curator_payout_value, author_rewards, net_votes, 
         root_comment, mode, max_accepted_payout,percent_steem_dollars, allow_replies, allow_votes, allow_curation_rewards, beneficiaries,url, 
         root_title, pending_payout_value, total_pending_payout_value, active_votes,replies, author_reputation, promoted, body_length, reblogged_by, 
-        body_language, image, tags ) 
+        body_language, image, tags, project ) 
       VALUES
           ('${post.author}','${post.permlink}','${post.category}','${post.parent_author}','${post.parent_permlink}',
           '${post.title}','${post.body}','${post.json_metadata}','${post.last_update}','${post.created}','${post.active}','${post.last_payout}',
@@ -197,7 +190,7 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
           '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
-          '${post.image}','${post.tags}')`
+          '${post.image}','${post.tags}','${post.project}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
@@ -414,6 +407,19 @@ function parseUpdate(update) {
   newUpdate.body_language = update.body_language
   newUpdate.tags = newUpdate.json_metadata.tags
   newUpdate.update = newUpdate.json_metadata.update
+  for(i=0;newUpdate.tags.length > i;i++)
+  {
+    if(newUpdate.tags[i].includes('fundition_'))
+    {
+      newUpdate.project = newUpdate.tags[i].split('_')[1]
+      console.log(newUpdate.project)
+    }
+    if(newUpdate.tags[i].includes('fundition-'))
+    {
+      newUpdate.project = newUpdate.tags[i].split('-')[1]
+      console.log(newUpdate.project)
+    }
+  }
   try {
     newUpdate.beneficiaries = JSON.stringify(update.beneficiaries)
     newUpdate.active_votes = JSON.stringify(update.active_votes)
