@@ -54,7 +54,7 @@ router.get("/api/getfullprojects", function (req, res) {
 
 router.get("/api/getfullupdates", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT author, permlink, created, tags FROM updates`
+    var query = `SELECT author, permlink, created, tags, project FROM updates`
     connection.query(query, function (err, result) {
       if (err) return;
       else
