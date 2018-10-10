@@ -115,7 +115,7 @@ router.get("/api/getprojectsdetails", function (req, res) {
 
 router.get("/api/getprojects", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT author, description, permlink, created, title, image, tags, type FROM projects`
+    var query = `SELECT author, permlink, created, title, image, tags, type FROM projects`
     connection.query(query, function (err, result) {
       if (err) return;
       else
