@@ -79,7 +79,7 @@ router.get("/api/getrecentupdates", function (req, res) {
   }
   date = yyyy + '/' + mm + '/' + dd;
   pool1.getConnection(function (error, connection) {
-    var query = "SELECT author, permlink, created, tags, active_votes, project FROM updates WHERE created > '"+date +"'"
+    var query = "SELECT author, permlink, created, project FROM updates WHERE created > '"+date +"'"
     connection.query(query, function (err, result) {
       if (err) return;
       else
