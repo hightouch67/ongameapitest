@@ -28,7 +28,7 @@ var pool1 = mysql.createPool({
 });
 
 
-router.get("/api/user/:name/:permlink", function (req, res) {
+router.get("/api/getproject/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT * FROM projects where author='${req.params.name}' AND permlink='${req.params.permlink}'`
     connection.query(query, function (err, result) {
@@ -40,7 +40,7 @@ router.get("/api/user/:name/:permlink", function (req, res) {
   })
 })
 
-router.get("/api/fullprojects", function (req, res) {
+router.get("/api/getfullprojects", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT * FROM projects`
     connection.query(query, function (err, result) {
@@ -52,7 +52,7 @@ router.get("/api/fullprojects", function (req, res) {
   })
 })
 
-router.get("/api/fullupdates", function (req, res) {
+router.get("/api/getfullupdates", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT author, permlink, created, tags FROM updates`
     connection.query(query, function (err, result) {
@@ -64,7 +64,7 @@ router.get("/api/fullupdates", function (req, res) {
   })
 })
 
-router.get("/api/recentupdates", function (req, res) {
+router.get("/api/getrecentupdates", function (req, res) {
   var date = new Date();
   date.setDate(date.getDate() - 7);
   var dd = date.getDate();
@@ -89,7 +89,7 @@ router.get("/api/recentupdates", function (req, res) {
   })
 })
 
-router.get("/api/userupdates/:name/:permlink", function (req, res) {
+router.get("/api/getuserupdates/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT * FROM updates where author='${req.params.name}' AND project='${req.params.permlink}'`
     connection.query(query, function (err, result) {
@@ -101,9 +101,21 @@ router.get("/api/userupdates/:name/:permlink", function (req, res) {
   })
 })
 
-router.get("/api/projects", function (req, res) {
+router.get("/api/getprojectsdetails", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT author, description, permlink, created, title, image, tags, active_votes, socials, rewards, goals, beneficiaries, thanks_message, type FROM projects`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
+router.get("/api/getprojects", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT author, description, permlink, created, title, image, tags, type FROM projects`
     connection.query(query, function (err, result) {
       if (err) return;
       else
