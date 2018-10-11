@@ -52,6 +52,18 @@ router.get("/api/getfullprojects", function (req, res) {
   })
 })
 
+router.get("/api/getdonations", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT * FROM donations`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 router.get("/api/getfullupdates", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT author, permlink, created, tags, project FROM updates`
