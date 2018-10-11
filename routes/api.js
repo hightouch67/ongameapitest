@@ -163,10 +163,10 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
   })
 })
 
-router.get("/api/adddonation/:id/:name/:amount/:memo/:secret", function (req, res) {
-      var query = `INSERT INTO donations (id,name,amount,memo,secret) 
+router.get("/api/adddonation/:id/:name/:to/:amount/:memo/:secret/:sent/", function (req, res) {
+      var query = `INSERT INTO donations (id,name, to, amount, memo, secret, sent_amount) 
       VALUES
-     ('${req.params.id}','${req.params.name}','${req.params.amount}','${req.params.memo}','${req.params.secret}')`
+     ('${req.params.id}','${req.params.name}','${req.params.to}','${req.params.amount}','${req.params.memo}','${req.params.secret}','${req.params.sent}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
