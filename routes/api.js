@@ -166,7 +166,7 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
 router.get("/api/adddonation/:id/:name/:amount/:secret", function (req, res) {
       var query = `INSERT INTO donations (id,name,amount,memo,secret) 
       VALUES
-     ('${req.params.id}','${req.params.name}','${req.params.amount}','${req.params.secret}')`
+     ('${req.params.id}','${req.params.name}','${req.params.amount}','${req.params.memo}','${req.params.secret}')`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
