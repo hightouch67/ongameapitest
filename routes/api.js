@@ -163,6 +163,24 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
   })
 })
 
+router.get("/api/adddonation/:id/:name/:amount/:secret/:date", function (req, res) {
+      var query = `INSERT INTO donations (id,name,amount,memo,secret,date) 
+      VALUES
+     ('${req.params.id}','${req.params.name}','${req.params.amount}','${req.params.secret}','${req.params.date}')`
+      pool1.getConnection(function (error, connection) {
+        connection.query(query, function (err, result) {
+          if (err) {
+            console.log(err)
+            res.json(err);
+            connection.release();
+          }
+          else
+          console.log('donation inserted')
+            res.json(result)
+        })
+  })
+})
+
 
 loadSingle = function (author, permlink, cb) {
   steem.api.getContent(author, permlink, function (error, result) {
