@@ -446,13 +446,12 @@ function parseProject(project) {
   newProject.socials = newProject.json_metadata.basics.social.toString().replace(/\'/g, "''")
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
-  console.log(newProject.active_votes)
-  newProject.voters = displayVoter(newProject.active_votes, 0)
+  newProject.voters = displayVoter(project.active_votes, 0)
 
-  // newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
-  // for (z = 0; z <  newProject.voters.length; z++) {
-  //   voters[z].upvote = Number(parseFloat(payoutupvote(voters[z].rsharespercent, payout)).toFixed(3))
-  // }
+  newProject.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
+  for (z = 0; z <  newProject.voters.length; z++) {
+    voters[z].upvote = Number(parseFloat(payoutupvote(voters[z].rsharespercent, payout)).toFixed(3))
+  }
 
   try {
     newProject.beneficiaries = JSON.stringify(project.beneficiaries)
@@ -466,8 +465,6 @@ function parseProject(project) {
   } catch (e) {
     console.log(e)
   }
-
-  console.log(JSON.parse(newProject.active_votes))
   return newProject;
 }
 
@@ -525,10 +522,10 @@ function parseUpdate(update) {
   newUpdate.body_language = update.body_language
   newUpdate.tags = newUpdate.json_metadata.tags
   newUpdate.update = newUpdate.json_metadata.update
-  newProject.voters = displayVoter(newProject.active_votes, 0)
-  newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
+  newProject.voters = displayVoter(project.active_votes, 0)
+
+  newProject.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
   for (z = 0; z <  newProject.voters.length; z++) {
-    console.log(voters[z])
     voters[z].upvote = Number(parseFloat(payoutupvote(voters[z].rsharespercent, payout)).toFixed(3))
   }
  
