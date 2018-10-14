@@ -449,10 +449,10 @@ function parseProject(project) {
   console.log(newProject.active_votes)
   newProject.voters = displayVoter(newProject.active_votes, 0)
 
-  newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
-  for (z = 0; z <  newProject.voters.length; z++) {
-    voters[z].upvote = Number(parseFloat(payoutupvote(voters[z].rsharespercent, payout)).toFixed(3))
-  }
+  // newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
+  // for (z = 0; z <  newProject.voters.length; z++) {
+  //   voters[z].upvote = Number(parseFloat(payoutupvote(voters[z].rsharespercent, payout)).toFixed(3))
+  // }
 
   try {
     newProject.beneficiaries = JSON.stringify(project.beneficiaries)
@@ -466,6 +466,8 @@ function parseProject(project) {
   } catch (e) {
     console.log(e)
   }
+
+  console.log(JSON.parse(newProject.active_votes))
   return newProject;
 }
 
