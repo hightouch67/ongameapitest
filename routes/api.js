@@ -5,6 +5,7 @@ var mysql = require('mysql');
 const router = express.Router();
 const sql = require('mssql')
 const steem = require('steem');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 steem.api.setOptions({ url: 'https://api.steemit.com' });
 
