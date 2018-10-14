@@ -145,7 +145,7 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
         last_payout='${post.last_payout}', 
         net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', 
         vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
-        cashout_time'=${post.cashout_time}', max_cashout_time'=${post.max_cashout_time}', total_vote_weight='${post.total_vote_weight}', 
+        cashout_time'=${post.cashout_time}', total_vote_weight='${post.total_vote_weight}', 
         reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}', 
         author_rewards='${post.author_rewards}', net_votes='${post.net_votes}', 
         root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value'${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
