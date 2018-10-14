@@ -523,9 +523,9 @@ function parseUpdate(update) {
   newUpdate.body_language = update.body_language
   newUpdate.tags = newUpdate.json_metadata.tags
   newUpdate.update = newUpdate.json_metadata.update
-  newUpdate.voters = displayVoter(project.active_votes, 0)
+  newUpdate.voters = displayVoter(update.active_votes, 0)
 
-  newUpdate.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
+  newUpdate.payout = displayPayout(update.pending_payout_value, update.total_payout_value, update.curator_payout_value)
   for (z = 0; z <  newUpdate.voters.length; z++) {
     newUpdate.voters[z].upvote = Number(parseFloat(payoutupvote(newUpdate.voters[z].rsharespercent, newUpdate.payout)).toFixed(3))
   }
