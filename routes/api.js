@@ -151,7 +151,7 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
         root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
         active_votes='${post.active_votes}',replies='${post.replies}',
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
-        body_language='${post.body_language}', image'${post.image}', tags='${post.tags}' WHERE permlink='${req.params.permlink}'`
+        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}' WHERE permlink='${req.params.permlink}'`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
