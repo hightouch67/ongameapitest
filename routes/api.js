@@ -745,7 +745,7 @@ function displayPayout(active, total, voter) {
   var amount = payout.split(' ')[0]
   var currency = payout.split(' ')[1]
   amount = parseFloat(amount).toFixed(3)
-  return amount;
+  return parseFloat(amount).toFixed(3)
 }
 
 function displayVoter(votes, isDownvote) {
