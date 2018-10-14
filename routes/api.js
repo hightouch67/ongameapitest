@@ -448,8 +448,8 @@ function parseProject(project) {
   newProject.project = newProject.json_metadata.project
   newProject.voters = displayVoter(newProject.active_votes, 0)
   newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
-  for (i = 0; i <  newProject.voters.length; i++) {
-    voters[i].upvote = Number(parseFloat(payoutupvote(voters[i].rsharespercent, payout)).toFixed(3))
+  for (z = 0; z <  newProject.voters.length; z++) {
+    voters[z].upvote = Number(parseFloat(payoutupvote(voters[z].rsharespercent, payout)).toFixed(3))
   }
 
   try {
@@ -521,12 +521,13 @@ function parseUpdate(update) {
   newUpdate.body_language = update.body_language
   newUpdate.tags = newUpdate.json_metadata.tags
   newUpdate.update = newUpdate.json_metadata.update
-
   newProject.voters = displayVoter(newProject.active_votes, 0)
   newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
-  for (i = 0; i <  newProject.voters.length; i++) {
-    voters[i].upvote = Number(parseFloat(payoutupvote(voters[i].rsharespercent, payout)).toFixed(3))
+  for (z = 0; z <  newProject.voters.length; z++) {
+    console.log(voters[z])
+    voters[z].upvote = Number(parseFloat(payoutupvote(voters[z].rsharespercent, payout)).toFixed(3))
   }
+ 
 
   for (i = 0; newUpdate.tags.length > i; i++) {
     if (newUpdate.tags[i].includes('fundition_')) {
@@ -546,6 +547,7 @@ function parseUpdate(update) {
   } catch (e) {
     console.log(e)
   }
+
   return newUpdate;
 }
 
