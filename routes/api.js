@@ -748,8 +748,7 @@ function displayPayout(active, total, voter) {
     amount -= (amount / 100) * 25
     amount = amount / 2
     var sbd = amount * SBD()
-    var sp = amount / sbdprice * STEEM()
-    amount = sbd + sp
+    var sp = amount * STEEM()
     amount = sbd + sp
     return parseFloat(amount).toFixed(3);
 }
