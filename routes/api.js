@@ -698,8 +698,7 @@ function SBD() {
       if (xtr.status == 200) {
         if (xtr.responseText) {
           var ticker = JSON.parse(xtr.responseText)
-          var number = amount.replace(/[^0-9\.]+/g, "");
-          totalUSD = number * ticker[0].price_usd
+          totalUSD = ticker[0].price_usd
           return parseFloat(totalUSD).toFixed(3)
         }
       } else {
@@ -718,8 +717,7 @@ function STEEM() {
       if (xtr.status == 200) {
         if (xtr.responseText) {
           var ticker = JSON.parse(xtr.responseText)
-          var number = amount.replace(/[^0-9\.]+/g, "");
-          totalUSD = number * ticker[0].price_usd
+          totalUSD =  ticker[0].price_usd
           return parseFloat(totalUSD).toFixed(3)
         }
       } else {
