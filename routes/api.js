@@ -523,11 +523,11 @@ function parseUpdate(update) {
   newUpdate.body_language = update.body_language
   newUpdate.tags = newUpdate.json_metadata.tags
   newUpdate.update = newUpdate.json_metadata.update
-  newProject.voters = displayVoter(project.active_votes, 0)
+  newUpdate.voters = displayVoter(project.active_votes, 0)
 
-  newProject.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
-  for (z = 0; z <  newProject.voters.length; z++) {
-    newProject.voters[z].upvote = Number(parseFloat(payoutupvote(newProject.voters[z].rsharespercent, newProject.payout)).toFixed(3))
+  newUpdate.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
+  for (z = 0; z <  newUpdate.voters.length; z++) {
+    newUpdate.voters[z].upvote = Number(parseFloat(payoutupvote(newUpdate.voters[z].rsharespercent, newUpdate.payout)).toFixed(3))
   }
  
 
