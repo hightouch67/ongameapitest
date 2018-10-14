@@ -446,7 +446,7 @@ function parseProject(project) {
   newProject.socials = newProject.json_metadata.basics.social.toString().replace(/\'/g, "''")
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
-  newProject.voters = displayVoter(newProject.active_votes, 0)
+  newProject.voters = displayVoter(JSON.parse(newProject.active_votes), 0)
   console.log(newProject.voters)
   newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
   for (z = 0; z <  newProject.voters.length; z++) {
