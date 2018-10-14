@@ -141,7 +141,7 @@ router.get("/api/getprojects", function (req, res) {
 router.get("/api/updateproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
-      var query = `UPDATE updates SET author='${post.author}' ,permlink='${post.permlink}' ,category='${post.category}',parent_author='${post.parent_author}',
+      var query = `UPDATE updates SET (category='${post.category}',parent_author='${post.parent_author}',
        parent_permlink'${post.parent_permlink}', title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
         last_update='${post.last_update}', created'=${post.created}', active='${post.active}', last_payout='${post.last_payout}', 
         depth='${post.depth}', children='${post.children}', net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', 
@@ -149,9 +149,7 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
         cashout_time'=${post.cashout_time}', max_cashout_time'=${post.max_cashout_time}', total_vote_weight='${post.total_vote_weight}', 
         reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}', 
         author_rewards='${post.author_rewards}', net_votes='${post.net_votes}', 
-        root_comment='${post.root_comment}', mode'=${post.mode}', max_accepted_payout='${post.max_accepted_payout}' ,percent_steem_dollars='${post.percent_steem_dollars}',
-         allow_replies='${post.allow_replies}', allow_votes='${post.allow_votes}', allow_curation_rewards='${post.allow_curation_rewards}', beneficiaries='${post.beneficiaries}',
-         url='${post.url}', root_title='${post.root_title}', pending_payout_value'${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
+        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value'${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
         active_votes='${post.active_votes}',replies='${post.replies}', author_reputation'=${post.author_reputation}', promoted='${post.promoted}', 
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
         body_language='${post.body_language}', image'${post.image}', tags='${post.tags}') 
