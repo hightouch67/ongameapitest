@@ -161,7 +161,7 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
             connection.release();
           }
           else
-            console.log('update inserted')
+            console.log('project inserted')
           res.json(result)
         })
       })
@@ -447,6 +447,7 @@ function parseProject(project) {
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
   newProject.voters = displayVoter(newProject.active_votes, 0)
+  console.log(newProject.voters)
   newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
   for (z = 0; z <  newProject.voters.length; z++) {
     voters[z].upvote = Number(parseFloat(payoutupvote(voters[z].rsharespercent, payout)).toFixed(3))
