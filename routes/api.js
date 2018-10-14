@@ -448,7 +448,7 @@ function parseProject(project) {
   newProject.project = newProject.json_metadata.project
   newProject.voters = displayVoter(newProject.active_votes, 0)
   newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
-  for (i = 0; i < voters.length; i++) {
+  for (i = 0; i <  newProject.voters.length; i++) {
     voters[i].upvote = Number(parseFloat(payoutupvote(voters[i].rsharespercent, payout)).toFixed(3))
   }
 
@@ -524,7 +524,7 @@ function parseUpdate(update) {
 
   newProject.voters = displayVoter(newProject.active_votes, 0)
   newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
-  for (i = 0; i < voters.length; i++) {
+  for (i = 0; i <  newProject.voters.length; i++) {
     voters[i].upvote = Number(parseFloat(payoutupvote(voters[i].rsharespercent, payout)).toFixed(3))
   }
 
