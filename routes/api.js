@@ -231,7 +231,7 @@ loadSingle = function (author, permlink, cb) {
       } catch (e) {
         console.log(e)
       }
-      if (test.json_metadata.content != undefined && test.json_metadata.content === 'project')
+      if (test.json_metadata.content === 'project')
         cb(parseProject(result))
       else {
         cb(parseUpdate(result))
