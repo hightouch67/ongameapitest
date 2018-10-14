@@ -141,7 +141,7 @@ router.get("/api/getprojects", function (req, res) {
 router.get("/api/updateproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
-      var query = `UPDATE updates SET (category='${post.category}', title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
+      var query = `UPDATE updates SET category='${post.category}', title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
         last_update='${post.last_update}', created'=${post.created}', active='${post.active}', last_payout='${post.last_payout}', 
         net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', 
         vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
@@ -151,8 +151,7 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
         root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value'${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
         active_votes='${post.active_votes}',replies='${post.replies}',
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
-        body_language='${post.body_language}', image'${post.image}', tags='${post.tags}') 
-        WHERE permlink='${req.params.permlink}'`
+        body_language='${post.body_language}', image'${post.image}', tags='${post.tags}' WHERE permlink='${req.params.permlink}'`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
