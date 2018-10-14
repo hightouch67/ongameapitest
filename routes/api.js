@@ -142,7 +142,7 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
       var query = `UPDATE updates SET category='${post.category}', title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
-        last_update='${post.last_update}', created'=${post.created}', active='${post.active}', last_payout='${post.last_payout}', 
+        last_payout='${post.last_payout}', 
         net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', 
         vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
         cashout_time'=${post.cashout_time}', max_cashout_time'=${post.max_cashout_time}', total_vote_weight='${post.total_vote_weight}', 
