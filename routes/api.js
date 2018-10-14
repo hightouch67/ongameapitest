@@ -141,6 +141,39 @@ router.get("/api/getprojects", function (req, res) {
 router.get("/api/updateproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
     if (post) {
+      var query = `UPDATE projects SET category='${post.category}', title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
+        last_payout='${post.last_payout}', 
+        net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', 
+        vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
+        cashout_time='${post.cashout_time}', total_vote_weight='${post.total_vote_weight}', 
+        reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}', 
+        author_rewards='${post.author_rewards}', net_votes='${post.net_votes}', 
+        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
+        active_votes='${post.active_votes}',replies='${post.replies}',
+        body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
+        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}' WHERE permlink='${req.params.permlink}'`
+      pool1.getConnection(function (error, connection) {
+        connection.query(query, function (err, result) {
+          if (err) {
+            console.log(err)
+            res.json(err);
+            connection.release();
+          }
+          else
+          console.log('update inserted')
+            res.json(result)
+        })
+      })
+    }
+    else{
+      connection.release();
+    }
+  })
+})
+
+router.get("/api/updateupd/:name/:permlink", function (req, res) {
+  loadSingle(req.params.name, req.params.permlink, function (post) {
+    if (post) {
       var query = `UPDATE updates SET category='${post.category}', title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
         last_payout='${post.last_payout}', 
         net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', 
