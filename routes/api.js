@@ -731,7 +731,8 @@ function STEEM() {
 }
 
 function displayPayout(active, total, voter) {
-    var payout = active
+    var payout = 0
+    payout = active
     if (typeof total === 'string') {
       if (total.split(' ')[0] > 0 || voter.split(' ')[0] > 0) {
         var amount = parseInt(total.split(' ')[0].replace('.', '')) + parseInt(voter.split(' ')[0].replace('.', ''))
