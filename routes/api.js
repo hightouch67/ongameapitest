@@ -454,6 +454,7 @@ function parseProject(project) {
   }
 
   try {
+    newProject.voters = JSON.stringify(newProject.voters)
     newProject.beneficiaries = JSON.stringify(project.beneficiaries)
     newProject.active_votes = JSON.stringify(project.active_votes)
     newProject.thanks = JSON.stringify(newProject.json_metadata.thanks.message).toString().replace(/\'/g, "''")
@@ -541,6 +542,7 @@ function parseUpdate(update) {
     }
   }
   try {
+    newUpdate.voters = JSON.stringify(newUpdate.voters)
     newUpdate.beneficiaries = JSON.stringify(update.beneficiaries)
     newUpdate.active_votes = JSON.stringify(update.active_votes)
     newUpdate.image = setImage(newUpdate.body)
@@ -731,30 +733,19 @@ function STEEM() {
 }
 
 function displayPayout(active, total, voter) {
-    var payout = 0
-    payout = active
-    if (typeof total === 'string') {
-      if (total.split(' ')[0] > 0 || voter.split(' ')[0] > 0) {
-        var amount = parseInt(total.split(' ')[0].replace('.', '')) + parseInt(voter.split(' ')[0].replace('.', ''))
-        amount /= 1000
-        payout = amount + ' SBD'
-      }
-    }
-    if (active || !total && !voter) {
-      payout = active + ' SBD'
-    }
-    else {
-      var amount = total + voter
+  if (active && !total || !voter) return active
+  if (!active || !total || !voter) return
+  var payout = active
+  if (total.split(' ')[0] > 0) {
+      var amount = parseInt(total.split(' ')[0].replace('.', '')) + parseInt(voter.split(' ')[0].replace('.', ''))
+      amount /= 1000
       payout = amount + ' SBD'
-    }
-    if (!payout) return
-    var amount = payout.split(' ')[0]
-    amount -= (amount / 100) * 25
-    amount = amount / 2
-    var sbd = amount * SBD()
-    var sp = amount * STEEM()
-    amount = sbd + sp
-    return parseFloat(amount).toFixed(3);
+  }
+  if (!payout) return
+  var amount = payout.split(' ')[0]
+  var currency = payout.split(' ')[1]
+  amount = parseFloat(amount).toFixed(3)
+  return amount;
 }
 
 function displayVoter(votes, isDownvote) {
