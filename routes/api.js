@@ -745,6 +745,7 @@ function displayPayout(active, total, voter) {
   var amount = payout.split(' ')[0]
   var currency = payout.split(' ')[1]
   amount = parseFloat(amount).toFixed(3)
+  amount -= (amount / 100) * 25
   return parseFloat(amount).toFixed(3)
 }
 
