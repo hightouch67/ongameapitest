@@ -84,14 +84,14 @@ router.get("/api/getrecentupdates", function (req, res) {
   var yyyy = date.getFullYear();
   date = yyyy + '/' + mm + '/' + dd;
   if (dd < 10) {
-      dd = '0' + dd
+    dd = '0' + dd
   }
   if (mm < 10) {
-      mm = '0' + mm
+    mm = '0' + mm
   }
   date = yyyy + '/' + mm + '/' + dd;
   pool1.getConnection(function (error, connection) {
-    var query = "SELECT author, permlink, created, project FROM updates WHERE created > '"+date +"'"
+    var query = "SELECT author, permlink, created, project FROM updates WHERE created > '" + date + "'"
     connection.query(query, function (err, result) {
       if (err) return;
       else
@@ -151,7 +151,7 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
         root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
         active_votes='${post.active_votes}',replies='${post.replies}',
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
-        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}' WHERE permlink='${req.params.permlink}'`
+        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}',voters='${post.voters}', payout='${post.payout}' WHERE permlink='${req.params.permlink}'`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
@@ -160,12 +160,12 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
             connection.release();
           }
           else
-          console.log('update inserted')
-            res.json(result)
+            console.log('update inserted')
+          res.json(result)
         })
       })
     }
-    else{
+    else {
       connection.release();
     }
   })
@@ -184,7 +184,7 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
         root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
         active_votes='${post.active_votes}',replies='${post.replies}',
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
-        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}' WHERE permlink='${req.params.permlink}'`
+        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}',voters='${post.voters}', payout='${post.payout}' WHERE permlink='${req.params.permlink}'`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
@@ -193,30 +193,30 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
             connection.release();
           }
           else
-          console.log('update inserted')
-            res.json(result)
+            console.log('update inserted')
+          res.json(result)
         })
       })
     }
-    else{
+    else {
       connection.release();
     }
   })
 })
 
 router.get("/api/adddonation/:id/:name/:project/:amount/:memo/:sent/", function (req, res) {
-      var query = `INSERT INTO donations (id, name, project, amount, memo, sent_amount) VALUES ('${req.params.id}','${req.params.name}','${req.params.project}','${req.params.amount}','${req.params.memo}','${req.params.sent}')`
-      pool1.getConnection(function (error, connection) {
-        connection.query(query, function (err, result) {
-          if (err) {
-            console.log(err)
-            res.json(err);
-            connection.release();
-          }
-          else
-          console.log('donation inserted')
-            res.json(result)
-        })
+  var query = `INSERT INTO donations (id, name, project, amount, memo, sent_amount) VALUES ('${req.params.id}','${req.params.name}','${req.params.project}','${req.params.amount}','${req.params.memo}','${req.params.sent}')`
+  pool1.getConnection(function (error, connection) {
+    connection.query(query, function (err, result) {
+      if (err) {
+        console.log(err)
+        res.json(err);
+        connection.release();
+      }
+      else
+        console.log('donation inserted')
+      res.json(result)
+    })
   })
 })
 
@@ -271,8 +271,8 @@ router.get("/api/addproject/:name/:permlink/:type", function (req, res) {
             connection.release();
           }
           else
-          console.log('project inserted')
-            res.json(result)
+            console.log('project inserted')
+          res.json(result)
         })
       })
     }
@@ -306,12 +306,12 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
             connection.release();
           }
           else
-          console.log('update inserted')
-            res.json(result)
+            console.log('update inserted')
+          res.json(result)
         })
       })
     }
-    else{
+    else {
       connection.release();
     }
   })
@@ -445,6 +445,12 @@ function parseProject(project) {
   newProject.socials = newProject.json_metadata.basics.social.toString().replace(/\'/g, "''")
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
+  newProject.voters = displayVoter(newProject.active_votes, 0)
+  newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
+  for (i = 0; i < voters.length; i++) {
+    voters[i].upvote = Number(parseFloat(payoutupvote(voters[i].rsharespercent, payout)).toFixed(3))
+  }
+
   try {
     newProject.beneficiaries = JSON.stringify(project.beneficiaries)
     newProject.active_votes = JSON.stringify(project.active_votes)
@@ -514,15 +520,19 @@ function parseUpdate(update) {
   newUpdate.body_language = update.body_language
   newUpdate.tags = newUpdate.json_metadata.tags
   newUpdate.update = newUpdate.json_metadata.update
-  for(i=0;newUpdate.tags.length > i;i++)
-  {
-    if(newUpdate.tags[i].includes('fundition_'))
-    {
+
+  newProject.voters = displayVoter(newProject.active_votes, 0)
+  newProject.payout = displayPayout(newProject.pending_payout_value, newProject.total_payout_value, newProject.curator_payout_value)
+  for (i = 0; i < voters.length; i++) {
+    voters[i].upvote = Number(parseFloat(payoutupvote(voters[i].rsharespercent, payout)).toFixed(3))
+  }
+
+  for (i = 0; newUpdate.tags.length > i; i++) {
+    if (newUpdate.tags[i].includes('fundition_')) {
       newUpdate.project = newUpdate.tags[i].split('_')[1]
       console.log(newUpdate.project)
     }
-    if(newUpdate.tags[i].includes('fundition-'))
-    {
+    if (newUpdate.tags[i].includes('fundition-')) {
       newUpdate.project = newUpdate.tags[i].split('-')[1]
       console.log(newUpdate.project)
     }
@@ -672,5 +682,102 @@ router.get("/api/battle_history", function (req, res) {
     })
   })
 })
+
+function payoutupvote(share, rewards) {
+  return (parseFloat(share) * rewards).toFixed(3);
+}
+
+
+function SBD() {
+  var xtr = new XMLHttpRequest();
+  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem-dollars/', true);
+  xtr.send();
+  xtr.onreadystatechange = function () {
+    if (xtr.readyState == 4) {
+      if (xtr.status == 200) {
+        if (xtr.responseText) {
+          var ticker = JSON.parse(xtr.responseText)
+          var number = amount.replace(/[^0-9\.]+/g, "");
+          totalUSD = number * ticker[0].price_usd
+          return parseFloat(totalUSD).toFixed(3)
+        }
+      } else {
+        console.log("Error: API not responding!");
+      }
+    }
+  }
+}
+
+function STEEM() {
+  var xtr = new XMLHttpRequest();
+  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem/', true);
+  xtr.send();
+  xtr.onreadystatechange = function () {
+    if (xtr.readyState == 4) {
+      if (xtr.status == 200) {
+        if (xtr.responseText) {
+          var ticker = JSON.parse(xtr.responseText)
+          var number = amount.replace(/[^0-9\.]+/g, "");
+          totalUSD = number * ticker[0].price_usd
+          return parseFloat(totalUSD).toFixed(3)
+        }
+      } else {
+        console.log("Error: API not responding!");
+      }
+    }
+  }
+}
+
+function displayPayout(active, total, voter) {
+    var payout = active
+    if (typeof total === 'string') {
+      if (total.split(' ')[0] > 0 || voter.split(' ')[0] > 0) {
+        var amount = parseInt(total.split(' ')[0].replace('.', '')) + parseInt(voter.split(' ')[0].replace('.', ''))
+        amount /= 1000
+        payout = amount + ' SBD'
+      }
+    }
+    if (active || !total && !voter) {
+      payout = active + ' SBD'
+    }
+    else {
+      var amount = total + voter
+      payout = amount + ' SBD'
+    }
+    if (!payout) return
+    var amount = payout.split(' ')[0]
+    amount -= (amount / 100) * 25
+    amount = amount / 2
+    var sbd = amount * SBD()
+    var sp = amount / sbdprice * STEEM()
+    amount = sbd + sp
+    amount = sbd + sp
+    return parseFloat(amount).toFixed(3);
+}
+
+function displayVoter(votes, isDownvote) {
+  if (!votes) return
+  votes.sort(function (a, b) {
+    var rsa = parseInt(a.rshares)
+    var rsb = parseInt(b.rshares)
+    return rsb - rsa
+  })
+  if (isDownvote) votes.reverse()
+
+  var rsharesTotal = 0;
+  for (let i = 0; i < votes.length; i++)
+    rsharesTotal += parseInt(votes[i].rshares)
+
+  var voters = []
+  for (let i = 0; i < votes.length; i++) {
+    if (i == votes.length) break
+    votes[i].rsharespercent = parseInt(votes[i].rshares) / rsharesTotal
+    if (parseInt(votes[i].rshares) < 0 && !isDownvote) break;
+    if (parseInt(votes[i].rshares) >= 0 && isDownvote) break;
+    voters.push(votes[i])
+  }
+  return voters
+}
+
 
 module.exports = router;
