@@ -145,7 +145,7 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
     if (post) {
       var query = `UPDATE projects SET category='${post.category}', title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
         last_payout='${post.last_payout}', 
-        net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', 
+        net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', mode='l',
         vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
         cashout_time='${post.cashout_time}', total_vote_weight='${post.total_vote_weight}', 
         reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}', 
@@ -178,7 +178,7 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
     if (post) {
       var query = `UPDATE updates SET category='${post.category}', title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
         last_payout='${post.last_payout}', 
-        net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', 
+        net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', mode='l',
         vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
         cashout_time='${post.cashout_time}', total_vote_weight='${post.total_vote_weight}', 
         reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}', 
