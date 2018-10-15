@@ -189,11 +189,9 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
           else
             console.log('project inserted')
           res.json(result)
+          connection.release();
         })
       })
-    }
-    else {
-      connection.release();
     }
   })
 })
@@ -222,11 +220,9 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
           else
             console.log('update inserted')
           res.json(result)
+          connection.release();
         })
       })
-    }
-    else {
-      connection.release();
     }
   })
 })
