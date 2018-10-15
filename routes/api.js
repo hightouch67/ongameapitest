@@ -452,6 +452,13 @@ function parseProject(project) {
   newProject.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
   for (z = 0; z <  newProject.voters.length; z++) {
     newProject.voters[z].upvote = Number(parseFloat(payoutupvote(newProject.voters[z].rsharespercent, newProject.payout)).toFixed(3))
+    if(newProject.voters[z].upvote > 0)
+    {
+
+    }
+    else{
+      delete newProject.voters[z]
+    }
   }
 
   try {
@@ -529,6 +536,13 @@ function parseUpdate(update) {
   newUpdate.payout = displayPayout(update.pending_payout_value, update.total_payout_value, update.curator_payout_value)
   for (z = 0; z <  newUpdate.voters.length; z++) {
     newUpdate.voters[z].upvote = Number(parseFloat(payoutupvote(newUpdate.voters[z].rsharespercent, newUpdate.payout)).toFixed(3))
+    if(newUpdate.voters[z].upvote > 0)
+    {
+
+    }
+    else{
+      delete newUpdate.voters[z]
+    }
   }
  
 
