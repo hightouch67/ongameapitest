@@ -55,7 +55,7 @@ router.get("/api/getprojects", function (req, res) {
 
 router.get("/api/getprojectspayout", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT payout FROM projects`
+    var query = `SELECT permlink, payout FROM projects`
     connection.query(query, function (err, result) {
       if (err) return;
       else
@@ -67,7 +67,7 @@ router.get("/api/getprojectspayout", function (req, res) {
 
 router.get("/api/getupdatespayout", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT payout FROM updates`
+    var query = `SELECT permlink, payout FROM updates`
     connection.query(query, function (err, result) {
       if (err) return;
       else
