@@ -567,7 +567,7 @@ function parseUpdate(update) {
   newUpdate.update = newUpdate.json_metadata.update
   newUpdate.voters = displayVoter(update.active_votes, 0)
 
-  displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value,function(payout){
+  displayPayout(update.pending_payout_value, update.total_payout_value, update.curator_payout_value,function(payout){
     if(payout)
     newUpdate.payout = payout
   for (z = 0; z <  newUpdate.voters.length; z++) {
