@@ -457,7 +457,7 @@ function parseProject(project) {
 
     }
     else{
-      delete newProject.voters[z]
+       newProject.voters.splice([z],1)
     }
   }
 
@@ -541,7 +541,7 @@ function parseUpdate(update) {
 
     }
     else{
-      delete newUpdate.voters[z]
+      newUpdate.voters.splice([z],1)
     }
   }
  
