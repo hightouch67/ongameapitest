@@ -780,6 +780,7 @@ function displayPayout(active, total, voter, cb) {
                   totalUSD = ticker[0].price_usd
                   var sp = (amount / 2) * parseFloat(totalUSD).toFixed(3)
                   amount = Number(sbd) + Number(sp)
+                  console.log(amount)
                   cb(parseFloat(amount).toFixed(3))
                 }
               } else {
