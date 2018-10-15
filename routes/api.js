@@ -457,6 +457,10 @@ function parseProject(project) {
 
     }
     else{
+      delete newProject.voters[z].weight
+      delete newProject.voters[z].rshares
+      delete newProject.voters[z].percent
+      delete newProject.voters[z].rsharespercent
        newProject.voters.splice([z],1)
     }
   }
@@ -541,6 +545,10 @@ function parseUpdate(update) {
 
     }
     else{
+      delete newUpdate.voters[z].weight
+      delete newUpdate.voters[z].rshares
+      delete newUpdate.voters[z].percent
+      delete newUpdate.voters[z].rsharespercent
       newUpdate.voters.splice([z],1)
     }
   }
