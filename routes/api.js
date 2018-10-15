@@ -461,6 +461,7 @@ function parseProject(project) {
       delete newProject.voters[z].rshares
       delete newProject.voters[z].percent
       delete newProject.voters[z].rsharespercent
+      delete newProject.voters[z].reputation
        newProject.voters.splice([z],1)
     }
   }
@@ -549,6 +550,7 @@ function parseUpdate(update) {
       delete newUpdate.voters[z].rshares
       delete newUpdate.voters[z].percent
       delete newUpdate.voters[z].rsharespercent
+      delete newUpdate.voters[z].reputation
       newUpdate.voters.splice([z],1)
     }
   }
