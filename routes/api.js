@@ -474,41 +474,37 @@ function parseProject(project) {
   newProject.project = newProject.json_metadata.project
   newProject.voters = displayVoter(project.active_votes, 0)
 
-  displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value,function(payout){
-    if(payout)
-    newProject.payout = payout
-    for (z = 0; z <  newProject.voters.length; z++) {
-      newProject.voters[z].upvote = Number(parseFloat(payoutupvote(newProject.voters[z].rsharespercent, newProject.payout)).toFixed(3))
-      if(newProject.voters[z].upvote > 0)
-      {
-        delete newProject.voters[z].weight
-        delete newProject.voters[z].rshares
-        delete newProject.voters[z].percent
-        delete newProject.voters[z].rsharespercent
-        delete newProject.voters[z].reputation
-      }
-      else{
-  
-         newProject.voters.splice([z],1)
-      }
+  newProject.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
+  for (z = 0; z <  newProject.voters.length; z++) {
+    newProject.voters[z].upvote = Number(parseFloat(payoutupvote(newProject.voters[z].rsharespercent, newProject.payout)).toFixed(3))
+    if(newProject.voters[z].upvote > 0)
+    {
+      delete newProject.voters[z].weight
+      delete newProject.voters[z].rshares
+      delete newProject.voters[z].percent
+      delete newProject.voters[z].rsharespercent
+      delete newProject.voters[z].reputation
     }
-  
-    try {
-      newProject.voters = JSON.stringify(newProject.voters)
-      newProject.beneficiaries = JSON.stringify(project.beneficiaries)
-      newProject.active_votes = JSON.stringify(project.active_votes)
-      newProject.thanks = JSON.stringify(newProject.json_metadata.thanks.message).toString().replace(/\'/g, "''")
-      newProject.description = JSON.stringify(newProject.json_metadata.basics.description).toString().replace(/\'/g, "''")
-      newProject.image = setImage(newProject.description)
-      newProject.rewards = JSON.stringify(newProject.json_metadata.rewards).toString().replace(/\'/g, "''")
-      newProject.goals = JSON.stringify(newProject.json_metadata.goals).toString().replace(/\'/g, "''")
-      newProject.json_metadata = JSON.stringify(newProject.json_metadata).toString().replace(/\'/g, "''")
-    } catch (e) {
-      console.log(e)
+    else{
+
+       newProject.voters.splice([z],1)
     }
-    return newProject;
-  })
- 
+  }
+
+  try {
+    newProject.voters = JSON.stringify(newProject.voters)
+    newProject.beneficiaries = JSON.stringify(project.beneficiaries)
+    newProject.active_votes = JSON.stringify(project.active_votes)
+    newProject.thanks = JSON.stringify(newProject.json_metadata.thanks.message).toString().replace(/\'/g, "''")
+    newProject.description = JSON.stringify(newProject.json_metadata.basics.description).toString().replace(/\'/g, "''")
+    newProject.image = setImage(newProject.description)
+    newProject.rewards = JSON.stringify(newProject.json_metadata.rewards).toString().replace(/\'/g, "''")
+    newProject.goals = JSON.stringify(newProject.json_metadata.goals).toString().replace(/\'/g, "''")
+    newProject.json_metadata = JSON.stringify(newProject.json_metadata).toString().replace(/\'/g, "''")
+  } catch (e) {
+    console.log(e)
+  }
+  return newProject;
 }
 
 
@@ -567,9 +563,7 @@ function parseUpdate(update) {
   newUpdate.update = newUpdate.json_metadata.update
   newUpdate.voters = displayVoter(update.active_votes, 0)
 
-  displayPayout(update.pending_payout_value, update.total_payout_value, update.curator_payout_value,function(payout){
-    if(payout)
-    newUpdate.payout = payout
+  newUpdate.payout = displayPayout(update.pending_payout_value, update.total_payout_value, update.curator_payout_value)
   for (z = 0; z <  newUpdate.voters.length; z++) {
     newUpdate.voters[z].upvote = Number(parseFloat(payoutupvote(newUpdate.voters[z].rsharespercent, newUpdate.payout)).toFixed(3))
     if(newUpdate.voters[z].upvote > 0)
@@ -608,7 +602,6 @@ function parseUpdate(update) {
   }
 
   return newUpdate;
-})
 }
 
 
@@ -750,7 +743,46 @@ function payoutupvote(share, rewards) {
   return (parseFloat(share) * rewards).toFixed(3);
 }
 
-function displayPayout(active, total, voter,cb) {
+
+function SBD() {
+  var xtr = new XMLHttpRequest();
+  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem-dollars/', true);
+  xtr.send();
+  xtr.onreadystatechange = function () {
+    if (xtr.readyState == 4) {
+      if (xtr.status == 200) {
+        if (xtr.responseText) {
+          var ticker = JSON.parse(xtr.responseText)
+          totalUSD = ticker[0].price_usd
+          return parseFloat(totalUSD).toFixed(3)
+        }
+      } else {
+        console.log("Error: API not responding!");
+      }
+    }
+  }
+}
+
+function STEEM() {
+  var xtr = new XMLHttpRequest();
+  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem/', true);
+  xtr.send();
+  xtr.onreadystatechange = function () {
+    if (xtr.readyState == 4) {
+      if (xtr.status == 200) {
+        if (xtr.responseText) {
+          var ticker = JSON.parse(xtr.responseText)
+          totalUSD =  ticker[0].price_usd
+          return parseFloat(totalUSD).toFixed(3)
+        }
+      } else {
+        console.log("Error: API not responding!");
+      }
+    }
+  }
+}
+
+function displayPayout(active, total, voter) {
   if (active && !total || !voter) return active
   if (!active || !total || !voter) return
   var payout = active
@@ -764,43 +796,7 @@ function displayPayout(active, total, voter,cb) {
   var currency = payout.split(' ')[1]
   amount = parseFloat(amount).toFixed(3)
   amount -= (amount / 100) * 25
-  var xtr = new XMLHttpRequest();
-  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem-dollars/', true);
-  xtr.send();
-  xtr.onreadystatechange = function () {
-    if (xtr.readyState == 4) {
-      if (xtr.status == 200) {
-        if (xtr.responseText) {
-          var ticker = JSON.parse(xtr.responseText)
-          totalUSD = ticker[0].price_usd
-          var sbd = (amount / 2) * parseFloat(totalUSD).toFixed(3)
-
-          var xtr = new XMLHttpRequest();
-          xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem/', true);
-          xtr.send();
-          xtr.onreadystatechange = function () {
-            if (xtr.readyState == 4) {
-              if (xtr.status == 200) {
-                if (xtr.responseText) {
-                  var ticker = JSON.parse(xtr.responseText)
-                  totalUSD =  ticker[0].price_usd
-                  var sp = (amount / 2) * parseFloat(totalUSD).toFixed(3)
-                  amount = Number(sbd) + Number(sp)
-                  cb(parseFloat(amount).toFixed(3))
-                }
-              } else {
-                console.log("Error: API not responding!");
-                cb(null)
-              }
-            }
-          }
-        }
-      } else {
-        console.log("Error: API not responding!");
-        cb(null)
-      }
-    }
-  }
+  return parseFloat(amount).toFixed(3)
 }
 
 function displayVoter(votes, isDownvote) {
