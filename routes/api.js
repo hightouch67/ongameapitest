@@ -43,7 +43,7 @@ router.get("/api/getproject/:name/:permlink", function (req, res) {
 
 router.get("/api/getprojects", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT author, permlink, created, title, image, mode, tags, payout, type FROM projects`
+    var query = `SELECT author, permlink, created, title, image, mode, tags, type FROM projects`
     connection.query(query, function (err, result) {
       if (err) return;
       else
@@ -52,6 +52,31 @@ router.get("/api/getprojects", function (req, res) {
     })
   })
 })
+
+router.get("/api/getprojectspayout", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT payout FROM projects`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
+router.get("/api/getupdatespayout", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT payout FROM updates`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 
 
 router.get("/api/getfullprojects", function (req, res) {
