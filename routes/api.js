@@ -43,7 +43,7 @@ router.get("/api/getproject/:name/:permlink", function (req, res) {
 
 router.get("/api/getprojects", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT author, permlink, created, title, image, tags, payout, voters, type FROM projects`
+    var query = `SELECT author, permlink, created, title, image, mode, tags, payout, voters, type FROM projects`
     connection.query(query, function (err, result) {
       if (err) return;
       else
@@ -105,7 +105,7 @@ router.get("/api/getrecentupdates", function (req, res) {
   }
   date = yyyy + '/' + mm + '/' + dd;
   pool1.getConnection(function (error, connection) {
-    var query = "SELECT author, permlink, created, project FROM updates WHERE created > '" + date + "'"
+    var query = "SELECT author, permlink, created, mode, project FROM updates WHERE created > '" + date + "'"
     connection.query(query, function (err, result) {
       if (err) return;
       else
