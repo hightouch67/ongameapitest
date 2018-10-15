@@ -454,14 +454,14 @@ function parseProject(project) {
     newProject.voters[z].upvote = Number(parseFloat(payoutupvote(newProject.voters[z].rsharespercent, newProject.payout)).toFixed(3))
     if(newProject.voters[z].upvote > 0)
     {
-
-    }
-    else{
       delete newProject.voters[z].weight
       delete newProject.voters[z].rshares
       delete newProject.voters[z].percent
       delete newProject.voters[z].rsharespercent
       delete newProject.voters[z].reputation
+    }
+    else{
+
        newProject.voters.splice([z],1)
     }
   }
@@ -543,14 +543,14 @@ function parseUpdate(update) {
     newUpdate.voters[z].upvote = Number(parseFloat(payoutupvote(newUpdate.voters[z].rsharespercent, newUpdate.payout)).toFixed(3))
     if(newUpdate.voters[z].upvote > 0)
     {
-
-    }
-    else{
       delete newUpdate.voters[z].weight
       delete newUpdate.voters[z].rshares
       delete newUpdate.voters[z].percent
       delete newUpdate.voters[z].rsharespercent
       delete newUpdate.voters[z].reputation
+    }
+    else{
+
       newUpdate.voters.splice([z],1)
     }
   }
