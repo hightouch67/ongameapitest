@@ -249,6 +249,8 @@ router.get("/api/adddonation/:id/:name/:project/:amount/:memo/:sent/", function 
 
 
 loadSingle = function (author, permlink, cb) {
+  SBD()
+  STEEM()
   steem.api.getContent(author, permlink, function (error, result) {
     if (result) {
       try {
@@ -742,7 +744,8 @@ router.get("/api/battle_history", function (req, res) {
 function payoutupvote(share, rewards) {
   return (parseFloat(share) * rewards).toFixed(3);
 }
-
+var steemprice
+var sbdprice
 
 function SBD() {
   var xtr = new XMLHttpRequest();
@@ -754,7 +757,7 @@ function SBD() {
         if (xtr.responseText) {
           var ticker = JSON.parse(xtr.responseText)
           totalUSD = ticker[0].price_usd
-          return parseFloat(totalUSD).toFixed(3)
+          sbdprice = parseFloat(totalUSD).toFixed(3)
         }
       } else {
         console.log("Error: API not responding!");
@@ -773,7 +776,7 @@ function STEEM() {
         if (xtr.responseText) {
           var ticker = JSON.parse(xtr.responseText)
           totalUSD =  ticker[0].price_usd
-          return parseFloat(totalUSD).toFixed(3)
+          steemprice = parseFloat(totalUSD).toFixed(3)
         }
       } else {
         console.log("Error: API not responding!");
@@ -796,9 +799,8 @@ function displayPayout(active, total, voter) {
   var currency = payout.split(' ')[1]
   amount = parseFloat(amount).toFixed(3)
   amount -= (amount / 100) * 25
-  var sp = (amount / 2) * parseFloat(STEEM()).toFixed(3)
-  var sbd = (amount / 2) * parseFloat(SBD()).toFixed(3)
-  return sp+sbd
+  amount = ((amount /2) * steemprice)+((amount/2)* sbdprice)
+  return parseFloat(amount).toFixed(3)
 }
 
 function displayVoter(votes, isDownvote) {
