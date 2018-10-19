@@ -420,6 +420,37 @@ setImage = function (string) {
 }
 
 
+router.get("/api/link/:user/:type/:userid", function (req, res) {
+  var query = `INSERT INTO ongamusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.userid}')`
+  pool1.getConnection(function (error, connection) {
+    connection.query(query, function (err, result) {
+      if (err) {
+        console.log(err)
+        res.json(err);
+        connection.release();
+      }
+      else
+        console.log('ongameuser inserted')
+      res.json(result)
+    })
+  })
+})
+
+router.get("/api/link/:user", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = "SELECT * FROM ongamusers WHERE username='" + req.params.user + "'"
+    connection.query(query, function (err, result) {
+      if (err) return (err);
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
+
+
+
 function parseProject(project) {
   var newProject = {}
   try {
