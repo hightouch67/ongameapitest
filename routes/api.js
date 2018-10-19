@@ -436,7 +436,7 @@ router.get("/api/link/:user/:type/:userid", function (req, res) {
   })
 })
 
-router.get("/api/link/:user", function (req, res) {
+router.get("/api/getlinks/:user", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = "SELECT * FROM ongameusers WHERE username='" + req.params.user + "'"
     connection.query(query, function (err, result) {
