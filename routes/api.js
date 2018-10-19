@@ -421,7 +421,7 @@ setImage = function (string) {
 
 
 router.get("/api/link/:user/:type/:userid", function (req, res) {
-  var query = `INSERT INTO ongamusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.userid}')`
+  var query = `INSERT INTO ongameusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.userid}')`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
@@ -438,7 +438,7 @@ router.get("/api/link/:user/:type/:userid", function (req, res) {
 
 router.get("/api/link/:user", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = "SELECT * FROM ongamusers WHERE username='" + req.params.user + "'"
+    var query = "SELECT * FROM ongameusers WHERE username='" + req.params.user + "'"
     connection.query(query, function (err, result) {
       if (err) return (err);
       else
