@@ -421,7 +421,7 @@ setImage = function (string) {
 
 
 router.get("/api/link/:user/:type/:userid", function (req, res) {
-  var query = `INSERT INTO ongameusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.userid}') ON DUPLICATE KEY UPDATE ${req.params.type}=${req.params.userid}+1`
+  var query = `INSERT INTO ongameusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.userid}') ON DUPLICATE KEY UPDATE ${req.params.type}=${req.params.userid}`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
