@@ -436,6 +436,22 @@ router.get("/api/link/:user/:type/:userid", function (req, res) {
   })
 })
 
+router.get("/api/link/youtube/:channelid", function (req, res) {
+  var query = `INSERT INTO ongameusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.channelid}') ON DUPLICATE KEY UPDATE youtube_id='${req.params.channelid}'`
+  pool1.getConnection(function (error, connection) {
+    connection.query(query, function (err, result) {
+      if (err) {
+        console.log(err)
+        res.json(err);
+        connection.release();
+      }
+      else
+        console.log('youtube ongameuser inserted')
+      res.json(result)
+    })
+  })
+})
+
 router.get("/api/getlinks/:user", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = "SELECT * FROM ongameusers WHERE username='" + req.params.user + "'"
