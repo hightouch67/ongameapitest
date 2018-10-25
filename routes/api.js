@@ -286,9 +286,9 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
 router.get("/api/adddonation/:id/:name/:project/:amount/:memo/:sent/", function (req, res) {
   var date = new Date();
   date.setDate(date.getDate());
-  var dd = date.getDate();
-  var mm = date.getMonth() + 1; //January is 0!
-  var yyyy = date.getFullYear();
+  var dd = date.getUTCDay();
+  var mm = date.getUTCMonth() + 1; //January is 0!
+  var yyyy = date.getUTCFullYear();
   if (dd < 10) {
     dd = '0' + dd
   }
