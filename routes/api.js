@@ -398,7 +398,14 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
           '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
-          '${post.image}','${post.tags}','${post.project}')`
+          '${post.image}','${post.tags}','${post.project}')
+          ON DUPLICATE KEY UPDATE  
+          title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
+          last_update='${post.last_update}', last_payout='${post.last_payout}',active='${post.active}',
+          cashout_time='${post.max_cashout_time}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}' 
+          ,author_rewards='${post.author_rewards}' ,net_votes='${post.net_votes}' ,pending_payout_value='${post.pending_payout_value}'
+          ,total_pending_payout_value='${post.total_pending_payout_value}' ,active_votes='${post.active_votes}', image='${post.image}'
+          ,tags='${post.tags}'`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
