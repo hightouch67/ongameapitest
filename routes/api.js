@@ -284,7 +284,7 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
 })
 
 router.get("/api/adddonation/:id/:name/:project/:amount/:memo/:sent/", function (req, res) {
-  var query = `INSERT INTO donations (date,id, name, project, amount, memo, sent_amount) VALUES (now(),${req.params.id}','${req.params.name}','${req.params.project}','${req.params.amount}','${req.params.memo}','${req.params.sent}')`
+  var query = `INSERT INTO donations (date,id, name, project, amount, memo, sent_amount) VALUES (CURRENT_TIMESTAMP(),${req.params.id}','${req.params.name}','${req.params.project}','${req.params.amount}','${req.params.memo}','${req.params.sent}')`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
