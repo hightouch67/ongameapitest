@@ -284,7 +284,19 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
 })
 
 router.get("/api/adddonation/:id/:name/:project/:amount/:memo/:sent/", function (req, res) {
-  var query = `INSERT INTO donations (id, name, project, amount, memo, sent_amount) VALUES ('${req.params.id}','${req.params.name}','${req.params.project}','${req.params.amount}','${req.params.memo}','${req.params.sent}')`
+  var date = new Date();
+  date.setDate(date.getDate());
+  var dd = date.getDate();
+  var mm = date.getMonth() + 1; //January is 0!
+  var yyyy = date.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  if (mm < 10) {
+    mm = '0' + mm
+  }
+  date = yyyy + '/' + mm + '/' + dd;
+  var query = `INSERT INTO donations (date, id, name, project, amount, memo, sent_amount) VALUES ('${date}','${req.params.id}','${req.params.name}','${req.params.project}','${req.params.amount}','${req.params.memo}','${req.params.sent}')`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
