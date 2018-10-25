@@ -363,7 +363,7 @@ router.get("/api/addproject/:name/:permlink/:type", function (req, res) {
       cashout_time='${post.max_cashout_time}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}' 
       ,author_rewards='${post.author_rewards}' ,net_votes='${post.net_votes}' ,pending_payout_value='${post.pending_payout_value}'
       ,total_pending_payout_value='${post.total_pending_payout_value}' ,active_votes='${post.active_votes}', image='${post.image}'
-      ,rewards='${post.rewards}' ,goals='${post.goals}' ,thanks_message='${post.thanks}' ,description='${post.description}' ,socials='${post.socials}' ,tags='${post.tags}' ,tags='${post.project_type}'`
+      ,rewards='${post.rewards}' ,goals='${post.goals}' ,thanks_message='${post.thanks}' ,description='${post.description}' ,socials='${post.socials}' ,tags='${post.tags}' ,project_type='${post.project_type}'`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
