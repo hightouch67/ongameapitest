@@ -230,7 +230,8 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
         root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
         active_votes='${post.active_votes}',replies='${post.replies}',
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
-        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}',voters='${post.voters}', payout='${post.payout}' WHERE permlink='${req.params.permlink}'`
+        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}',voters='${post.voters}', payout='${post.payout}' WHERE permlink='${req.params.permlink}'
+        `
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
@@ -355,7 +356,14 @@ router.get("/api/addproject/:name/:permlink/:type", function (req, res) {
           '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
           '${post.image}','${post.rewards}','${post.goals}','${post.thanks}','${post.description}',
-          '${post.socials}','${post.tags}','${post.project}','${req.params.type}')`
+          '${post.socials}','${post.tags}','${post.project}','${req.params.type}')
+      ON DUPLICATE KEY UPDATE  
+      title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
+      last_update='${post.last_update}', last_payout='${post.last_payout}',active='${post.active}',
+      cashout_time='${post.max_cashout_time}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}' 
+      ,author_rewards='${post.author_rewards}' ,net_votes='${post.net_votes}' ,pending_payout_value='${post.pending_payout_value}'
+      ,total_pending_payout_value='${post.total_pending_payout_value}' ,active_votes='${post.active_votes}', image='${post.image}'
+      ,rewards='${post.rewards}' ,goals='${post.goals}' ,thanks_message='${post.thanks}' ,description='${post.description}' ,socials='${post.socials}' ,tags='${post.tags}'`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
