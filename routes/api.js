@@ -440,6 +440,20 @@ router.get("/api/projects/authors", function (req, res) {
   })
 })
 
+router.get("/api/market/items", function (req, res) {
+  var query = `SELECT * FROM ongamemarket`
+  pool1.getConnection(function (error, connection) {
+    connection.query(query, function (err, result) {
+      if (err) {
+
+        res.json(err);
+        connection.release();
+      }
+      else
+        res.json(result)
+    })
+  })
+})
 
 
 router.get("/api/gifts/:name", function (req, res) {
