@@ -107,7 +107,7 @@ router.get("/api/getdonations", function (req, res) {
 
 router.get("/api/getfullupdates", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT author, permlink, title created, mode, project, active_votes FROM updates`
+    var query = `SELECT author, permlink, title, created, mode, project, active_votes FROM updates`
     connection.query(query, function (err, result) {
       if (err) return;
       else
