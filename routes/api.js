@@ -83,7 +83,7 @@ router.get("/api/getupdatespayout", function (req, res) {
 
 router.get("/api/getfullprojects", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT * FROM projects`
+    var query = `SELECT author, permlink, created, title, image, mode, tags, payout, type, json_metadata, FROM projects`
     connection.query(query, function (err, result) {
       if (err) return;
       else
