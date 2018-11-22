@@ -545,7 +545,7 @@ router.get("/api/link/:user/:type/:userid", function (req, res) {
 })
 
 router.get("/api/addscore/:user/:type/:score", function (req, res) {
-  var query = `INSERT INTO ongameusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.score}') ON DUPLICATE KEY UPDATE ${req.params.type}+1`
+  var query = `INSERT INTO ongameusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.score}') ON DUPLICATE KEY UPDATE ${req.params.type}=${req.params.type}+1`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
