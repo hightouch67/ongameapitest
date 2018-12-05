@@ -586,6 +586,18 @@ router.get("/api/getgamecontents/:game", function (req, res) {
   })
 })
 
+router.get("/api/getusercontents/:author", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = "SELECT author, permlink FROM ongamecontents WHERE author=" + req.params.author 
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 
 router.get("/api/getrecentgamecontents", function (req, res) {
   var date = new Date();
