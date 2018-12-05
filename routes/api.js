@@ -602,7 +602,7 @@ router.get("/api/getrecentgamecontents", function (req, res) {
   }
   date = yyyy + '/' + mm + '/' + dd;
   pool1.getConnection(function (error, connection) {
-    var query = "SELECT author, permlink FROM ongamecontents WHERE created > '" + date + "'"
+    var query = "SELECT author, permlink, game FROM ongamecontents WHERE created > '" + date + "'"
     connection.query(query, function (err, result) {
       if (err) return;
       else
