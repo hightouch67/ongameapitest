@@ -587,6 +587,32 @@ router.get("/api/getgamecontents/:game", function (req, res) {
 })
 
 
+router.get("/api/getrecentgamecontents", function (req, res) {
+  var date = new Date();
+  date.setDate(date.getDate() - 30);
+  var dd = date.getDate();
+  var mm = date.getMonth() + 1; //January is 0!
+  var yyyy = date.getFullYear();
+  date = yyyy + '/' + mm + '/' + dd;
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  if (mm < 10) {
+    mm = '0' + mm
+  }
+  date = yyyy + '/' + mm + '/' + dd;
+  pool1.getConnection(function (error, connection) {
+    var query = "SELECT author, permlink FROM ongamecontents WHERE created > '" + date + "'"
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
+
 function parseProject(project) {
   var newProject = {}
   try {
