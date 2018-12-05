@@ -576,7 +576,7 @@ router.get("/api/getlinks/:user", function (req, res) {
 
 router.get("/api/getgamecontents/:game", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = "SELECT * FROM ongamecontents WHERE game=" + req.params.game 
+    var query = "SELECT author, permlink FROM ongamecontents WHERE game=" + req.params.game 
     connection.query(query, function (err, result) {
       if (err) return;
       else
