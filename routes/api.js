@@ -561,7 +561,7 @@ router.get("/api/addscore/:user/:type/:score", function (req, res) {
 })
 
 router.get("/api/addaccount/:user/:wallet", function (req, res) {
-  var query = `INSERT INTO ongameusers (username, trx_wallet) VALUES ('${req.params.user}','${req.params.trx_wallet}')`
+  var query = `INSERT INTO ongameusers (username, trx_wallet) VALUES ('${req.params.user}','${req.params.wallet}')`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
