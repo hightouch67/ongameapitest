@@ -560,6 +560,21 @@ router.get("/api/addscore/:user/:type/:score", function (req, res) {
   })
 })
 
+router.get("/api/addaccount/:user/:wallet", function (req, res) {
+  var query = `INSERT INTO ongameusers (username, trx_wallet) VALUES ('${req.params.user}','${req.params.trx_wallet}')`
+  pool1.getConnection(function (error, connection) {
+    connection.query(query, function (err, result) {
+      if (err) {
+        console.log(err)
+        res.json(err);
+        connection.release();
+      }
+      else
+        console.log('ongameuser ' + req.params.user + ' inserted')
+      res.json(result)
+    })
+  })
+})
 
 
 router.get("/api/getlinks/:user", function (req, res) {
