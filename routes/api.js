@@ -194,7 +194,7 @@ router.get("/api/getrecentupdatesdetails", function (req, res) {
 
 router.get("/api/getuserupdates/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT author, permlink, body, created, title, project, payout, voters FROM updates where author='${req.params.name}' AND project='${req.params.permlink}'`
+    var query = `SELECT author, permlink, body, created, title, project, payout, voters FROM updates where project='${req.params.permlink}'`
     connection.query(query, function (err, result) {
       if (err) return;
       else
