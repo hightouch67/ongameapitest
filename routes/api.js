@@ -132,7 +132,7 @@ router.get("/api/getrecentdonations", function (req, res) {
   }
   date = yyyy + '/' + mm + '/' + dd;
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT * FROM donations WHERE created > ${date}`
+    var query = `SELECT * FROM donations WHERE date > ${date}`
     connection.query(query, function (err, result) {
       if (err) return;
       else
