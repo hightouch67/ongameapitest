@@ -377,6 +377,18 @@ router.get("/api/addtip/:name/:amount/:type/:permlink/:id/", function (req, res)
   })
 })
 
+router.get("/api/tips/:permlink", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = "SELECT * FROM tips WHERE permlink='" + req.params.permlink + "'"
+    connection.query(query, function (err, result) {
+      if (err) return (err);
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 
 loadSingle = function (author, permlink, cb) {
   SBD()
