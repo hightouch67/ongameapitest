@@ -349,7 +349,7 @@ router.get("/api/adddonation/:id/:name/:project/:amount/:memo/:sent/", function 
   })
 })
 
-router.get("/api/addtip/:name/:amount/:permlink/:id/", function (req, res) {
+router.get("/api/addtip/:name/:amount/:type/:permlink/:id/", function (req, res) {
   var today = new Date()
   var dd = today.getUTCDate();
   var mm = today.getUTCMonth() + 1; //January is 0!
@@ -362,7 +362,7 @@ router.get("/api/addtip/:name/:amount/:permlink/:id/", function (req, res) {
       mm = '0' + mm
   }
   today = yyyy + '/' + mm + '/' + dd 
-  var query = `INSERT INTO tips (date, name, amount, permlink, id) VALUES ('${today}',''${req.params.name}''${req.params.amount}','${req.params.permlink}','${req.params.id}')`
+  var query = `INSERT INTO tips (date, name, amount,type, permlink, id) VALUES ('${today}',''${req.params.name}','${req.params.amount}','${req.params.type}','${req.params.permlink}','${req.params.id}')`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
