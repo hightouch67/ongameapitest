@@ -362,7 +362,7 @@ router.get("/api/addtip/:name/:amount/:type/:permlink/:id/", function (req, res)
       mm = '0' + mm
   }
   today = yyyy + '/' + mm + '/' + dd 
-  var query = `INSERT INTO tips (date, name, amount,type, permlink, id) VALUES ('${today}',''${req.params.name}','${req.params.amount}','${req.params.type}','${req.params.permlink}','${req.params.id}')`
+  var query = `INSERT INTO tips (date, name, amount,type, permlink, id) VALUES ('${today}','${req.params.name}','${req.params.amount}','${req.params.type}','${req.params.permlink}','${req.params.id}')`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
