@@ -117,6 +117,18 @@ router.get("/api/getdonations", function (req, res) {
   })
 })
 
+router.get("/api/gettrxdonations", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT * FROM trx_donations`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 router.get("/api/getrecentdonations", function (req, res) {
   var date = new Date();
   date.setDate(date.getDate() - 7);
@@ -348,6 +360,35 @@ router.get("/api/adddonation/:id/:name/:project/:amount/:memo/:sent/", function 
     })
   })
 })
+
+router.get("/api/addtrxdonation/:id/:name/:project/:amount/:memo/:sent/", function (req, res) {
+  var today = new Date()
+  var dd = today.getUTCDate();
+  var mm = today.getUTCMonth() + 1; //January is 0!
+  var yyyy = today.getUTCFullYear();
+  today = yyyy + '/' + mm + '/' + dd;
+  if (dd < 10) {
+      dd = '0' + dd
+  }
+  if (mm < 10) {
+      mm = '0' + mm
+  }
+  today = yyyy + '/' + mm + '/' + dd 
+  var query = `INSERT INTO trx_donations (date, id, name, project, amount, memo, sent_amount) VALUES ('${today}','${req.params.id}','${req.params.name}','${req.params.project}','${req.params.amount}','${req.params.memo}','${req.params.sent}')`
+  pool1.getConnection(function (error, connection) {
+    connection.query(query, function (err, result) {
+      if (err) {
+        console.log(err)
+        res.json(err);
+        connection.release();
+      }
+      else
+        console.log('donation inserted')
+      res.json(result)
+    })
+  })
+})
+
 
 router.get("/api/addtip/:name/:amount/:type/:permlink/:id/", function (req, res) {
   var today = new Date()
