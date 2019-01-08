@@ -67,6 +67,18 @@ router.get("/api/getprojects", function (req, res) {
   })
 })
 
+router.get("/api/getprojectvotes", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT author, permlink, image, active_votes, type FROM projects`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 router.get("/api/getprojectspayout", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = `SELECT permlink, payout FROM projects`
