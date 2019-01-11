@@ -598,6 +598,18 @@ router.get("/api/gifts/:name", function (req, res) {
   })
 })
 
+router.get("/api/allgifts", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = "SELECT * FROM gift"
+    connection.query(query, function (err, result) {
+      if (err) return (err);
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 
 
 
