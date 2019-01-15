@@ -22,14 +22,11 @@ function handleError(res, reason, message, code) {
 
 var pool1 = mysql.createPool({
   connectionLimit: 5,
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DB
+  host: 'us-cdbr-iron-east-01.cleardb.net',
+  user: 'bce50ec26bedce',
+  password: '13c7ceb6',
+  database: 'heroku_38540d920d933f3'
 });
-
-
-// API GET
 
 router.get("/api/getproject/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
@@ -93,7 +90,7 @@ router.get("/api/getprojectspayout", function (req, res) {
 
 router.get("/api/getupdatespayout", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT permlink, payout FROM updates`
+    var query = `SELECT payout FROM updates`
     connection.query(query, function (err, result) {
       if (err) return;
       else
@@ -119,7 +116,7 @@ router.get("/api/getfullprojects", function (req, res) {
 
 router.get("/api/getdonations", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT * FROM donations`
+    var query = `SELECT date, amount, name, memo, project FROM donations`
     connection.query(query, function (err, result) {
       if (err) return;
       else
@@ -128,6 +125,9 @@ router.get("/api/getdonations", function (req, res) {
     })
   })
 })
+
+
+
 
 router.get("/api/gettrxdonations", function (req, res) {
   pool1.getConnection(function (error, connection) {
@@ -654,7 +654,8 @@ setImage = function (string) {
   }
 }
 router.get("/api/link/:user/youtube/:channelid", function (req, res) {
-  var query = `INSERT INTO ongameusers (username, youtube_id) VALUES ('${req.params.user}','${req.params.channelid}') ON DUPLICATE KEY UPDATE youtube_id='${req.params.channelid}'`
+  var query = `INSERT INTO ongameusers (username, youtube_id) VALUES ('${req.params.user}','${req.params.channelid}') 
+  ON DUPLICATE KEY UPDATE youtube_id='${req.params.channelid}'`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
@@ -671,7 +672,8 @@ router.get("/api/link/:user/youtube/:channelid", function (req, res) {
 
 
 router.get("/api/link/:user/:type/:userid", function (req, res) {
-  var query = `INSERT INTO ongameusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.userid}') ON DUPLICATE KEY UPDATE ${req.params.type}=${req.params.userid}`
+  var query = `INSERT INTO ongameusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.userid}') 
+  ON DUPLICATE KEY UPDATE ${req.params.type}=${req.params.userid}`
   pool1.getConnection(function (error, connection) {
     connection.query(query, function (err, result) {
       if (err) {
@@ -1189,6 +1191,65 @@ function displayVoter(votes, isDownvote) {
   }
   return voters
 }
+
+// router.get("/api/getaadonations", function (req, res) {
+//   pool1.getConnection(function (error, connection) {
+//     const query = `SELECT * FROM donations_copy1`
+//     connection.query(query, function (err, result) {
+//       if (error) return;
+//       else
+//       for(i=0;result.length>i;i++)
+//       {
+//         const trx = result[i]
+//         Dome(trx)
+//         if(i===result.length-1)
+//         {
+//           res.json(result)
+//           connection.release();
+//         }
+//       }
+//     })
+//   })
+// })
+
+// function Dome(trx){
+//         if(trx.symbol ==="SBD" && !trx.sent_amount)
+//         {
+//           var dd = trx.date.getDate();
+//           var mm = trx.date.getMonth() + 1; //January is 0!
+//           var yyyy = trx.date.getFullYear();
+//           if (dd < 10) {
+//             dd = '0' + dd
+//           }
+//           if (mm < 10) {
+//             mm = '0' + mm
+//           }
+//           var amount = trx.amount.replace(',','.')
+//           var ss = trx.amount +' ' +trx.symbol
+//           var date = yyyy + '/' + mm + '/' + dd;
+//           pool1.getConnection(function (error, nexconnection) {
+//             const query = `SELECT usd FROM steemdollarprice WHERE date='${date}'`
+//             nexconnection.query(query, function (err, price) {
+//               if (err) return;
+//               else
+//                 price[0].usd = Number(price[0].usd.replace(',','.'))
+//                 var newamount =  amount * price[0].usd
+//                 console.log(ss)
+//                 pool2.getConnection(function (error, connection) {
+//                   var query = `INSERT INTO donations_copy1 (id) VALUES ('${trx.id}') 
+//                   ON DUPLICATE KEY UPDATE amount='${newamount}', sent_amount='${ss}'`
+//                   connection.query(query, function (err, result) {
+//                     if (err) return;
+//                     else
+//                      console.log(result)
+//                     connection.release();
+//                   })
+//                 })
+//             })
+//             nexconnection.release()
+//           })
+//         }
+// }
 
 
 module.exports = router;
