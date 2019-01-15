@@ -143,7 +143,7 @@ router.get("/api/gettrxdonations", function (req, res) {
 
 router.get("/api/getrecentdonations/:days", function (req, res) {
   var date = new Date();
-  date.setDate(date.getDate() - req.days);
+  date.setDate(date.getDate() - Number(req.days));
   var dd = date.getDate();
   var mm = date.getMonth() + 1; //January is 0!
   var yyyy = date.getFullYear();
