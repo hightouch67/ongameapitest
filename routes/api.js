@@ -582,7 +582,7 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
 
 router.get("/api/getcontent/:author/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT * FROM ongamecontents where author='${req.params.author}', permlink='${req.params.permlink}'`
+    var query = `SELECT * FROM ongamecontents where author='${req.params.author}' AND permlink='${req.params.permlink}'`
     connection.query(query, function (err, result) {
       if (err) return;
       else
