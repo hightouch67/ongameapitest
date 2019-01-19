@@ -580,6 +580,18 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
   })
 })
 
+router.get("/api/getcontent/:author/:permlink", function (req, res) {
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT * FROM ongamecontents where author='${req.params.author},permlink='${req.params.permlink}'`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
 router.get("/api/projects/authors", function (req, res) {
   var query = `SELECT author, permlink FROM projects`
   pool1.getConnection(function (error, connection) {
