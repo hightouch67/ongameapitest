@@ -1143,6 +1143,16 @@ router.get("/api/battle_history", function (req, res) {
   })
 })
 
+router.get("/api/steemprice", function (req, res) {
+  STEEM()
+  res.json(steemprice)
+})
+
+router.get("/api/sbdprice", function (req, res) {
+  SBD()
+  res.json(sbdprice)
+})
+
 function payoutupvote(share, rewards) {
   return (parseFloat(share) * rewards).toFixed(3);
 }
