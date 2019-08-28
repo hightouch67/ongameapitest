@@ -15,6 +15,8 @@ router.get('/', (req, res) => {
 });
 
 
+
+
 function handleError(res, reason, message, code) {
   console.log("ERROR: " + reason);
   res.status(code || 500).json({ "error": message });
@@ -878,6 +880,8 @@ function parseProject(project) {
   newProject.voters = displayVoter(project.active_votes, 0)
 
   newProject.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
+  newProject.payout = newProject.payout/100*45;
+
   for (z = 0; z <  newProject.voters.length; z++) {
     newProject.voters[z].upvote = Number(parseFloat(payoutupvote(newProject.voters[z].rsharespercent, newProject.payout)).toFixed(3))
     if(newProject.voters[z].upvote > 0)
@@ -968,6 +972,7 @@ function parseUpdate(update) {
   newUpdate.voters = displayVoter(update.active_votes, 0)
 
   newUpdate.payout = displayPayout(update.pending_payout_value, update.total_payout_value, update.curator_payout_value)
+  newUpdate.payout = newUpdate.payout/100*45;
   for (z = 0; z <  newUpdate.voters.length; z++) {
     newUpdate.voters[z].upvote = Number(parseFloat(payoutupvote(newUpdate.voters[z].rsharespercent, newUpdate.payout)).toFixed(3))
     if(newUpdate.voters[z].upvote > 0)
@@ -1011,7 +1016,7 @@ function parseUpdate(update) {
 
 router.get("/api/characters", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = "SELECT * FROM user"
+    var query = "SELECT * FROM drugwars_user"
     connection.query(query, function (err, result) {
       if (err) return;
       else
