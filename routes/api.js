@@ -1148,6 +1148,42 @@ router.get("/api/battle_history", function (req, res) {
   })
 })
 
+router.get("/api/sbdprice", function (req, res) {
+  var xtr = new XMLHttpRequest();
+  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem-dollars/', true);
+  xtr.send();
+  xtr.onreadystatechange = function () {
+    if (xtr.readyState == 4) {
+      if (xtr.status == 200) {
+        if (xtr.responseText) {
+          var ticker = JSON.parse(xtr.responseText)
+          res.json(ticker)
+        }
+      } else {
+        console.log("Error: API not responding!");
+      }
+    }
+  }
+})
+
+router.get("/api/allcoins", function (req, res) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/', true);
+  xhr.send();
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4) {
+          if (xhr.status == 200) {
+              if (xhr.responseText) {
+                  var ticker = JSON.parse(xhr.responseText)
+                  res.json(ticker)
+              }
+          } else {
+              console.log("Error: API not responding!");
+          }
+      }
+  }
+})
+
 function payoutupvote(share, rewards) {
   return (parseFloat(share) * rewards).toFixed(3);
 }
