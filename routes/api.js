@@ -877,9 +877,10 @@ function parseProject(project) {
   newProject.socials = newProject.json_metadata.basics.social.toString().replace(/\'/g, "''")
   newProject.tags = newProject.json_metadata.tags
   newProject.project = newProject.json_metadata.project
-  newProject.voters = displayVoter(project.active_votes, 0)
 
   newProject.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
+  newProject.voters = displayVoter(project.active_votes, 0)
+  console.log(newProject.payout)
   newProject.payout = newProject.payout/100*45;
 
   for (z = 0; z <  newProject.voters.length; z++) {
@@ -972,6 +973,8 @@ function parseUpdate(update) {
   newUpdate.voters = displayVoter(update.active_votes, 0)
 
   newUpdate.payout = displayPayout(update.pending_payout_value, update.total_payout_value, update.curator_payout_value)
+  newProject.payout = newProject.payout/100*45;
+
   newUpdate.payout = newUpdate.payout/100*45;
   for (z = 0; z <  newUpdate.voters.length; z++) {
     newUpdate.voters[z].upvote = Number(parseFloat(payoutupvote(newUpdate.voters[z].rsharespercent, newUpdate.payout)).toFixed(3))
