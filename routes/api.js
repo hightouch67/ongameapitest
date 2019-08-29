@@ -897,7 +897,11 @@ function parseProject(project) {
        newProject.voters.splice([z],1)
     }
   }
+  if(newProject.payout)
   newProject.payout = Number(newProject.payout)/100*45;
+  else{
+    newProject.payout = 0
+  }
   console.log(newProject.payout = newProject.payout/100*45)
   try {
     newProject.voters = JSON.stringify(newProject.voters)
@@ -990,8 +994,11 @@ function parseUpdate(update) {
     }
   }
   console.log(newUpdate.payout)
+  if(newUpdate.payout)
   newUpdate.payout = Number(newUpdate.payout)/100*45;
-
+  else{
+    newUpdate.payout = 0
+  }
   for (i = 0; newUpdate.tags.length > i; i++) {
     if (newUpdate.tags[i].includes('fundition_')) {
       newUpdate.project = newUpdate.tags[i].split('_')[1]
