@@ -880,8 +880,6 @@ function parseProject(project) {
 
   newProject.payout = displayPayout(project.pending_payout_value, project.total_payout_value, project.curator_payout_value)
   newProject.voters = displayVoter(project.active_votes, 0)
-  console.log(newProject.payout)
-  newProject.payout = newProject.payout/100*45;
 
   for (z = 0; z <  newProject.voters.length; z++) {
     newProject.voters[z].upvote = Number(parseFloat(payoutupvote(newProject.voters[z].rsharespercent, newProject.payout)).toFixed(3))
@@ -898,7 +896,8 @@ function parseProject(project) {
        newProject.voters.splice([z],1)
     }
   }
-
+  newProject.payout = newProject.payout/100*45;
+  console.log(newProject.payout = newProject.payout/100*45)
   try {
     newProject.voters = JSON.stringify(newProject.voters)
     newProject.beneficiaries = JSON.stringify(project.beneficiaries)
@@ -973,9 +972,7 @@ function parseUpdate(update) {
   newUpdate.voters = displayVoter(update.active_votes, 0)
 
   newUpdate.payout = displayPayout(update.pending_payout_value, update.total_payout_value, update.curator_payout_value)
-  newProject.payout = newProject.payout/100*45;
 
-  newUpdate.payout = newUpdate.payout/100*45;
   for (z = 0; z <  newUpdate.voters.length; z++) {
     newUpdate.voters[z].upvote = Number(parseFloat(payoutupvote(newUpdate.voters[z].rsharespercent, newUpdate.payout)).toFixed(3))
     if(newUpdate.voters[z].upvote > 0)
@@ -991,7 +988,8 @@ function parseUpdate(update) {
       newUpdate.voters.splice([z],1)
     }
   }
- 
+  console.log(newUpdate.payout)
+  newUpdate.payout = newUpdate.payout/100*45;
 
   for (i = 0; newUpdate.tags.length > i; i++) {
     if (newUpdate.tags[i].includes('fundition_')) {
@@ -1017,139 +1015,6 @@ function parseUpdate(update) {
 }
 
 
-router.get("/api/characters", function (req, res) {
-  pool1.getConnection(function (error, connection) {
-    var query = "SELECT * FROM drugwars_user"
-    connection.query(query, function (err, result) {
-      if (err) return;
-      else
-        res.json(result)
-      connection.release();
-    })
-  })
-})
-
-router.get("/api/character/:name", function (req, res) {
-  var playerid;
-  var character = {}
-  pool1.getConnection(function (err, connection) {
-    //LOAD USER
-    var query = "SELECT * FROM user WHERE username='" + req.params.name + "'"
-    connection.query(query, function (err, result) {
-      if (err || result.length < 1) return res.json(err);
-      playerid = result[0].user_id
-      character = result[0]
-      //LOAD CHARACTER
-      var query = "SELECT * FROM characters WHERE character_id='" + playerid + "'"
-      connection.query(query, function (err, result) {
-        if (err) return;
-        character.character = result[0]
-        //LOAD ATTRIBUTES
-        var query = "SELECT * FROM character_attribute WHERE character_id='" + playerid + "'"
-        connection.query(query, function (err, result) {
-          if (err) return;
-          character.character.attributes = result
-          //LOAD ITEMS
-          var query = "SELECT * FROM character_item WHERE character_id='" + playerid + "'"
-          connection.query(query, function (err, result) {
-            if (err) return;
-            character.character.items = result
-            //LOAD EQUIPMENT
-            var query = "SELECT * FROM character_equipment WHERE character_id='" + playerid + "'"
-            connection.query(query, function (err, result) {
-              if (err) return;
-              character.character.equipment = result
-              //LOAD CLASS
-              var query = "SELECT * FROM character_class WHERE character_id='" + playerid + "'"
-              connection.query(query, function (err, result) {
-                if (err) return;
-                character.character.class = result[0]
-                res.json(character)
-                connection.release();
-              })
-            })
-          })
-        })
-      })
-    })
-  })
-})
-
-
-
-router.get("/api/properties", function (req, res) {
-  var properties = {}
-  pool1.getConnection(function (err, connection) {
-    //LOAD ATTRIBUTES
-    var query = "SELECT * FROM attribute"
-    connection.query(query, function (err, result) {
-      if (err) return;
-      properties.attributes = result
-      //LOAD ITEMS
-      var query = "SELECT * FROM item"
-      connection.query(query, function (err, result) {
-        if (err) return;
-        properties.items = result
-        //LOAD ITEMS ATTRIBUTES
-        var query = "SELECT * FROM item_attribute"
-        connection.query(query, function (err, result) {
-          if (err) return;
-          properties.items_attributes = result
-          //LOAD ITEMS TYPES
-          var query = "SELECT * FROM item_type"
-          connection.query(query, function (err, result) {
-            if (err) return;
-            properties.items_types = result
-            //LOAD SLOTS
-            var query = "SELECT * FROM equipment_slot"
-            connection.query(query, function (err, result) {
-              if (err) return;
-              properties.slots = result
-            })
-            //LOAD CLASS
-            var query = "SELECT * FROM class"
-            connection.query(query, function (err, result) {
-              if (err) return;
-              properties.class = result
-              //LOAD SHOP
-              var query = "SELECT * FROM shop"
-              connection.query(query, function (err, result) {
-                if (err) return;
-                properties.shop = result
-                res.json(properties)
-                connection.release();
-              })
-            })
-          })
-        })
-      })
-    })
-  })
-});
-
-router.get("/api/battle", function (req, res) {
-  pool1.getConnection(function (error, connection) {
-    var query = "SELECT * FROM battle"
-    connection.query(query, function (err, result) {
-      if (err) return;
-      else
-        res.json(result)
-      connection.release();
-    })
-  })
-})
-
-router.get("/api/battle_history", function (req, res) {
-  pool1.getConnection(function (error, connection) {
-    var query = "SELECT * FROM battle_history"
-    connection.query(query, function (err, result) {
-      if (err) return;
-      else
-        res.json(result)
-      connection.release();
-    })
-  })
-})
 
 router.get("/api/sbdprice", function (req, res) {
   var xtr = new XMLHttpRequest();
