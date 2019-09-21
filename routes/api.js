@@ -294,7 +294,7 @@ router.get("/api/getuserupdates/:name/:permlink", function (req, res) {
 })
 
 
-router.get("/api/getstates/:permlink", function (req, res) {
+router.get("/api/state/:permlink", function (req, res) {
   console.log(req.params.permlink)
   pool1.getConnection(function (error, connection) {
     let query = `SELECT SUM(p.payout) as amount_p, SUM(u.payout) as amount_u, SUM(d.amount) as amount_d FROM projects p
@@ -317,7 +317,7 @@ router.get("/api/getstates/:permlink", function (req, res) {
         if(result[0].amount_d != null)
         total+=Number(result[0].amount_d)
         console.log(total,result[0])
-        res.json(total)
+        res.json(parseFloat(total).toFixed(3))
       connection.release();
       }
 
