@@ -300,7 +300,10 @@ router.get("/api/getstates/:name/:permlink", function (req, res) {
                  SELECT SUM(payout) as amount FROM updates where project='${req.params.permlink}'; 
                  SELECT SUM(amount) as amount FROM donations where project='${req.params.name}' AND memo like '%${req.params.permlink}%';`
     connection.query(query, function (err, result) {
-      if (err) return;
+      if (err){
+        console.log(error)
+        return
+      }
       else
       console.log(result)
         res.json(result)
