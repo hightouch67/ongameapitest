@@ -397,7 +397,7 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
       })
     }
     else {
-      connection.release();
+      res.json('error')
     }
   })
 })
