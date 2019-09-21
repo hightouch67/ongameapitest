@@ -295,6 +295,7 @@ router.get("/api/getuserupdates/:name/:permlink", function (req, res) {
 
 
 router.get("/api/getstates/:name/:permlink", function (req, res) {
+  console.log(req.params.name,req.params.permlink)
   pool1.getConnection(function (error, connection) {
     var query = `SELECT SUM(payout) as amount FROM projects where permlink='${req.params.permlink}';
                  SELECT SUM(payout) as amount FROM updates where project='${req.params.permlink}'; 
