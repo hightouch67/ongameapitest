@@ -306,9 +306,13 @@ router.get("/api/getstates/:name/:permlink", function (req, res) {
         return
       }
       else
-      console.log(result)
+      if(result)
+      {
+        console.log(result)
         res.json(result)
       connection.release();
+      }
+
     })
   })
 })
