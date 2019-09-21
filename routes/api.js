@@ -255,6 +255,7 @@ router.get("/api/getrecentupdates", function (req, res) {
   })
 })
 
+
 router.get("/api/getrecentupdatesdetails", function (req, res) {
   var date = new Date();
   date.setDate(date.getDate() - 7);
@@ -286,6 +287,35 @@ router.get("/api/getuserupdates/:name/:permlink", function (req, res) {
     connection.query(query, function (err, result) {
       if (err) return;
       else
+        res.json(result)
+      connection.release();
+    })
+  })
+})
+
+
+router.get("/api/getstates/:name/:permlink", function (req, res) {
+  var date = new Date();
+  date.setDate(date.getDate() - 7);
+  var dd = date.getDate();
+  var mm = date.getMonth() + 1; //January is 0!
+  var yyyy = date.getFullYear();
+  date = yyyy + '/' + mm + '/' + dd;
+  if (dd < 10) {
+    dd = '0' + dd
+  }
+  if (mm < 10) {
+    mm = '0' + mm
+  }
+  date = yyyy + '/' + mm + '/' + dd;
+  pool1.getConnection(function (error, connection) {
+    var query = `SELECT SUM(payout) as amount FROM projects where permlink='${req.params.permlink}';
+                 SELECT SUM(payout) as amount FROM updates where project='${req.params.permlink}'; 
+                 SELECT SUM(amount) as amount FROM donations where project='${req.params.name}' AND memo like '%${req.params.permlink}%';`
+    connection.query(query, function (err, result) {
+      if (err) return;
+      else
+      console.log(result)
         res.json(result)
       connection.release();
     })
