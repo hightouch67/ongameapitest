@@ -310,13 +310,13 @@ router.get("/api/getstates/:permlink", function (req, res) {
       if(result)
       {
         let total = 0;
-        if(result.amount_p != null)
-        total+=Number(result.amount_p)
-        if(result.amount_u != null)
-        total+=Number(result.amount_u)
-        if(result.amount_d != null)
-        total+=Number(result.amount_d)
-        console.log(total,result)
+        if(result[0].amount_p != null)
+        total+=Number(result[0].amount_p)
+        if(result[0].amount_u != null)
+        total+=Number(result[0].amount_u)
+        if(result[0].amount_d != null)
+        total+=Number(result[0].amount_d)
+        console.log(total,result[0])
         res.json(total)
       connection.release();
       }
