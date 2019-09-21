@@ -309,8 +309,15 @@ router.get("/api/getstates/:permlink", function (req, res) {
       else
       if(result)
       {
+        let total = 0;
+        if(result.amount_p)
+        total+=Number(result.amount_p)
+        if(result.amount_u)
+        total+=Number(result.amount_u)
+        if(result.amount_d)
+        total+=Number(result.amount_d)
         console.log(result)
-        res.json(result)
+        res.json(total)
       connection.release();
       }
 
