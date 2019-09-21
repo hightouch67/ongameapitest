@@ -302,7 +302,7 @@ router.get("/api/getstates/:name/:permlink", function (req, res) {
                  SELECT SUM(amount) as amount FROM donations where project='${req.params.name}' AND memo like '%${req.params.permlink}%';`
     connection.query(query, function (err, result) {
       if (err){
-        console.log(error)
+        console.log(err)
         return
       }
       else
