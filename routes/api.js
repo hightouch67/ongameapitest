@@ -1083,8 +1083,24 @@ router.get("/api/allcoins", function (req, res) {
       if (xhr.readyState == 4) {
           if (xhr.status == 200) {
               if (xhr.responseText) {
-                  var ticker = JSON.parse(xhr.responseText)
-                  res.json(ticker)
+                  var allticker = JSON.parse(xhr.responseText)
+                  var xtr = new XMLHttpRequest();
+                  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem/', true);
+                  xtr.send();
+                  xtr.onreadystatechange = function () {
+                    if (xtr.readyState == 4) {
+                      if (xtr.status == 200) {
+                        if (xtr.responseText) {
+                          var [ticker] = JSON.parse(xtr.responseText)
+                          allticker.push(ticker)
+                          res.json(allticker)
+
+                        }
+                      } else {
+                        console.log("Error: API not responding!");
+                      }
+                    }
+                  }
               }
           } else {
               console.log("Error: API not responding!");
