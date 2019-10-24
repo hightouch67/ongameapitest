@@ -61,10 +61,14 @@ router.get("/api/getprojects", function (req, res) {
     res.json(projects.projects)
   }
   else{
+    if(projects&&projects.projects)
+    {
+      res.json(projects.projects)
+    }
     pool1.getConnection(function (error, connection) {
-      var query = `SELECT p.author, p.permlink, p.created, p.title, p.image, p.mode, p.tags,  p.type, p.payout, SUM(d.amount) as donation , SUM(u.payout) as update_payout FROM projects p
-      LEFT JOIN donations d ON d.memo LIKE concat('%',p.permlink,'%')
-      LEFT JOIN updates u ON u.project = p.permlink and u.mode = 'l'
+      var query = `SELECT p.author, p.permlink, p.created, p.title, p.image, p.mode, p.tags,  p.type, p.payout, 
+      (SELECT SUM(d.amount) FROM donations d WHERE d.memo LIKE concat('%',p.permlink,'%')) as donation ,
+      (SELECT SUM(u.payout) FROM updates u WHERE u.project = p.permlink) as update_payout FROM projects p
       WHERE p.type !='off'
       group by p.permlink
       order by p.created DESC`
