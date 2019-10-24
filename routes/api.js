@@ -53,17 +53,30 @@ router.get("/api/getuserprojects/:author", function (req, res) {
     })
   })
 })
-
+var projects;
 router.get("/api/getprojects", function (req, res) {
-  pool1.getConnection(function (error, connection) {
-    var query = `SELECT author, permlink, created, title, image, mode, tags, payout, type FROM projects order by created DESC`
-    connection.query(query, function (err, result) {
-      if (err) return;
-      else
-        res.json(result)
-      connection.release();
+  var now = new Date().getHours();
+  if(projects && projects.time === now)
+  {
+    res.json(projects.projects)
+  }
+  else{
+    pool1.getConnection(function (error, connection) {
+      var query = `SELECT p.author, p.permlink, p.created, p.title, p.image, p.mode, p.tags,  p.type, p.payout, SUM(d.amount) as donation , SUM(u.payout) as update_payout FROM projects p
+      LEFT JOIN donations d ON d.memo LIKE concat('%',p.permlink,'%')
+      LEFT JOIN updates u ON u.project = p.permlink and u.mode = 'l'
+      WHERE p.type !='off'
+      group by p.permlink
+      order by p.created DESC`
+      connection.query(query, function (err, result) {
+        if (err) return;
+        else
+          projects = { projects: result, time: now };
+          res.json(result)
+        connection.release();
+      })
     })
-  })
+  }
 })
 
 router.get("/api/getprojectvotes", function (req, res) {
