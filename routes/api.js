@@ -134,7 +134,7 @@ router.get("/api/getfullprojects", function (req, res) {
 
 router.get("/api/getdonations", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT date, amount, name, memo, project, link FROM donations`
+    var query = `SELECT date, amount, name, memo, project, link FROM donations group by name,link`
     connection.query(query, function (err, result) {
       if (err) return;
       else
@@ -1136,6 +1136,25 @@ router.get("/api/allcoins", function (req, res) {
       }
   }
 })
+router.get("/api/convertcoin", function (req, res) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://apilayer.net/api/live?access_key=a4d5d62cc69c3cb2fea2fb9fd4402852&currencies=EUR,GBP,CAD,PLN,TRY,CNY,IDR,KRW,PHP,JPY&source=USD&format=1', true);
+    xhr.send();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                if (xhr.responseText) {
+                    var ticker = JSON.parse(xhr.responseText)
+                    res.json(ticker.quotes)
+                }
+            } else {
+                console.log("Error: API not responding!");
+            }
+        }
+    }
+})
+
+
 
 function payoutupvote(share, rewards) {
   return (parseFloat(share) * rewards).toFixed(3);
