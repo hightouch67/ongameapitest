@@ -135,7 +135,7 @@ router.get("/api/getfullprojects", function (req, res) {
 
 router.get("/api/getdonations", function (req, res) {
   pool1.getConnection(function (error, connection) {
-    var query = `SELECT date, amount, name, memo, project FROM donations`
+    var query = `SELECT date, amount, name, memo, project, link FROM donations`
     connection.query(query, function (err, result) {
       if (err) return;
       else
