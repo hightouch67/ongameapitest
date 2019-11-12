@@ -325,10 +325,18 @@ router.get("/api/getuserupdates/:name/:permlink", function (req, res) {
 router.get("/api/state/:permlink", function (req, res) {
   console.log(req.params.permlink)
   pool1.getConnection(function (error, connection) {
-    let query = `SELECT SUM(p.payout) as amount_p, SUM(u.payout) as amount_u, SUM(d.amount) as amount_d FROM projects p
-    LEFT JOIN updates u ON u.permlink = p.permlink
-    LEFT JOIN donations d ON d.memo like '%${req.params.permlink}%'
-    WHERE p.permlink = '${req.params.permlink}'`
+    let query = `SELECT  (
+      SELECT SUM(payout)
+      FROM  projects WHERE permlink = '${req.params.permlink}'
+      ) AS amount_p ,
+      (
+      SELECT SUM(payout)
+      FROM   updates WHERE project = '${req.params.permlink}'
+      ) AS amount_u,
+      (
+      SELECT SUM(amount)
+      FROM   donations where memo like '%${req.params.permlink}%'
+      ) AS amound_d`
     connection.query(query, function (err, result) {
       if (err){
         console.log(err)
