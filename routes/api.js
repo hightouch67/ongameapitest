@@ -336,7 +336,7 @@ router.get("/api/state/:permlink", function (req, res) {
       (
       SELECT SUM(amount)
       FROM   donations where memo like '%${req.params.permlink}%'
-      ) AS amound_d`
+      ) AS amount_d`
     connection.query(query, function (err, result) {
       if (err){
         console.log(err)
@@ -354,7 +354,7 @@ router.get("/api/state/:permlink", function (req, res) {
         total+=Number(result[0].amount_d)
         console.log(total,result[0])
         res.json(parseFloat(total).toFixed(3))
-      connection.release();
+        connection.release();
       }
 
     })
