@@ -7,7 +7,7 @@ const sql = require('mssql')
 const steem = require('steem');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const rp = require('request-promise');
-
+var allcoins;
 steem.api.setOptions({ url: 'https://api.steemit.com' });
 
 
@@ -1089,7 +1089,7 @@ const requestOptions = {
   uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
   qs: {
     'start': '1',
-    'limit': '1000',
+    'limit': '500',
     'convert': 'USD'
   },
   headers: {
@@ -1100,13 +1100,28 @@ const requestOptions = {
 };
 
 router.get("/api/allcoins", function (req, res) {
-  rp(requestOptions).then(response => {
-    var data = response.data
-    res.json(data)
-  }).catch((err) => {
-    console.log('API call error:', err.message);
-    res.json(err)
-  });
+  var bnow = new Date().getHours()
+  if(allcoins && allcoins.lasttime && allcoins.lasttime=== bnow)
+  {
+    res.json(allcoins.data)
+  }
+  else{
+    const next = new Date().getHours();
+    rp(requestOptions).then(response => {
+      var data = response.data
+      allcoins.data = data;
+      allcoins.lasttime = next;
+      var steem = data.find(rep => rep.name === 'Steem')
+      steemprice = parseFloat(steem.quote.USD.price).toFixed(3);
+      var sbdprice = data.find(rep => rep.name === 'Steem Dollars')
+      priceofsbd = parseFloat(sbdprice.quote.USD.price).toFixed(3);
+      res.json(data)
+    }).catch((err) => {
+      console.log('API call error:', err.message);
+      res.json(err)
+    });
+  }
+
 })
 
 router.get("/api/convertcoin", function (req, res) {
@@ -1130,30 +1145,6 @@ router.get("/api/convertcoin", function (req, res) {
 function payoutupvote(share, rewards) {
   return (parseFloat(share) * rewards).toFixed(3);
 }
-
-
-
-function SBD() {
-  rp(requestOptions).then(response => {
-    var data = response.data
-    var sbdprice = data.find(rep => rep.name === 'Steem Dollars')
-    priceofsbd = parseFloat(sbdprice.quote.USD.price).toFixed(3);
-  }).catch((err) => {
-    console.log('API call error:', err.message);
-  });
-}
-
-function STEEM() {
-  rp(requestOptions).then(response => {
-    var data = response.data
-    var steem = data.find(rep => rep.name === 'Steem')
-    steemprice = parseFloat(steem.quote.USD.price).toFixed(3);
-  }).catch((err) => {
-    console.log('API call error:', err.message);
-  });
-}
-
-
 
 function displayPayout(active, total, voter) {
   if (active && !total || !voter) return active
@@ -1255,8 +1246,5 @@ function displayVoter(votes, isDownvote) {
 //           })
 //         }
 // }
-
-SBD()
-STEEM()
 
 module.exports = router;
