@@ -1034,6 +1034,7 @@ function parseUpdate(update) {
   newUpdate.payout = displayPayout(update.pending_payout_value, update.total_payout_value, update.curator_payout_value)
 
   for (z = 0; z <  newUpdate.voters.length; z++) {
+    console.log(newUpdate.voters[z].upvote)
     newUpdate.voters[z].upvote = Number(parseFloat(payoutupvote(newUpdate.voters[z].rsharespercent, newUpdate.payout)).toFixed(3))
     if(newUpdate.voters[z].upvote > 0)
     {
@@ -1156,6 +1157,8 @@ function displayPayout(active, total, voter) {
       payout = amount + ' SBD'
   }
   if (!payout) return
+  console.log(payout)
+
   var amount = payout.split(' ')[0]
   var currency = payout.split(' ')[1]
   amount = parseFloat(amount).toFixed(3)
