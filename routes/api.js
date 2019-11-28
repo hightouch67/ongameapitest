@@ -1089,7 +1089,7 @@ const requestOptions = {
   uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
   qs: {
     'start': '1',
-    'limit': '500',
+    'limit': '600',
     'convert': 'USD'
   },
   headers: {
