@@ -7,7 +7,7 @@ const sql = require('mssql')
 const steem = require('steem');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const rp = require('request-promise');
-var allcoins;
+
 steem.api.setOptions({ url: 'https://api.steemit.com' });
 
 
@@ -1098,7 +1098,7 @@ const requestOptions = {
   json: true,
   gzip: true
 };
-
+var allcoins = {};
 router.get("/api/allcoins", function (req, res) {
   var bnow = new Date().getHours()
   if(allcoins && allcoins.lasttime && allcoins.lasttime=== bnow)
