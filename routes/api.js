@@ -6,6 +6,7 @@ const router = express.Router();
 const sql = require('mssql')
 const steem = require('steem');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const rp = require('request-promise');
 
 steem.api.setOptions({ url: 'https://api.steemit.com' });
 
@@ -13,9 +14,6 @@ steem.api.setOptions({ url: 'https://api.steemit.com' });
 router.get('/', (req, res) => {
   res.json({ hello: 'world' });
 });
-
-
-
 
 function handleError(res, reason, message, code) {
   console.log("ERROR: " + reason);
@@ -143,9 +141,6 @@ router.get("/api/getdonations", function (req, res) {
     })
   })
 })
-
-
-
 
 router.get("/api/gettrxdonations", function (req, res) {
   pool1.getConnection(function (error, connection) {
@@ -372,7 +367,6 @@ router.get("/api/getprojectsdetails", function (req, res) {
     })
   })
 })
-
 
 router.get("/api/updateproject/:name/:permlink", function (req, res) {
   loadSingle(req.params.name, req.params.permlink, function (post) {
@@ -694,7 +688,6 @@ router.get("/api/market/items", function (req, res) {
   })
 })
 
-
 router.get("/api/gifts/:name", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = "SELECT * FROM gift WHERE username='" + req.params.name + "'"
@@ -729,9 +722,7 @@ function getHash(input) {
     hash |= 0; // to 32bit integer
   }
   return hash;
-
 }
-
 
 setImage = function (string) {
   if (!string) return
@@ -762,6 +753,7 @@ setImage = function (string) {
     }
   }
 }
+
 router.get("/api/link/:user/youtube/:channelid", function (req, res) {
   var query = `INSERT INTO ongameusers (username, youtube_id) VALUES ('${req.params.user}','${req.params.channelid}') 
   ON DUPLICATE KEY UPDATE youtube_id='${req.params.channelid}'`
@@ -778,7 +770,6 @@ router.get("/api/link/:user/youtube/:channelid", function (req, res) {
     })
   })
 })
-
 
 router.get("/api/link/:user/:type/:userid", function (req, res) {
   var query = `INSERT INTO ongameusers (username, ${req.params.type}) VALUES ('${req.params.user}','${req.params.userid}') 
@@ -829,7 +820,6 @@ router.get("/api/addaccount/:user/:wallet", function (req, res) {
   })
 })
 
-
 router.get("/api/getlinks/:user", function (req, res) {
   pool1.getConnection(function (error, connection) {
     var query = "SELECT * FROM ongameusers WHERE username='" + req.params.user + "'"
@@ -866,7 +856,6 @@ router.get("/api/getusercontents/:author", function (req, res) {
   })
 })
 
-
 router.get("/api/getrecentgamecontents", function (req, res) {
   var date = new Date();
   date.setDate(date.getDate() - 30);
@@ -891,7 +880,6 @@ router.get("/api/getrecentgamecontents", function (req, res) {
     })
   })
 })
-
 
 function parseProject(project) {
   var newProject = {}
@@ -988,7 +976,6 @@ function parseProject(project) {
   }
   return newProject;
 }
-
 
 function parseUpdate(update) {
   var newUpdate = {}
@@ -1091,8 +1078,6 @@ function parseUpdate(update) {
   return newUpdate;
 }
 
-
-
 router.get("/api/sbdprice", function (req, res) {
   var xtr = new XMLHttpRequest();
   xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem-dollars/', true);
@@ -1130,7 +1115,6 @@ router.get("/api/allcoins", function (req, res) {
                           var [ticker] = JSON.parse(xtr.responseText)
                           allticker.push(ticker)
                           res.json(allticker)
-
                         }
                       } else {
                         console.log("Error: API not responding!");
@@ -1144,6 +1128,7 @@ router.get("/api/allcoins", function (req, res) {
       }
   }
 })
+
 router.get("/api/convertcoin", function (req, res) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://apilayer.net/api/live?access_key=a4d5d62cc69c3cb2fea2fb9fd4402852&currencies=EUR,GBP,CAD,PLN,TRY,CNY,IDR,KRW,PHP,JPY&source=USD&format=1', true);
@@ -1162,51 +1147,49 @@ router.get("/api/convertcoin", function (req, res) {
     }
 })
 
-
-
 function payoutupvote(share, rewards) {
   return (parseFloat(share) * rewards).toFixed(3);
 }
 var steemprice
 var sbdprice
 
+const requestOptions = {
+  method: 'GET',
+  uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
+  qs: {
+    'start': '1',
+    'limit': '5000',
+    'convert': 'USD'
+  },
+  headers: {
+    'X-CMC_PRO_API_KEY': '44994647-b39b-412d-82d8-8f78589deb7e'
+  },
+  json: true,
+  gzip: true
+};
+
+
 function SBD() {
-  var xtr = new XMLHttpRequest();
-  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem-dollars/', true);
-  xtr.send();
-  xtr.onreadystatechange = function () {
-    if (xtr.readyState == 4) {
-      if (xtr.status == 200) {
-        if (xtr.responseText) {
-          var ticker = JSON.parse(xtr.responseText)
-          totalUSD = ticker[0].price_usd
-          sbdprice = parseFloat(totalUSD).toFixed(3)
-        }
-      } else {
-        console.log("Error: API not responding!");
-      }
-    }
-  }
+  rp(requestOptions).then(response => {
+    var data = response.data
+    var sbdprice = data.find(rep => rep.name === 'Steem Dollars')
+    priceofsbd = parseFloat(sbdprice.quote.USD.price).toFixed(3);
+  }).catch((err) => {
+    console.log('API call error:', err.message);
+  });
 }
 
 function STEEM() {
-  var xtr = new XMLHttpRequest();
-  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem/', true);
-  xtr.send();
-  xtr.onreadystatechange = function () {
-    if (xtr.readyState == 4) {
-      if (xtr.status == 200) {
-        if (xtr.responseText) {
-          var ticker = JSON.parse(xtr.responseText)
-          totalUSD =  ticker[0].price_usd
-          steemprice = parseFloat(totalUSD).toFixed(3)
-        }
-      } else {
-        console.log("Error: API not responding!");
-      }
-    }
-  }
+  rp(requestOptions).then(response => {
+    var data = response.data
+    var steem = data.find(rep => rep.name === 'Steem')
+    steemprice = parseFloat(steem.quote.USD.price).toFixed(3);
+  }).catch((err) => {
+    console.log('API call error:', err.message);
+  });
 }
+
+
 
 function displayPayout(active, total, voter) {
   if (active && !total || !voter) return active
@@ -1308,6 +1291,5 @@ function displayVoter(votes, isDownvote) {
 //           })
 //         }
 // }
-
 
 module.exports = router;
