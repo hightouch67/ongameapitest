@@ -1096,37 +1096,29 @@ router.get("/api/sbdprice", function (req, res) {
   }
 })
 
+const requestOptions = {
+  method: 'GET',
+  uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
+  qs: {
+    'start': '1',
+    'limit': '1000',
+    'convert': 'USD'
+  },
+  headers: {
+    'X-CMC_PRO_API_KEY': '44994647-b39b-412d-82d8-8f78589deb7e'
+  },
+  json: true,
+  gzip: true
+};
+
 router.get("/api/allcoins", function (req, res) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/', true);
-  xhr.send();
-  xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4) {
-          if (xhr.status == 200) {
-              if (xhr.responseText) {
-                  var allticker = JSON.parse(xhr.responseText)
-                  var xtr = new XMLHttpRequest();
-                  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem/', true);
-                  xtr.send();
-                  xtr.onreadystatechange = function () {
-                    if (xtr.readyState == 4) {
-                      if (xtr.status == 200) {
-                        if (xtr.responseText) {
-                          var [ticker] = JSON.parse(xtr.responseText)
-                          allticker.push(ticker)
-                          res.json(allticker)
-                        }
-                      } else {
-                        console.log("Error: API not responding!");
-                      }
-                    }
-                  }
-              }
-          } else {
-              console.log("Error: API not responding!");
-          }
-      }
-  }
+  rp(requestOptions).then(response => {
+    var data = response.data
+    res.json(data)
+  }).catch((err) => {
+    console.log('API call error:', err.message);
+    res.json(err)
+  });
 })
 
 router.get("/api/convertcoin", function (req, res) {
@@ -1152,21 +1144,6 @@ function payoutupvote(share, rewards) {
 }
 var steemprice
 var sbdprice
-
-const requestOptions = {
-  method: 'GET',
-  uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
-  qs: {
-    'start': '1',
-    'limit': '5000',
-    'convert': 'USD'
-  },
-  headers: {
-    'X-CMC_PRO_API_KEY': '44994647-b39b-412d-82d8-8f78589deb7e'
-  },
-  json: true,
-  gzip: true
-};
 
 
 function SBD() {
