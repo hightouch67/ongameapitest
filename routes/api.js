@@ -22,10 +22,10 @@ function handleError(res, reason, message, code) {
 
 var pool1 = mysql.createPool({
   connectionLimit: 5,
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DB
+  host: 'us-cdbr-iron-east-01.cleardb.net',
+  user: 'bce50ec26bedce',
+  password: '13c7ceb6',
+  database: 'heroku_38540d920d933f3'
 });
 
 router.get("/api/getproject/:name/:permlink", function (req, res) {
@@ -1090,7 +1090,7 @@ const requestOptions = {
   uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
   qs: {
     'start': '1',
-    'limit': '600',
+    'limit': '800',
     'convert': 'USD'
   },
   headers: {
@@ -1114,8 +1114,8 @@ router.get("/api/allcoins", function (req, res) {
       allcoins.lasttime = next;
       var steem = data.find(rep => rep.name === 'Steem')
       steemprice = parseFloat(steem.quote.USD.price).toFixed(3);
-      var sbdprice = data.find(rep => rep.name === 'Steem Dollars')
-      priceofsbd = parseFloat(sbdprice.quote.USD.price).toFixed(3);
+      var priceofsbd = data.find(rep => rep.name === 'Steem Dollars')
+      sbdprice = parseFloat(priceofsbd.quote.USD.price).toFixed(3);
       res.json(data)
     }).catch((err) => {
       console.log('API call error:', err.message);
