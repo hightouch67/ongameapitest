@@ -534,8 +534,7 @@ router.get("/api/tips/:permlink", function (req, res) {
 
 
 loadSingle = function (author, permlink, cb) {
-  SBD()
-  STEEM()
+
   steem.api.getContent(author, permlink, function (error, result) {
     if (result) {
       try {
@@ -1078,22 +1077,11 @@ function parseUpdate(update) {
   return newUpdate;
 }
 
+var steemprice
+var sbdprice
+
 router.get("/api/sbdprice", function (req, res) {
-  var xtr = new XMLHttpRequest();
-  xtr.open('GET', 'https://api.coinmarketcap.com/v1/ticker/steem-dollars/', true);
-  xtr.send();
-  xtr.onreadystatechange = function () {
-    if (xtr.readyState == 4) {
-      if (xtr.status == 200) {
-        if (xtr.responseText) {
-          var ticker = JSON.parse(xtr.responseText)
-          res.json(ticker)
-        }
-      } else {
-        console.log("Error: API not responding!");
-      }
-    }
-  }
+  res.json(sbdprice)
 })
 
 const requestOptions = {
@@ -1142,8 +1130,7 @@ router.get("/api/convertcoin", function (req, res) {
 function payoutupvote(share, rewards) {
   return (parseFloat(share) * rewards).toFixed(3);
 }
-var steemprice
-var sbdprice
+
 
 
 function SBD() {
@@ -1268,5 +1255,8 @@ function displayVoter(votes, isDownvote) {
 //           })
 //         }
 // }
+
+SBD()
+STEEM()
 
 module.exports = router;
