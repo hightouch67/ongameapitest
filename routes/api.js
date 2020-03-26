@@ -1151,6 +1151,7 @@ router.get("/api/convertcoin", function (req, res) {
             }
         }
     }
+    }
 })
 
 function payoutupvote(share, rewards) {
