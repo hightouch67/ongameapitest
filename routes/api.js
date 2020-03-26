@@ -1124,8 +1124,16 @@ router.get("/api/allcoins", function (req, res) {
   }
 
 })
-
+var convertedcoins = {};
 router.get("/api/convertcoin", function (req, res) {
+    var bnow = new Date().getHours()
+  if(allcoins && allcoins.lasttime && allcoins.lasttime=== bnow)
+  {
+    res.json(convertedcoins.data)
+  }
+  else{
+    const next = new Date().getHours();
+    convertedcoins.lasttime = next;
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://apilayer.net/api/live?access_key=a4d5d62cc69c3cb2fea2fb9fd4402852&currencies=EUR,GBP,CAD,PLN,TRY,CNY,IDR,KRW,PHP,JPY&source=USD&format=1', true);
     xhr.send();
@@ -1134,9 +1142,11 @@ router.get("/api/convertcoin", function (req, res) {
             if (xhr.status == 200) {
                 if (xhr.responseText) {
                     var ticker = JSON.parse(xhr.responseText)
-                    res.json(ticker.quotes)
+                    convertedcoins.data = ticker.quotes;
+                    res.json(convertedcoins.data)
                 }
             } else {
+              res.json({error:"Error: API not responding!"})
                 console.log("Error: API not responding!");
             }
         }
