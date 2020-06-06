@@ -4,10 +4,10 @@ const Connection = require('mysql/lib/Connection');
 const Promise = require('bluebird');
 const parse = require('connection-string');
 const config = parse(process.env.DATABASE_URL);
-config.connectionLimit = 3;
+config.connectionLimit = 10;
 config.multipleStatements = true;
 config.database = config.path[0];
-config.host = config.hosts[0].name;
+config.host = config.hosts[0].name; 
 
 Promise.promisifyAll([Pool, Connection]);
 
