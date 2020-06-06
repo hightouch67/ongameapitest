@@ -367,9 +367,9 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
         net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', mode='l',
         vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
         cashout_time='${post.cashout_time}', total_vote_weight='${post.total_vote_weight}', 
-        reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}', 
+        reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value.split(',')[0].split(' ')[0]}' ,curator_payout_value='${post.curator_payout_value}', 
         author_rewards='${post.author_rewards}', net_votes='${post.net_votes}', 
-        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
+        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value.split(' ')[0]}', total_pending_payout_value='${post.total_pending_payout_value.split(' ')[0]}',
         active_votes='${post.active_votes}',replies='${post.replies}',
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
         body_language='${post.body_language}', image='${post.image}', tags='${post.tags}',voters='${post.voters}', payout='${post.payout}' WHERE permlink='${req.params.permlink}'
@@ -401,12 +401,12 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
         net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', mode='l',
         vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
         cashout_time='${post.cashout_time}', total_vote_weight='${post.total_vote_weight}', 
-        reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value.split(' ')}' ,curator_payout_value='${post.curator_payout_value}', 
+        reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value.split(',')[0].split(' ')[0]}' ,curator_payout_value='${post.curator_payout_value.split(' ')[0]}', 
         author_rewards='${post.author_rewards}', net_votes='${post.net_votes}', 
-        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
+        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value.split(' ')[0]}', total_pending_payout_value='${post.total_pending_payout_value.split(' ')[0]}',
         active_votes='${post.active_votes}',replies='${post.replies}',
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
-        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}',voters='${post.voters}', payout='${post.payout}' WHERE permlink='${req.params.permlink}'`
+        body_language='${post.body_language}', image='${post.image}', tags='${post.tags}',voters='${post.voters}', payout='${post.payout || 0}' WHERE permlink='${req.params.permlink}'`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
           if (err) {
@@ -607,15 +607,15 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
           '${post.cashout_time}','${post.max_cashout_time}','${post.total_vote_weight}','${post.reward_weight}','${post.total_payout_value}',
           '${post.curator_payout_value}','${post.author_rewards}','${post.net_votes}','${post.root_comment}','${post.mode}','${post.max_accepted_payout}',
           '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
-          '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
+          '${post.url}','${post.root_title}','${post.pending_payout_value.split(' ')[0]}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
           '${post.image}','${post.tags}','${post.project}',${post.payout})
           ON DUPLICATE KEY UPDATE  
           title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
           last_update='${post.last_update}', last_payout='${post.last_payout}',active='${post.active}',
-          cashout_time='${post.max_cashout_time}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}' 
-          ,author_rewards='${post.author_rewards}' ,net_votes='${post.net_votes}' ,pending_payout_value='${post.pending_payout_value}'
-          ,total_pending_payout_value='${post.total_pending_payout_value}' ,active_votes='${post.active_votes}', image='${post.image}'
+          cashout_time='${post.max_cashout_time}', total_payout_value='${post.total_payout_value.split(' ')[0]}' ,curator_payout_value='${post.curator_payout_value}' 
+          ,author_rewards='${post.author_rewards}' ,net_votes='${post.net_votes}' ,pending_payout_value='${post.pending_payout_value.split(' ')[0]}'
+          ,total_pending_payout_value='${post.total_pending_payout_value.split(' ')[0]}' ,active_votes='${post.active_votes}', image='${post.image}'
           ,tags='${post.tags}', payout = ${post.payout}`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
@@ -967,6 +967,11 @@ function parseProject(project) {
   return newProject;
 }
 
+function removeEmojis (string) {
+  var regex = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
+  return string.replace(regex, '');
+}
+
 function parseUpdate(update) {
   var newUpdate = {}
   try {
@@ -980,8 +985,8 @@ function parseUpdate(update) {
   newUpdate.category = update.category
   newUpdate.parent_author = update.parent_author
   newUpdate.parent_permlink = update.parent_permlink
-  newUpdate.title = update.title.toString().replace(/\'/g, "''")
-  newUpdate.body = update.body.toString().replace(/\'/g, "''")
+  newUpdate.title = removeEmojis(update.title).replace(/\'/g, "''")
+  newUpdate.body = removeEmojis(update.body).replace(/\'/g, "''")
   newUpdate.last_update = update.last_update
   newUpdate.created = update.created
   newUpdate.active = update.active
@@ -996,7 +1001,7 @@ function parseUpdate(update) {
   newUpdate.max_cashout_time = update.max_cashout_time
   newUpdate.total_vote_weight = update.total_vote_weight
   newUpdate.reward_weight = update.reward_weight
-  newUpdate.total_payout_value = update.total_payout_value.split(' ')
+  newUpdate.total_payout_value = update.total_payout_value
   newUpdate.curator_payout_value = update.curator_payout_value
   newUpdate.author_rewards = update.author_rewards
   newUpdate.net_votes = update.net_votes
@@ -1008,7 +1013,7 @@ function parseUpdate(update) {
   newUpdate.allow_curation_rewards = update.allow_curation_rewards
 
   newUpdate.url = update.url
-  newUpdate.root_title = update.root_title.toString().replace(/\'/g, "''")
+  newUpdate.root_title = removeEmojis(update.root_title).toString().replace(/\'/g, "''")
   newUpdate.pending_payout_value = update.pending_payout_value
   newUpdate.total_pending_payout_value = update.total_pending_payout_value
 
