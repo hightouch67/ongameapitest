@@ -3,21 +3,13 @@ const decamelize = require('decamelize');
 const _ = require('lodash');
 var mysql = require('mysql');
 const router = express.Router();
-const sql = require('mssql')
 const steem = require('steem');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const rp = require('request-promise');
-
+const pool1 = require('../helpers/db');
 steem.api.setOptions({ url: 'https://api.steemit.com' });
 
-const parse = require('connection-string');
-const config = parse(process.env.DATABASE_URL);
-config.connectionLimit = 5;
-config.multipleStatements = true;
-config.database = config.path[0];
-config.host = config.hosts[0].name;
-config.queryTimeout = 10000 // setting timeout
-config.acquireTimeout = 10000
+
 
 router.get('/', (req, res) => {
   res.json({ hello: 'world' });
@@ -28,7 +20,6 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
-var pool1 = mysql.createPool(config);
 
 router.get("/api/getproject/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {
