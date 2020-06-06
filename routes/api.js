@@ -10,6 +10,14 @@ const rp = require('request-promise');
 
 steem.api.setOptions({ url: 'https://api.steemit.com' });
 
+const parse = require('connection-string');
+const config = parse(process.env.DATABASE_URL);
+config.connectionLimit = 5;
+config.multipleStatements = true;
+config.database = config.path[0];
+config.host = config.hosts[0].name;
+config.queryTimeout = 10000 // setting timeout
+config.acquireTimeout = 10000
 
 router.get('/', (req, res) => {
   res.json({ hello: 'world' });
@@ -20,13 +28,7 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({ "error": message });
 }
 
-var pool1 = mysql.createPool({
-  connectionLimit: 5,
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DB
-});
+var pool1 = mysql.createPool(config);
 
 router.get("/api/getproject/:name/:permlink", function (req, res) {
   pool1.getConnection(function (error, connection) {

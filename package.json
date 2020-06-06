@@ -1,5 +1,5 @@
 {
-  "name": "OngameAPI",
+  "name": "ongameapi",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
     "@steemit/steem-js": "github:steemit/steem-js",
     "bluebird": "^3.7.1",
     "body-parser": "^1.18.3",
+    "connection-string": "^3.3.1",
     "cors": "^2.8.4",
     "debug": "^3.1.0",
     "decamelize": "^2.0.0",
