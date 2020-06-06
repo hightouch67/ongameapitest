@@ -900,7 +900,7 @@ function parseProject(project) {
   newProject.max_cashout_time = project.max_cashout_time
   newProject.total_vote_weight = project.total_vote_weight
   newProject.reward_weight = project.reward_weight
-  newProject.total_payout_value = project.total_payout_value.split(' ')
+  newProject.total_payout_value = project.total_payout_value
   newProject.curator_payout_value = project.curator_payout_value
   newProject.author_rewards = project.author_rewards
   newProject.net_votes = project.net_votes
