@@ -900,7 +900,7 @@ function parseProject(project) {
   newProject.max_cashout_time = project.max_cashout_time
   newProject.total_vote_weight = project.total_vote_weight
   newProject.reward_weight = project.reward_weight
-  newProject.total_payout_value = project.total_payout_value
+  newProject.total_payout_value = project.total_payout_value.split(' ')
   newProject.curator_payout_value = project.curator_payout_value
   newProject.author_rewards = project.author_rewards
   newProject.net_votes = project.net_votes
@@ -996,7 +996,7 @@ function parseUpdate(update) {
   newUpdate.max_cashout_time = update.max_cashout_time
   newUpdate.total_vote_weight = update.total_vote_weight
   newUpdate.reward_weight = update.reward_weight
-  newUpdate.total_payout_value = update.total_payout_value
+  newUpdate.total_payout_value = update.total_payout_value.split(' ')
   newUpdate.curator_payout_value = update.curator_payout_value
   newUpdate.author_rewards = update.author_rewards
   newUpdate.net_votes = update.net_votes
