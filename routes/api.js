@@ -367,9 +367,9 @@ router.get("/api/updateproject/:name/:permlink", function (req, res) {
         net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', mode='l',
         vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
         cashout_time='${post.cashout_time}', total_vote_weight='${post.total_vote_weight}', 
-        reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value.split(',')[0].split(' ')[0]}' ,curator_payout_value='${post.curator_payout_value}', 
+        reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}', 
         author_rewards='${post.author_rewards}', net_votes='${post.net_votes}', 
-        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value.split(' ')[0]}', total_pending_payout_value='${post.total_pending_payout_value.split(' ')[0]}',
+        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
         active_votes='${post.active_votes}',replies='${post.replies}',
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
         body_language='${post.body_language}', image='${post.image}', tags='${post.tags}',voters='${post.voters}', payout='${post.payout}' WHERE permlink='${req.params.permlink}'
@@ -401,9 +401,9 @@ router.get("/api/updateupd/:name/:permlink", function (req, res) {
         net_rshares='${post.net_rshares}', abs_rshares='${post.abs_rshares}', mode='l',
         vote_rshares='${post.vote_rshares}', children_abs_rshares='${post.children_abs_rshares}', 
         cashout_time='${post.cashout_time}', total_vote_weight='${post.total_vote_weight}', 
-        reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value.split(',')[0].split(' ')[0]}' ,curator_payout_value='${post.curator_payout_value.split(' ')[0]}', 
+        reward_weight='${post.reward_weight}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}', 
         author_rewards='${post.author_rewards}', net_votes='${post.net_votes}', 
-        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value.split(' ')[0]}', total_pending_payout_value='${post.total_pending_payout_value.split(' ')[0]}',
+        root_comment='${post.root_comment}',root_title='${post.root_title}', pending_payout_value='${post.pending_payout_value}', total_pending_payout_value='${post.total_pending_payout_value}',
         active_votes='${post.active_votes}',replies='${post.replies}',
         body_length='${post.body_length}', reblogged_by='${post.reblogged_by}', 
         body_language='${post.body_language}', image='${post.image}', tags='${post.tags}',voters='${post.voters}', payout='${post.payout || 0}' WHERE permlink='${req.params.permlink}'`
@@ -607,15 +607,15 @@ router.get("/api/addupdate/:name/:permlink", function (req, res) {
           '${post.cashout_time}','${post.max_cashout_time}','${post.total_vote_weight}','${post.reward_weight}','${post.total_payout_value}',
           '${post.curator_payout_value}','${post.author_rewards}','${post.net_votes}','${post.root_comment}','${post.mode}','${post.max_accepted_payout}',
           '${post.percent_steem_dollars}','${post.allow_replies}','${post.allow_votes}','${post.allow_curation_rewards}','${post.beneficiaries}',
-          '${post.url}','${post.root_title}','${post.pending_payout_value.split(' ')[0]}','${post.total_pending_payout_value}','${post.active_votes}',
+          '${post.url}','${post.root_title}','${post.pending_payout_value}','${post.total_pending_payout_value}','${post.active_votes}',
           '${post.replies}','${post.author_reputation}','${post.promoted}','${post.body_length}','${post.reblogged_by}','${post.body_language}',
           '${post.image}','${post.tags}','${post.project}',${post.payout})
           ON DUPLICATE KEY UPDATE  
           title='${post.title}', body='${post.body}', json_metadata='${post.json_metadata}', 
           last_update='${post.last_update}', last_payout='${post.last_payout}',active='${post.active}',
-          cashout_time='${post.max_cashout_time}', total_payout_value='${post.total_payout_value.split(' ')[0]}' ,curator_payout_value='${post.curator_payout_value}' 
-          ,author_rewards='${post.author_rewards}' ,net_votes='${post.net_votes}' ,pending_payout_value='${post.pending_payout_value.split(' ')[0]}'
-          ,total_pending_payout_value='${post.total_pending_payout_value.split(' ')[0]}' ,active_votes='${post.active_votes}', image='${post.image}'
+          cashout_time='${post.max_cashout_time}', total_payout_value='${post.total_payout_value}' ,curator_payout_value='${post.curator_payout_value}' 
+          ,author_rewards='${post.author_rewards}' ,net_votes='${post.net_votes}' ,pending_payout_value='${post.pending_payout_value}'
+          ,total_pending_payout_value='${post.total_pending_payout_value}' ,active_votes='${post.active_votes}', image='${post.image}'
           ,tags='${post.tags}', payout = ${post.payout}`
       pool1.getConnection(function (error, connection) {
         connection.query(query, function (err, result) {
