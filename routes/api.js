@@ -46,7 +46,7 @@ router.get("/api/getuserprojects/:author", function (req, res) {
 })
 var projects;
 router.get("/api/getprojects", function (req, res) {
-  var now = new Date().getMinutes();
+  var now = new Date().getHours();
   if(projects && projects.time === now)
   {
     res.json(projects.projects)
